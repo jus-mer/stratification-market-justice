@@ -1,0 +1,50 @@
+---
+title: "Market Justice and Stratification. [^*]"
+linestretch: '1.5'
+output:
+  pdf_document:
+    toc: false
+    number_sections: false
+    keep-tex: true
+geometry: margin=0.78in
+header-includes:
+  - \usepackage{times}           # Times New Roman
+  - \usepackage{caption}
+  - \captionsetup[figure, table]{labelfont={bf},labelformat={default},labelsep=period}
+  - \usepackage[figurename=Fig.]{caption}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+fontsize: 12pt
+
+---
+
+
+Juan Carlos Castillo, Department of Sociology, Universidad de Chile, Santiago de Chile. *
+
+ORCID: 0000-0003-1265-7854
+
+Julio Iturra, Bremen International Graduate School of Social Sciences, Bremen, Germany.
+
+ORCID: 0000-0003-1993-3479
+
+Kevin Carrasco, Center for Social Conflict and Cohesion Studies
+
+ORCID: 0000-0002-9348-8361
+
+
+
+# Conflict of interest
+
+The authors report there are no competing interests to declare.
+
+[^*]: Corresponding author (juancastillov@uchile.cl - [jc-castillo.com](https://juancarloscastillo.github.io/jc-castillo/) -  Ignacio Carrera Pinto 1045 Ñuñoa, Santiago de Chile). The authors recognize the support of the National Research and Development Agency (ANID) through the grant from the National Fund for Scientific and Technological Development (FONDECYT) N° 1210847; from the Center for Conflict and Social Cohesion Studies (COES) grant Financing Fund for Research Centers in Priority Areas (FONDAP) N° 1523A0005; and Millenium Nucleus on Digital Inequalities and Opportunities (NUDOS) NCS2022_046

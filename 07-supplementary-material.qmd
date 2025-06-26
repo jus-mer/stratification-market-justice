@@ -1,0 +1,9 @@
+---
+author: "Equipo EDUMER"
+bibliography: "input/bib/merit-edjust.bib"
+csl: "input/bib/apa6.csl"
+---
+
+
+# Supplementary material
+

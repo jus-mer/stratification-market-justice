@@ -1,0 +1,48 @@
+$-- Provides configuration of document metadata for writing the title block.
+$-- Note that in addition to these templates and partials, Quarto will also make normalized authors and affiliations data available to the template,
+$-- making is easy to write custom title blocks against a standard schema.
+$--
+$-- %%%% TODO %%%%%
+$-- Customize is needed, like below for printing the authors. Otherwise remove this partials to use Quarto default one.
+$-- %%%%%%%%%%%%%%%%
+
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+$if(subtitle)$
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{$subtitle$}
+$endif$
+
+${ _authors.tex() }
+
+\date{$date$}
+
+$if(shorttitle)$
+$if(shortauthor)$
+\fancyhead[C]{${shortauthor} $$\bullet$$ ${shorttitle}}
+$else$ $-- no shortauthor
+$for(by-author/first)$
+\fancyhead[C]{${it.name.literal} $$\bullet$$ ${shorttitle}}
+$endfor$
+$endif$
+$else$ $-- no shorttitle
+$if(shortauthor)$
+\fancyhead[C]{${shortauthor} $$\bullet$$ ${title}}
+$else$ $-- no shortauthor
+$for(by-author/first)$
+\fancyhead[C]{${it.name.literal} $$\bullet$$ ${title}}
+$endfor$
+$endif$
+$endif$
+
+$if(document-id)$
+\fancyfoot{} % Blank out the default footer
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+\fancyfoot[LO,RE]{\small{}$document-id$}
+$endif$

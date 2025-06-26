@@ -1,0 +1,173 @@
+---
+author: "Equipo EDUMER"
+bibliography: "input/bib/merit-edjust.bib"
+csl: "input/bib/apa6.csl"
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+```{r}
+#| echo: false
+#| include: false 
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               marginaleffects,
+               MLMusingR,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled,
+               summarytools)
+
+
+options(scipen=999)
+rm(list = ls())
+
+load(file = here("input/data/proc/df_study1_long_t7.RData"))
+
+# Generate analytical sample
+
+df_study1 <- df_study1_long_t7 %>%
+  select(idencuesta,
+         ola,
+         ponderador_long_total,
+         segmento,
+         estrato,
+         just_health,
+         just_pension,
+         just_educ,
+         mjp, 
+         perc_inequality, 
+         merit_effort, 
+         merit_talent, 
+         educ,
+         quintil1,
+         sex,
+         age,
+         ess, 
+         ideo) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_health <- sjlabelled::set_label(df_study1$just_health, 
+                        label = "Health distributive justice")
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$just_educ <- sjlabelled::set_label(df_study1$just_educ, 
+                        label = "Education distributive justice")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+```
+
+# Data, Variables and Methods
+
+## Data
+
+This study draws on data from the Chilean Longitudinal Social Survey (ELSOC), a panel study collected annually from 2016 to 2023. The survey evaluates how individuals think, feel, and behave regarding conflict and social cohesion in Chile. ELSOC employs a probabilistic, stratified, clustered, multistage sampling design encompassing major urban centers (Santiago, Valparaíso, and Concepción) and smaller cities. The target population includes women and men aged 18--75 who are habitual residents of private dwellings. The first wave included 2,927 participants, representing northern and southern regions, covering 77% of the country's total population and 93% of its urban population, with a response rate of 62.4% [@elsoc_estudio_2022].
+
+The survey has been conducted yearly since 2016, except in 2020, when it was suspended due to the pandemic. Waves 2016, 2017, 2018, 2019, 2022, and 2023 used computer-assisted personal interviewing (CAPI), while a reduced wave in 2021 employed computer-assisted telephone interviews (CATI). Wave 3 included a refreshment sample (N = 1,519) to counter attrition, but these cases are not used here to capture longer response trends. Between wave 1 and wave 7, attrition amounted to 40%, achieving a final sample of N = 1,741. Longitudinal weights adjust for both the sampling design and potential biases arising from systematic non-participation. Further details on sampling, attrition, and weighting can be found at <https://coes.cl/encuesta-panel/>, and the dataset is publicly available at <https://dataverse.harvard.edu/dataverse/elsoc>.
+
+## Variables
+
+**Market justice preferences**: The dependent variable in this study is preferences for market justice. This construct is operationalized through three items that capture how strongly individuals justify conditioning access to social services---healthcare, pensions, and education---on income. Specifically, the justification of inequality in healthcare is assessed by the question: "Is it fair in Chile that people with higher incomes can access better healthcare than people with lower incomes?" The same question is posed for pensions and education. In all cases, respondents indicate their level of agreement on a five-point Likert scale ranging from 1 ("strongly disagree") to 5 ("strongly agree"). Additionally, we include a composite measure of "market justice preferences", calculated as the average of these three items ($\alpha$ = 0.84). This index ranges from 1 to 5, with higher values indicating stronger preferences for market justice (see @tbl-summary1).
+
+```{r}
+#| label: tbl-summary1
+#| tbl-cap: "Dependent variables for the first wave (2016)"
+#| tbl-cap-location: top
+#| results: asis
+#| echo: false
+
+
+t1 <- df_study1 %>% 
+  filter(ola == 1) %>% 
+  select(just_health, just_pension, just_educ, mjp) 
+
+df<-dfSummary(t1,
+               plain.ascii = FALSE,
+               style = "multiline",
+               tmp.img.dir = "/tmp",
+               graph.magnif = 0.75,
+               headings = F,  # encabezado
+               varnumbers = F, # num variable
+               labels.col = T, # etiquetas
+               na.col = F,    # missing
+               graph.col = F, # plot
+               valid.col = T, # n valido
+               col.widths = c(30,10,10,10))
+
+df$Variable <- NULL # delete variable column
+
+print(df)
+```
+
+
+
+
+
+## Methods
+
+Given the data's hierarchical structure, in which observations are nested in survey waves, we employ longitudinal multilevel linear models [@singer_applied_2009]. In a panel-data framework, within-person effects capture how shifts in individual-level variables across waves are associated with variations in market justice preferences. By contrast, between-person effects focus on differences among individuals, explaining how long-term (or average) values relate to overall levels of market justice preferences.
+
+To estimate within-person effects, we use group-mean centering, where each respondent functions as the "group" (i.e., observations nested within persons). Meanwhile, the between-person effects are derived from each individual's average on these variables, calculated across the waves of panel data.
+
+All the analyses were conducted using R software and the *lme4* package [@bates_fitting_2015].

@@ -1,0 +1,44 @@
+---
+title: "My paper"
+format:
+  html: default
+  hikmah-pdf: 
+    indent: false
+abstract: |
+  My abstract
+keywords: 
+  - first 
+  - second
+  - third
+  - fourth
+  - fifth
+bibliography: "input/bib/merit-edjust.bib"
+csl: "input/bib/apa6.csl"
+link-citations: true
+linestretch: 1.15       
+mainfont: Times New Roman
+fontsize: 12pt          
+geometry: "left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm"
+papersize: letter
+colorlinks: true
+fig-height: 4
+fig-width: 7.5
+header-includes:
+  - \usepackage{threeparttable}
+---
+
+{{< include 01-introduction.qmd >}}
+
+{{< include 02-antecedents.qmd >}}
+
+{{< include 03-methods.qmd >}}
+
+{{< include 04-analisis.qmd >}}
+
+{{< include 05-discussion.qmd >}}
+
+{{< include 06-conclusion.qmd >}}
+
+{{< pagebreak >}}
+
+{{< include 07-supplementary-material.qmd >}}

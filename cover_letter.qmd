@@ -1,0 +1,48 @@
+---
+title: "My paper"
+subtitle: "Cover Letter"
+format:
+  hikmah-pdf: 
+    indent: false
+    keep-tex: true
+  hikmah-manuscript-pdf: 
+    indent: false
+    keep-tex: true
+bibliography: "input/bib/refs.bib"
+csl: "input/bib/apa6.csl"
+link-citations: true
+linestretch: 1.15       
+mainfont: Times New Roman
+fontsize: 12pt          
+geometry: "left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm"
+papersize: letter
+colorlinks: true
+fig-height: 4
+fig-width: 7.5
+header-includes:
+  - \usepackage{threeparttable}
+---
+Text
+
+## Authors Identification
+
+
+
+## Exclusive Submission Statement
+
+
+## Acknowledgments
+
+
+
+## Authors' Contributions
+
+
+## Conflict of Interest
+
+
+## Funding
+
+
+## Data Avaibility Statement
+

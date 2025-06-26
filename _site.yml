@@ -1,0 +1,25 @@
+name: "market-justice-panel-elsoc"
+output_dir: "." # Esto es para que se compile en el rootdir
+navbar:
+  title: "Perceptions of Inequality and Meritocracy: Their Interplay in Shaping Preferences for Market Justice in Chile (2016-2023)"
+  right:
+    - text: "Paper"
+      href: "paper.html"
+    - text: ""
+      icon: fa-file-pdf
+      href: "paper.pdf"
+    - text: ""
+      icon: fa-github fa-lg
+      href: https://github.com/justicia-distributiva/market-justice-panel-elsoc
+
+output:
+  bookdown::html_document2:
+      css: "custom.css"
+      theme: flatly
+  bookdown::pdf_document2:
+    template: null
+    number_sections: false
+    toc: false
+    keep_tex: false
+    pandoc_args:
+      - --template=input/mytemplate.tex #custom template para usar autores con afiliacion

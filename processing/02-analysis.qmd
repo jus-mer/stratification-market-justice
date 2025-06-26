@@ -1,0 +1,708 @@
+---
+title: "Data analysis"
+subtitle: "Perceptions of Inequality and Meritocracy: Their Interplay in Shaping Preferences for Market Justice in Chile (2016-2023)"
+author: "Researcher"
+date: today
+lang: en
+fontsize: 12pt
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    toc-expand: 2
+    toc-title: Contents
+    number-sections: true
+    number-depth: 3
+    theme:
+      - cosmo
+      - edumer_html.scss
+    code-link: true
+    title-block-banner: true
+  pdf:
+    number-sections: true
+    number-depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Presentation
+
+This is the analysis code for the paper "Perceptions of Inequality and Meritocracy: Their Interplay in Shaping Preferences for Market Justice in Chile (2016-2023)". The dataset used is `df_study1_long_t7.RData`.
+
+```{r}
+#| label: set
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+# Libraries
+
+```{r}
+#| label: packages
+#| include: true
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               marginaleffects,
+               MLMusingR,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+# Data
+
+```{r}
+#| label: data
+#| echo: true
+
+load(file = here("input/data/proc/df_study1_long_t7.RData"))
+
+glimpse(df_study1_long_t7)
+
+# Generate analytical sample
+
+df_study1 <- df_study1_long_t7 %>%
+  select(idencuesta,
+         ola,
+         ponderador_long_total,
+         segmento,
+         estrato,
+         just_health,
+         just_pension,
+         just_educ,
+         mjp, 
+         perc_inequality, 
+         just_inequality,
+         merit_effort, 
+         merit_talent, 
+         educ,
+         quintil1,
+         sex,
+         age,
+         ess, 
+         ideo) %>% 
+  na.omit() %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_health <- sjlabelled::set_label(df_study1$just_health, 
+                        label = "Health distributive justice")
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$just_educ <- sjlabelled::set_label(df_study1$just_educ, 
+                        label = "Education distributive justice")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+```
+
+# Analysis
+
+## Descriptives
+
+```{r}
+#| label: tbl-summary1
+#| tbl-cap: "Estadísticos descriptivos items justicia de mercado"
+#| tbl-cap-location: top
+t1 <- df_study1 %>% 
+  filter(ola == 1) %>% 
+  select(just_health, just_pension, just_educ, mjp) 
+
+print(summarytools::dfSummary(t1), method="render")
+```
+
+```{r}
+#| label: tbl-summary2
+#| tbl-cap: "Estadísticos descriptivos variables independientes"
+#| tbl-cap-location: top
+t2 <- df_study1 %>% 
+  filter(ola == 1) %>% 
+  select(perc_inequality, just_inequality, merit_effort, merit_talent) 
+
+print(summarytools::dfSummary(t2), method="render")
+```
+
+```{r}
+#| label: fig-alluvial
+#| out-width: '100%'
+#| fig-asp: 1
+#| fig-cap: "Change in the justification of inequality in health, pensions and education over time (2016-2023)"
+#| fig-cap-location: top
+
+
+datos.health <- df_study1 %>% 
+  mutate(just_health = factor(just_health, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_health) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                      "2017",
+                                      "2018",
+                                      "2019",
+                                      "2022",
+                                      "2023")))
+
+
+
+etiquetas.health <- df_study1 %>%
+  mutate(just_health = factor(just_health, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(ola, just_health) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+
+p1 <- datos.health %>% 
+  ggplot(aes(x = wave, fill = just_health, stratum = just_health,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.health,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = "Wave",
+       fill = NULL,
+       title = "a. Health") +
+  theme_ggdist() +
+  theme(legend.position = "none") 
+  
+
+
+datos.pension <- df_study1 %>% 
+   mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_pension) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.pension <- df_study1 %>%
+  mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(ola, just_pension) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+p2 <- datos.pension %>% 
+  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.pension,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = "Wave",
+       fill = NULL,
+       title = "b. Pension") +
+  theme_ggdist() +
+  theme(legend.position = "none") 
+
+
+datos.educ <- df_study1 %>% 
+  mutate(just_educ = factor(just_educ, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>%
+  group_by(idencuesta, ola) %>% 
+  count(just_educ) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.educ <- df_study1 %>%
+    mutate(just_educ = factor(just_educ, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>%
+  group_by(ola, just_educ) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 6 ~ "2022",
+                          ola == 7 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+p3 <- datos.educ %>% 
+  ggplot(aes(x = wave, fill = just_educ, stratum = just_educ,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.educ,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = "Wave",
+       fill = NULL,
+       title = "c. Education",
+       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (n = 8460)") +
+  theme_ggdist() +
+  theme(legend.position = "bottom") 
+
+(p1 / p2 / p3) 
+
+```
+
+
+```{r}
+library(srvyr)
+
+df_pond <- df_study1 %>% 
+  mutate(ola = case_when(ola == 1 ~ "2016",
+                         ola == 2 ~ "2017",
+                         ola == 3 ~ "2018",
+                         ola == 4 ~ "2019",
+                         ola == 6 ~ "2022",
+                         ola == 7 ~ "2023"),
+         ola = factor(ola, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023"))) %>% 
+  as_survey_design(.data = .,
+                   ids = segmento, 
+                   strata = estrato, 
+                   weights = ponderador_long_total)
+
+p4 <- df_pond %>% 
+  select(ola, mjp, perc_inequality, just_inequality, merit_effort, merit_talent) %>% 
+  mutate_at(.vars = 2:6, .funs = ~ as.numeric(.)) %>% 
+  group_by(ola) %>% 
+  summarise_all(~survey_mean(., vartype = "ci")) %>% 
+  pivot_longer(cols = -ola,
+               names_to = "temp",
+               values_to = "valor") %>%
+  mutate(
+    ci = case_when(
+      str_ends(temp, "_low") ~ "ic_low",
+      str_ends(temp, "_upp") ~ "ic_upp",
+      TRUE                   ~ "mean"
+    ),
+    variable = str_remove(temp, "_low|_upp")
+  ) %>%
+  select(ola, variable, ci, valor) %>%
+  pivot_wider(
+    names_from  = ci,
+    values_from = valor
+  ) %>% 
+  mutate(variable = case_when(variable == "mjp" ~ "Market justice preferences",
+                              variable == "perc_inequality"  ~ "Inequality perception",
+                              variable == "just_inequality"  ~ "Inequality justification",
+                              variable == "merit_effort"     ~ "Merit: Effort",
+                              variable == "merit_talent"     ~ "Merit: Talent"),
+         variable = factor(variable, levels = c("Market justice preferences",
+                                      "Inequality perception",
+                                      "Inequality justification",
+                                      "Merit: Effort",
+                                      "Merit: Talent")
+                              )) %>% 
+  ggplot(aes(x = ola, y = mean, group = variable)) +
+  geom_point(aes(shape=variable, color=variable), size = 3.5) +
+  geom_line(aes(color = variable), linewidth = 0.8) +
+  geom_errorbar(aes(ymin = ic_low, ymax = ic_upp, color = variable),
+                width = 0.1) +
+  scale_color_manual(values = c("#023858", # azul oscuro
+                                "#0571B0", # azul intermedio
+                                "#b3b3b3", # gris
+                                "#F4A582", # salmón
+                                "#B2182B"  # rojo profundo
+                                         )) +
+  scale_shape_manual(values=c(15, 16, 17, 18, 4)) +
+  labs(y = "Mean",
+       x = "Wave",
+       color = NULL,
+       shape = NULL,
+       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (n = 8460)") +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        text = element_text(size = 12)) 
+ 
+```
+
+
+## Correlations
+
+```{r}
+M <- df_study1 %>%
+  filter(ola == 7) %>% 
+  select(mjp, perc_inequality, just_inequality, merit_effort, merit_talent) %>% 
+  mutate_all(.funs = ~ as.numeric(.)) %>% 
+  cor(use = "pairwise.complete.obs", method = "pearson")
+
+diag(M) <- NA
+
+rownames(M) <- c("A. Marjet justice preferences",
+                 "B. Inequality gap perception",
+                 "C. Inequality gap justification",
+                 "D. People are rewarded for their efforts ",
+                 "E. People are rewarded for their intelligence")
+
+#set Column names of the matrix
+colnames(M) <-c("(A)", "(B)","(C)","(D)","(E)")
+
+#Plot the matrix using corrplot
+corrplot::corrplot(M,
+                   method = "color",
+                   addCoef.col = "black",
+                   type = "upper",
+                   tl.col = "black",
+                   col = colorRampPalette(c("#E16462", "white", "#0D0887"))(12),
+                   bg = "white",
+                   na.label = "-") 
+
+```
+
+## Longitudinal multilevel models
+
+```{r}
+
+df_study1$merit_effort <- as_numeric(df_study1$merit_effort)
+df_study1$merit_talent <- as_numeric(df_study1$merit_talent)
+
+df_study1 <- df_study1 %>% 
+  mutate(ola = case_when(ola == 1 ~ "2016",
+                         ola == 2 ~ "2017",
+                         ola == 3 ~ "2018",
+                         ola == 4 ~ "2019",
+                         ola == 6 ~ "2022",
+                         ola == 7 ~ "2023"),
+         ola = factor(ola, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+df_study1 <- df_study1 %>% 
+  group_by(idencuesta) %>% 
+  mutate(perc_inequality_mean = mean(perc_inequality, na.rm = T),
+         perc_inequality_cwc = perc_inequality - perc_inequality_mean,
+         just_inequality_mean = mean(just_inequality, na.rm = T),
+         just_inequality_cwc = just_inequality - just_inequality_mean,
+         merit_effort_mean = mean(merit_effort, na.rm = T),
+         merit_effort_cwc = merit_effort - merit_effort_mean,
+         merit_talent_mean = mean(merit_talent, na.rm = T),
+         merit_talent_cwc = merit_talent - merit_talent_mean,
+         ) %>% 
+  ungroup()
+```
+
+
+
+```{r}
+m0 <- lmer(mjp ~ 1 + (1 | idencuesta), 
+                data = df_study1)
+
+performance::icc(m0, by_group = T)
+
+m1 <- lmer(mjp ~ 1 + ola + (1 | idencuesta),
+                data = df_study1)
+
+m1.1 <- lmer(mjp ~ 1 + ola_num + ola_2 + (1 | idencuesta),
+                data = df_study1)
+
+m2 <- lmer(mjp ~ 1 + ola_num + ola_2 + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+anova(m1.1, m2)
+
+m3 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + (1 + ola_num | idencuesta), 
+           data = df_study1)
+
+m4 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+m5 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+m6 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort + merit_talent + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+
+m7 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort + merit_talent + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+m8 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort + merit_talent + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + educ + quintil1 + ess + ideo + sex + age + (1 + ola_num | idencuesta),
+                data = df_study1)
+
+m9 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality*ola_num + just_inequality + merit_effort + merit_talent + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + educ + quintil1 + ess + ideo + sex + age + (1 + perc_inequality | idencuesta),
+                data = df_study1)
+
+m10 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality*ola_num + merit_effort + merit_talent + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + educ + quintil1 + ess + ideo + sex + age + (1 + just_inequality| idencuesta),
+                data = df_study1)
+
+m11 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort*ola_num + merit_talent + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + educ + quintil1 + ess + ideo + sex + age + (1 + merit_effort | idencuesta),
+                data = df_study1)
+
+m12 <- lmer(mjp ~ 1 + ola_num + ola_2 + perc_inequality + just_inequality + merit_effort + merit_talent*ola_num + perc_inequality_mean + just_inequality_mean + merit_effort_mean + merit_talent_mean + educ + quintil1 + ess + ideo + sex + age + (1 + merit_talent | idencuesta),
+                data = df_study1)
+```
+
+
+```{r}
+#| label: tbl-modelos
+#| results: asis
+#| tbl-cap: "Longitudinal multilevel models for market justice preferences"
+#| tbl-cap-location: top
+
+ccoef <- list(
+  "(Intercept)" = "Intercept",
+  "ola2017" = "Wave 2017",
+  "ola2018" = "Wave 2018",
+  "ola2019" = "Wave 2019",
+  "ola2022" = "Wave 2022",
+  "ola2023" = "Wave 2023",
+  ola_num = "Wave",
+  ola_2 = "Wave^2",
+  perc_inequality = "Perception inequality (WE)",
+  just_inequality = "Justification inequality (WE)",
+  merit_effort = "Merit: Effort (WE)",
+  merit_talent = "Merit: Talent (WE)",
+  perc_inequality_mean = "Perception inequality (BE)",
+  just_inequality_mean = "Justification inequality (BE)",
+  merit_effort_mean = "Merit: Effort (BE)",
+  merit_talent_mean = "Merit: Talent (BE)",
+  educUniversitary = "Universitary (Ref.= Less than universitary)",
+  quintil1Q2 = "Quintile 2",
+  quintil1Q3 = "Quintile 3",
+  quintil1Q4 = "Quintile 4",
+  quintil1Q5 = "Quintile 5",
+  quintil1QNA = "Quintile NA",
+  ess = "Subjective social status",
+  ideoCenter = "Center",
+  ideoRight = "Right",
+  "ideoDoes not identify" = "Does not identify",
+  sexFemale = "Female (Ref.= Male)",
+  "age30-49" = "30-49",
+  "age50-64" = "50-64",
+  "age65 or more" = "65 or more"
+  )
+
+texreg::htmlreg(list(m1, m2, m3, m4, m5, m6, m7, m8),
+               custom.model.names = c(paste0("Model ", seq(1:8))),
+               caption = NULL,
+               stars = c(0.05, 0.01, 0.001),
+               custom.coef.map = ccoef,
+               digits = 3,
+               groups = list("Wave (Ref.= 2016)" = 2:6, "Income (Ref.= Quintile 1)" = 18:22, "Political identification (Ref.= Left)" = 24:26, "Age (Ref. = 18-29)" = 28:30),
+               custom.note = "Note: Cells contain regression coefficients with standard errors in parentheses. %stars.",
+               threeparttable = T,
+               leading.zero = T,
+               float.pos = "h!",
+               use.packages = F,
+               booktabs = T,
+               scalebox = 1)
+```
+
+
+
+```{r}
+#| label: tbl-interactions
+#| results: asis
+#| tbl-cap: "Time interactions within effects for market justice preferences"
+#| tbl-cap-location: top
+
+ccoef <- list(
+  "(Intercept)" = "Intercept",
+  "ola_num:perc_inequality" = "Perception inequality (WE) x Wave",
+  "ola_num:just_inequality" = "Justification inequality (WE) x Wave",
+  "ola_num:merit_effort" = "Merit: Effort (WE) x Wave",
+  "ola_num:merit_talent" = "Merit: Talent (WE) x Wave"
+  )
+
+texreg::htmlreg(list(m9,m10,m11,m12),
+               custom.model.names = c(paste0("Model ", seq(9:12))),
+               caption = NULL,
+               stars = c(0.05, 0.01, 0.001),
+               custom.coef.map = ccoef,
+               digits = 3,
+               custom.note = "Note: Cells contain regression coefficients with standard errors in parentheses. %stars.",
+               threeparttable = T,
+               leading.zero = T,
+               float.pos = "h!",
+               use.packages = F,
+               booktabs = T,
+               scalebox = 1)
+```
+

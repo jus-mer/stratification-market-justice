@@ -1,0 +1,386 @@
+---
+author: "Equipo EDUMER"
+bibliography: "input/bib/merit-edjust.bib"
+csl: "input/bib/apa6.csl"
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+```{r}
+#| label: packages
+#| echo: false
+#| include: false
+
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               marginaleffects,
+               MLMusingR,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled,
+               summarytools)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+```{r}
+#| label: data
+#| echo: false
+#| include: false 
+
+load(file = here("input/data/proc/df_study1_long_t7.RData"))
+
+glimpse(df_study1_long_t7)
+
+# Generate analytical sample
+
+df_study1 <- df_study1_long_t7 %>%
+  select(idencuesta,
+         ola,
+         ponderador_long_total,
+         segmento,
+         estrato,
+         just_health,
+         just_pension,
+         just_educ,
+         mjp, 
+         perc_inequality, 
+         merit_effort, 
+         merit_talent, 
+         educ,
+         quintil1,
+         sex,
+         age,
+         ess, 
+         ideo) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_health <- sjlabelled::set_label(df_study1$just_health, 
+                        label = "Health distributive justice")
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$just_educ <- sjlabelled::set_label(df_study1$just_educ, 
+                        label = "Education distributive justice")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+```
+# Results
+
+## Descriptive 
+
+
+@fig-alluvial shows the annual frequencies of market justice preferences for healthcare, pensions, and education from 2016 to 2023. Each year presents stacked percentage frequencies, and the flows between them reflect opinion changes among the same individuals from one year to the next, given that we are using panel data. For instance, of the 40.8% who strongly disagreed with justifying inequality in healthcare in 2019, around 24.3% maintained that position in 2022, while the remaining 16.5% shifted toward other response categories—primarily moving into disagreement rather than strong disagreement. Overall, more than half of the respondents exhibit a high level of disagreement (disagree + strongly disagree) with inequality in these three social service areas over time. Despite this general pattern, recent waves show a slight decrease in disagreement and a corresponding rise in support for inequality. Specifically, in healthcare and education, although disagreement remains substantial, agreement (agree + strongly agree) increased from 7.4% and 7.2% in 2019 to 13.1% and 14.2% in 2023, respectively. This shift is most evident in pensions, where the combined agree/strongly agree category grew by about 10 percentage points, from 16.9% in 2016 to 28% in 2023.
+
+```{r}
+#| label: fig-alluvial
+#| out-width: '100%'
+#| fig-asp: 1.2
+#| fig-cap: "Change in the justification of inequality in healthcare, pensions and education over time (2016-2023)"
+#| fig-cap-location: top
+#| echo: false
+#| results: asis
+
+
+datos.health <- df_study1 %>% 
+  mutate(just_health = factor(just_health, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_health) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                      "2017",
+                                      "2018",
+                                      "2019",
+                                      "2022",
+                                      "2023")))
+
+
+
+etiquetas.health <- df_study1 %>%
+  mutate(just_health = factor(just_health, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(ola, just_health) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+
+p1 <- datos.health %>% 
+  ggplot(aes(x = wave, fill = just_health, stratum = just_health,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.health,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = NULL,
+       fill = NULL,
+       title = "a. Healthcare") +
+  theme_ggdist() +
+  theme(legend.position = "none") 
+  
+
+
+datos.pension <- df_study1 %>% 
+   mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_pension) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.pension <- df_study1 %>%
+  mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>% 
+  group_by(ola, just_pension) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+p2 <- datos.pension %>% 
+  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.pension,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = NULL,
+       fill = NULL,
+       title = "b. Pensions") +
+  theme_ggdist() +
+  theme(legend.position = "none") 
+
+
+datos.educ <- df_study1 %>% 
+  mutate(just_educ = factor(just_educ, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>%
+  group_by(idencuesta, ola) %>% 
+  count(just_educ) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.educ <- df_study1 %>%
+    mutate(just_educ = factor(just_educ, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor desagree",
+                                         "Desagree",
+                                         "Strongly desagree"))) %>%
+  group_by(ola, just_educ) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+p3 <- datos.educ %>% 
+  ggplot(aes(x = wave, fill = just_educ, stratum = just_educ,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_shadowtext(data = etiquetas.educ,
+                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+                  position = position_stack(vjust = .5),
+                  show.legend = FALSE,
+                  size = 3,
+                  color = rep('white'),
+                  bg.colour='grey30')+
+  labs(y = "%",
+       x = "Wave",
+       fill = NULL,
+       title = "c. Education",
+       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (n = 8460)") +
+  theme_ggdist() +
+  theme(legend.position = "bottom") 
+
+(p1 / p2 / p3) 
+
+```
+
+
+
+
+## Multilevel models
+
