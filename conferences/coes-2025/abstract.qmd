@@ -1,0 +1,112 @@
+---
+title: "El rol de la meritocracia, la percepción de desigualdad y la clase social en la justificación de pensiones desiguales en Chile (2016-2023)"
+format:
+  docx:
+    number-sections: true
+  html: 
+    code-fold: true
+    html-math-method: katex
+    number-sections: true
+  pdf: 
+    geometry: margin=2cm
+    keep-tex: true
+    include-in-header:
+      text: |
+        \usepackage[noblocks]{authblk}
+        \renewcommand*{\Authsep}{, }
+        \renewcommand*{\Authand}{, }
+        \renewcommand*{\Authands}{, }
+        \renewcommand\Affilfont{\small}
+    number-sections: true
+editor: source
+bibliography: "../../input/bib/merit-edjust.bib"
+csl: "../../input/bib/apa6.csl"
+author:
+  - name: Kevin Carrasco
+    orcid: 0000-0002-9348-8361
+    email: kevin.carrasco@ug.uchile.cl
+    affiliations:
+      - ref: 2
+  - name: Juan Carlos Castillo
+    corresponding: true
+    orcid: 0000-0003-1265-7854
+    email: juancastillov@uchile.cl
+    affiliations:
+      - ref: 1
+      - ref: 2
+      - ref: 3
+  - name: Andreas Laffert
+    orcid: 0000-0002-9008-2454
+    email: alaffertt@estudiante.uc.cl 
+    affiliations:
+      - ref: 4
+  - name: René Canales
+    orcid: 0000-0002-9008-2454
+    email: alaffertt@estudiante.uc.cl 
+    affiliations:
+      - ref: 4
+  - name: Tomás Urzúa
+    orcid: 0000-0002-9008-2454
+    email: alaffertt@estudiante.uc.cl 
+    affiliations:
+      - ref: 1
+  # - name: Julio Iturra
+  #   orcid: 0000-0003-1993-3479
+  #   email: julioiturrasanhueza@gmail.com 
+  #   affiliations:
+  #     - ref: 5     
+affiliations: 
+  - id: 1
+    name: Departamento de Sociología, Universidad de Chile
+  - id: 2
+    name: Centro de estudios del conflicto y cohesión social (COES)
+  - id: 3
+    name: Núcleo milenio de desigualdades y oportunidades digitales (NUDOS)
+  - id: 4
+    name: Instituto de Sociología, Pontificia Universidad Católica de Chile
+  - id: 5
+    name: International Graduate School of Social Sciencies (BIGSSS), University of Bremen, Germany
+citeproc: true
+abstract: | 
+  \newline
+  **Keywords**: Pensions, Social class, meritocracy, market justice, Chile
+link-citations: true
+linestretch: 1.15       
+mainfont: Times New Roman
+fontsize: 12pt          
+colorlinks: true
+fig-height: 4
+fig-width: 7.5
+---
+
+```{r setup, include=FALSE}
+ knitr::opts_chunk$set(echo=FALSE, warning = FALSE,message = FALSE, cache = TRUE,out.width = '85%',fig.pos= "H"
+                       # , fig.align = 'center'
+                       )
+ # knitr::opts_knit$set(base.url = "../") #relative path for .html output file
+ # knitr::opts_knit$set(root.dir = "../") #relative path for chunks within .rmd files
+ options(scipen=999)
+ options(kableExtra.auto_format = FALSE)
+ rm(list=ls())
+ options(knitr.kable.NA = '')
+ options(knitr.graphics.error = FALSE)
+ Sys.setlocale("LC_ALL", "ES_ES.UTF-8")
+```
+
+El sistema de pensiones chileno ha sido ampliamente analizado como un caso extremo de privatización de la protección social en América Latina [@arenasdemesa_sistemas_2019; @castiglioni_politics_2013]. Desde su instauración en 1981, el diseño basado en la capitalización individual ha transferido los riesgos a los trabajadores, profundizando trayectorias laborales fragmentadas y precarizadas. Esto ha derivado en tasas de reemplazo insuficientes para vastos sectores de la población, manteniendo una promesa de bienestar que se sostiene sobre principios de mercado [@castiglioni_explaining_2018]. Así, la idea de que mayores ingresos en la etapa laboral justifican mejores pensiones refleja cómo la desigualdad económica se legitima socialmente y se prolonga a través de la estratificación de ingresos y estatus durante todo el ciclo de vida.
+
+La justicia de mercado se ha conceptualizado como un principio normativo que legitima la distribución desigual de bienes y servicios al basarse en la idea de que los resultados económicos reflejan méritos y responsabilidades individuales [@lane_market_1986; @barry_theories_1989]. Desde esta perspectiva, las desigualdades no solo se consideran inevitables, sino justas, siempre que surjan de reglas transparentes de competencia y capacidad de pago. Esta visión contrasta con enfoques que entienden derechos sociales como garantías universales de bienestar. La evidencia comparada muestra que, en países con una mayor mercantilización de servicios como la salud, la justicia de mercado se convierte en un marco cultural que forma expectativas y naturaliza brechas de acceso y calidad [@immergut_it_2020].
+
+La forma en que se legitima la justicia de mercado tiende a estar estructurada por la posición que ocupan las personas en la jerarquía social. Distintos estudios muestran que quienes se ubican en los estratos de mayores ingresos tienden a justificar desigualdades distributivas, ya que interpretan sus ventajas como legítimas y consistentes con trayectorias de éxito [@koos_moral_2019]. La literatura comparada indica que, en contextos de alta desigualdad de ingresos y baja movilidad social percibida, la estratificación de clase refuerza la aceptación de principios de mercado para explicar por qué mayores ingresos se asocian con mejores beneficios y protección social [@trump_income_2018]. Esta interacción entre posición social y justificación de la desigualdad muestra cómo la estructura de clase moldea creencias normativas sobre lo que se considera justo.
+
+Además de la posición de clase, las creencias meritocráticas refuerzan la aceptación de la justicia de mercado, pues la meritocracia se entiende como un principio normativo que justifica la asignación de recompensas y oportunidades en función del esfuerzo y el talento individuales [@young_rise_1962]. @mijs_paradox_2021 subraya que esta promesa resulta paradójica en contextos de alta desigualdad estructural, ya que tiende a invisibilizar barreras sistémicas. La literatura muestra que estas creencias se transmiten y reproducen a través de distintos espacios de socialización —la educación, el trabajo y los discursos políticos— reforzando la disposición a legitimar resultados desiguales como reflejo de mérito [@reynolds_perceptions_2014; @heuer_legitimizing_2020; @castillo_socialization_2024].
+
+La percepción de desigualdad modula la legitimidad de resultados desiguales: cuando las brechas reales se subestiman, la justicia de mercado y las creencias meritocráticas se sostienen con mayor facilidad [@gimpelson_misperceiving_2018]. En cambio, percepciones más ajustadas pueden tensionar estos principios y debilitar la justificación de resultados desiguales, como la aceptación de pensiones diferenciadas. De este modo, la percepción de desigualdad actúa como un factor clave que puede reforzar o erosionar la coherencia entre estratificación social, meritocracia y justicia de mercado [@janmaat_subjective_2013].
+
+Utilizando datos del Estudio Longitudinal Social de Chile (2016-2023), esta investigación pretende analizar cómo aceptación de mejores pensiones para personas de mayores ingresos se articula mediante la interacción de la posición de clase, las creencias meritocráticas y la percepción de desigualdad. Esta perspectiva contribuye a comprender cómo se legitima la reproducción de desigualdades estructurales en la vejez dentro de un régimen de justicia de mercado, en el que los intereses privados siguen limitando la adopción de políticas más redistributivas. Así, los resultados aportan evidencia para debatir la sostenibilidad de modelos previsionales altamente mercantilizados y sus tensiones con la cohesión social.
+
+
+*Referencias*
+
+::: {#refs}
+:::
