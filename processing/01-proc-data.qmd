@@ -543,9 +543,6 @@ dim(df_study1_long) #check, now is OK
 #           label = get_label(select(df_study1,names(df_study1_long))))
   
 
-sjPlot::view_df(df_study1_long,
-                show.frq = T,show.values = T,show.na = T,show.prc = T,
-                show.type = T)
 #______________________________________________________________________________
 # obtain the idencuesta for wave 7
 ids <- 
@@ -557,7 +554,7 @@ ids <-
 
 # filter data by the idencuesta of t7
 df_study1_long_t7 <- 
-  elsoc_long_2016_2023 %>%
+  df_study1_long %>%
   filter(idencuesta %in% ids$val)
 
 names(df_study1_long_t7)
