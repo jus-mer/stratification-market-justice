@@ -223,8 +223,6 @@ datos.pension %>%
   theme_ggdist() +
   theme(legend.position = "bottom") 
 
-
-
 ```
 
 
@@ -238,12 +236,6 @@ t2 <- df_study1 %>%
 
 print(summarytools::dfSummary(t2), method="render")
 ```
-
-
-
-
-## Correlations
-
 
 
 ```{r}

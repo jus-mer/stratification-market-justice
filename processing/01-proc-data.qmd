@@ -129,197 +129,160 @@ elsoc_long_2016_2023$just_pension <- sjlabelled::set_label(elsoc_long_2016_2023$
 
 
 ```{r}
-# Social class scheme EOW
+# Social class scheme EGP
 
-frq(elsoc_long_2016_2023$m07)
-elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(rel_empleo = factor(m07,
-                             levels = 1:7,
-                             labels= c("Empleado u obrero en empresa privada",
-                                       "Empleado u obrero del sector público",
-                                       "Miembro de las Fuerzas Armadas y de Orden",
-                                       "Patrón/a o empleador/a",
-                                       "Trabaja solo, no tiene empleados",
-                                       "Familiar no remunerado",
-                                       "Servicio doméstico"
-                                       )))
+# isco 
 
+frq(elsoc_long_2016_2023$ciuo88_m03)
 
-# Definir los niveles y etiquetas originales
-niveles_rel_empleo <- 1:7
-etiquetas_rel_empleo <- c("Empleado u obrero en empresa privada",
-                          "Empleado u obrero del sector público",
-                          "Miembro de las Fuerzas Armadas y de Orden",
-                          "Patrón/a o empleador/a",
-                          "Trabaja solo, no tiene empleados",
-                          "Familiar no remunerado",
-                          "Servicio doméstico")
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(ciuo88_m03))
+  ) # only wave 2016
 
-# Crear columna desplazada y rellenar valores NA
-elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  group_by(idencuesta) %>%                                              # Agrupa por id para trabajar en cada individuo
-  mutate(rel_empleo_lagged = lag(as.character(rel_empleo), n = 1)) %>%  # Desplaza rel_empleo a la siguiente ola
-  ungroup() %>%
-  mutate(rel_empleo = if_else(!is.na(rel_empleo), 
-                              as.character(rel_empleo), 
-                              rel_empleo_lagged),
-         rel_empleo = factor(rel_empleo,                                # Convertir de nuevo a factor
-                             levels = etiquetas_rel_empleo)) %>%
-  select(-rel_empleo_lagged)                                            # Elimina la columna temporal
+frq(elsoc_long_2016_2023$ciuo08_m03)
 
-# Tabla de frecuencias y porcentajes
-sjt.xtab(elsoc_long_2016_2023$rel_empleo,elsoc_long_2016_2023$ola,
-         show.col.prc=TRUE,
-         var.labels=c("Relación de empleo","Ola"),
-         show.summary=FALSE,         title="Frecuencias y porcentajes de Relación de Empleo, por ola")
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(ciuo08_m03))
+  ) # only wave 2018, 2021 and 2023
 
-elsoc_long_2016_2023$rel_empleo2 <- car::recode(elsoc_long_2016_2023$rel_empleo,
-                                recodes=c("'Patrón/a o empleador/a'='Empleador';
-                                           'Trabaja solo, no tiene empleados'='Autoempleado';
-                                           'Empleado u obrero en empresa privada'='Asalariado';
-                                           'Empleado u obrero del sector público'='Asalariado';
-                                           'Miembro de las Fuerzas Armadas y de Orden'='Asalariado';
-                                           'Familiar no remunerado'='Asalariado';
-                                           'Servicio doméstico'='Asalariado'"),
-                                as.factor=TRUE, # convertir a factor
-                                levels=c("Empleador",
-                                         "Autoempleado",
-                                         "Asalariado")) # ordenar niveles
+elsoc_long_2016_2023$isco88 <- NA
+elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(1)] <- elsoc_long_2016_2023$ciuo88_m03[elsoc_long_2016_2023$ola %in% c(1)]
 
-# Tabla de frecuencias y porcentajes
-sjt.xtab(elsoc_long_2016_2023$rel_empleo2,elsoc_long_2016_2023$ola,
-         show.col.prc=TRUE,
-         var.labels=c("Relación de empleo 2","Ola"),
-         show.summary=FALSE,
-         title="Frecuencias y porcentajes de Relación de Empleo 2, por ola")
+elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(3,5,7)] <- occupar::isco08to88(elsoc_long_2016_2023$ciuo08_m03[elsoc_long_2016_2023$ola %in% c(3,5,7)]
+)
 
-# Carga bbdd con comparacion 88 y 08
-isco08_88 <- read_excel(here::here("input/data/original/isco08-88.xls"))
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(isco88))
+  )
 
-isco08_88 <- isco08_88 %>%
-  rename(isco08=`ISCO 08 Code`,isco88=`ISCO-88 code`)
-
-# Exploración
-valores_repetidos <- table(isco08_88$isco88) # Contar los valores repetidos en la variable
-valores_repetidos <- valores_repetidos[valores_repetidos > 1]
-valores_repetidos <- table(isco08_88$isco08) # Contar los valores repetidos en la variable
-valores_repetidos <- valores_repetidos[valores_repetidos > 1]
-
-# CIUO - ISCO: Recodificación 88->08 4 digitos en datos elsoc
-indices <- match(elsoc_long_2016_2023$ciuo88_m03,isco08_88$isco88)
-elsoc_long_2016_2023$ciuo08_rec <- isco08_88$isco08[indices]
-elsoc_long_2016_2023$ciuo08_rec <- as.numeric(elsoc_long_2016_2023$ciuo08_rec) # es solo la recodificación de las que eran 88 en data, es decir, año 2016
-
-# Creación variable isco08 con ciuo08_m03 y ciuo08_rec (ex ciuo88_m03) 4 digitos
-elsoc_long_2016_2023$isco08 <- ifelse(!is.na(elsoc_long_2016_2023$ciuo08_rec),elsoc_long_2016_2023$ciuo08_rec,elsoc_long_2016_2023$ciuo08_m03) # es la unión en una variable de todo en 08
 
 # Crear una columna con la variable "isco08" adelantada una ola
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
   group_by(idencuesta) %>%        # Agrupa por id para trabajar en cada individuo
-  mutate(isco08_lagged=lag(isco08,n=1)) %>%  # Desplaza isco08 a la siguiente ola
+  mutate(isco88_lagged=lag(isco88,n=1)) %>%  # Desplaza isco08 a la siguiente ola
   ungroup()
 
 # Rellenar los valores NA en la variable original
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  mutate(isco08=ifelse(!is.na(isco08),isco08,isco08_lagged)) %>%  # Si isco08 es NA, sustituir con el valor de la ola anterior 
-  select(-isco08_lagged)                 # Elimina la columna temporal
+  mutate(isco88=ifelse(!is.na(isco88),isco88,isco88_lagged)) %>%  # Si isco08 es NA, sustituir con el valor de la ola anterior 
+  select(-isco88_lagged)                 # Elimina la columna temporal
 
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(isco88))
+  )
 
-# CIUO - ISCO: creación de variables con 1 dígito
-elsoc_long_2016_2023$isco08_1d <- as.character(elsoc_long_2016_2023$isco08)
-elsoc_long_2016_2023$isco08_1d <- substr(elsoc_long_2016_2023$isco08_1d,1,1)
-elsoc_long_2016_2023$isco08_1d <- as.numeric(elsoc_long_2016_2023$isco08_1d)
+# rel empleo
+frq(elsoc_long_2016_2023$m07)
 
-# CIUO - ISCO: creación de variables con 2 dígitos
-elsoc_long_2016_2023$isco08_2d <- as.character(elsoc_long_2016_2023$isco08)
-elsoc_long_2016_2023$isco08_2d <- substr(elsoc_long_2016_2023$isco08_2d,1,2)
-elsoc_long_2016_2023$isco08_2d <- as.numeric(elsoc_long_2016_2023$isco08_2d)
+labs_sj <- c(
+  `1` = "Empleado u obrero en empresa privada",
+  `2` = "Empleado u obrero del sector público",
+  `3` = "Miembro de las Fuerzas Armadas y de Orden",
+  `4` = "Patrón/a o empleador/a",
+  `5` = "Trabaja solo, no tiene empleados",
+  `6` = "Familiar no remunerado",
+  `7` = "Servicio doméstico"
+)
 
-# Tabla de frecuencias y porcentajes 1 dígito
-sjt.xtab(elsoc_long_2016_2023$isco08_1d,elsoc_long_2016_2023$ola,
-         show.col.prc=TRUE, 
-         var.labels=c("CIUO08","Ola"),
-         show.summary=FALSE,
-         title="Frecuencias y porcentajes de Ocupación con 1 dígito, por ola")
-
-
-# Creación variable Nivel de cualificación
-elsoc_long_2016_2023 <- mutate(elsoc_long_2016_2023,
-               cualificacion=factor(case_when(isco08_2d<=34&m01>=9~"Experts",
-                                              isco08_2d<=34&m01<9~"Skilled",
-                                              isco08_2d%in%c(35,41:44,53)~"Skilled",
-                                              isco08_2d%in%c(51,54,61,62,71:75,81)&m01>5~"Skilled",
-                                              isco08_2d%in%c(51,54,61,62,71:75,81)&m01<=5~"Unskilled",
-                                              isco08_2d%in%c(52,63,82,83,91:99)~"Unskilled"),
-                                    levels=c("Experts","Skilled","Unskilled")))
-
-# Tabla de frecuencias y porcentajes 
-sjt.xtab(elsoc_long_2016_2023$cualificacion,elsoc_long_2016_2023$ola,
-         show.col.prc=TRUE, 
-         var.labels=c("Nivel de cualificación","Ola"),
-         show.summary=FALSE,
-         title="Frecuencias y porcentajes del Nivel de Cualificación, por ola")
-
-
-# Crear variable supervisa==1, no supervisa==0
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  mutate(supervisa=case_when(m06==0~0,
-                             m06>=1~1))
+  mutate(m07 = suppressWarnings(as.integer(m07)),
+         m07 = if_else(m07 %in% c(1,2,4,5,7), m07, NA_integer_)) %>%
+  group_by(idencuesta) %>%
+  arrange(idencuesta, ola, .by_group = TRUE) %>%
+  mutate(rel_empleo = coalesce(m07, lag(m07))) %>%
+  ungroup() %>%
+  mutate(
+    rel_empleo = set_labels(rel_empleo, labels = labs_sj),
+    rel_empleo = set_label(rel_empleo, label = "Relación de empleo (1–7)")
+  )
 
+frq(elsoc_long_2016_2023$rel_empleo)
 
-# Crear una columna con la variable "m06" adelantada una ola
+sjt.xtab(elsoc_long_2016_2023$rel_empleo,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         var.labels=c("Relación de empleo","Ola"),
+         show.summary=FALSE,         title=NULL)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  rowwise() %>% 
+  mutate(selfemp_egp = case_when(rel_empleo %in% c(4:5) ~ 1,
+                                 rel_empleo %in% c(1,2,7) ~ 0,
+                                 TRUE ~ NA)) %>% 
+  ungroup()
+
+frq(elsoc_long_2016_2023$selfemp_egp)
+
+# n_employed
+
+frq(elsoc_long_2016_2023$m05)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(m05_rec = case_when(m05 == 1 ~ 1,
+                           m05 == 2 ~ 4,
+                           m05 == 3 ~ 9,
+                           m05 == 4 ~ 49,
+                           m05 == 5 ~ 199,
+                           m05 == 6 ~ 201,
+                           TRUE ~ NA_real_))
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(nemploy_egp = if_else(selfemp_egp == 1 & m05_rec > 1, m05_rec, 0))
+
+frq(elsoc_long_2016_2023$nemploy_egp)
+
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  arrange(ola) %>%  # Ordena por ola, por si acaso no está ordenado
   group_by(idencuesta) %>%        # Agrupa por id para trabajar en cada individuo
-  mutate(m06_lagged=lag(m06,n=1)) %>%  # Desplaza "m06" a la siguiente ola
-  ungroup() 
+  mutate(nemploy_egp_lagged=lag(nemploy_egp,n=1)) %>%  # Desplaza isco08 a la siguiente ola
+  ungroup()
 
 # Rellenar los valores NA en la variable original
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  mutate(m06_full=ifelse(!is.na(m06),m06,m06_lagged)) %>%  # Si m06 es NA, sustituir con el valor de la ola anterior
-  select(-m06_lagged) 
-
-# Crear variable supervisa==1, no supervisa==0
-elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  mutate(supervisa=case_when(m06_full==0~0,
-                             m06_full>=1~1))
-
-# Tabla de frecuencias y porcentajes 
-sjt.xtab(elsoc_long_2016_2023$supervisa,elsoc_long_2016_2023$ola,
-         show.col.prc=TRUE, 
-         var.labels=c("Supervisa","Ola"),
-         show.summary=FALSE,
-         title="Frecuencias y porcentajes de variable Supervisa, por ola")
+  mutate(nemploy_egp=ifelse(!is.na(nemploy_egp),nemploy_egp,nemploy_egp_lagged)) %>%  # Si isco08 es NA, sustituir con el valor de la ola anterior 
+  select(-nemploy_egp_lagged)                 # Elimina la columna temporal
 
 
+sjt.xtab(elsoc_long_2016_2023$nemploy_egp,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         var.labels=c("N employees","Ola"),
+         show.summary=FALSE,         title=NULL)
 
-# Creación de variable posición de clase
-elsoc_long_2016_2023 <- mutate(elsoc_long_2016_2023,
-               class1=case_when(
-                 rel_empleo2=="Empleador"~"Petit bourgeoisie",
-                 rel_empleo2=="Autoempleado"&m01>=9~"Petit bourgeoisie",
-                 rel_empleo2=="Autoempleado"&m01<9~"Informal",
-                 rel_empleo2=="Asalariado"&cualificacion=="Experts"&supervisa==1~"Expert managers",
-                 rel_empleo2=="Asalariado"&cualificacion=="Experts"&supervisa==0~"Experts",
-                 rel_empleo2=="Asalariado"&cualificacion=="Skilled"&supervisa==1~"Supervisors",
-                 rel_empleo2=="Asalariado"&cualificacion=="Unskilled"&supervisa==1~"Supervisors",
-                 rel_empleo2=="Asalariado"&cualificacion=="Skilled"&supervisa==0~"Workers",
-                 rel_empleo2=="Asalariado"&cualificacion=="Unskilled"&supervisa==0~"Workers"))
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(egp = occupar::isco88toEGP(isco88 = isco88, 
+                                    n.employees = nemploy_egp, 
+                                    self.employed = selfemp_egp,
+                                    n.classes = 7))
 
-elsoc_long_2016_2023$class1 <- factor(elsoc_long_2016_2023$class1,
-                      levels=c("Petit bourgeoisie",
-                               "Informal",
-                               "Expert managers",
-                               "Experts",
-                               "Supervisors",
-                               "Workers"))
+frq(elsoc_long_2016_2023$egp)
 
-# Tabla de frecuencias y porcentajes 
-sjt.xtab(elsoc_long_2016_2023$class1, elsoc_long_2016_2023$ola,
-         show.col.prc = TRUE, 
-         var.labels = c("Posición de clase 1","Ola"),
-         show.summary = FALSE,
-         title = "Frecuencias y porcentajes de la Posición de clase 1, por ola")
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(egp = factor(str_squish(as.character(egp))),
+         egp3 = case_when(egp %in% c("I Service class I", 
+                                    "II Service class II") ~ "Service class (I+II)",
+                         egp %in% c("III Routine non-manual",
+                                    "IV Self-employed") ~ "Intermediate class (III+IV)",
+                         egp %in% c("V Manual supervisors/Lower grade technicians",
+                                    "VI Skilled workers",
+                                    "VII Unskilled workers/Farm labours") ~ "Working class (V+VI+VII)"),
+         egp3 = factor(egp3, levels = c("Service class (I+II)",
+                                      "Intermediate class (III+IV)",
+                                      "Working class (V+VI+VII)")))
+
+
+frq(elsoc_long_2016_2023$egp3)
+
+sjt.xtab(elsoc_long_2016_2023$egp3,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         var.labels=c("EGP","Ola"),
+         show.summary=FALSE,         title=NULL)
+
 ```
 
 
@@ -445,7 +408,7 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          segmento, 
          estrato,
          just_pension,
-         class1,
+         egp = egp3,
          merit_effort,
          merit_talent,
          educ,
@@ -460,12 +423,12 @@ df_study1_wide <- df_study1_long %>%
                      values_from = names(select(df_study1_long,ponderador_long_total,segmento, estrato, just_pension:ideo)))
 
 # fix data to w01 values
-df_study1_wide$class1_2 <-df_study1_wide$class1_1 #class
-df_study1_wide$class1_3 <-df_study1_wide$class1_1
-df_study1_wide$class1_4 <-df_study1_wide$class1_1
-df_study1_wide$class1_5 <-df_study1_wide$class1_1
-df_study1_wide$class1_6 <-df_study1_wide$class1_1
-df_study1_wide$class1_7 <-df_study1_wide$class1_1
+df_study1_wide$egp_2 <-df_study1_wide$egp_1 #class
+df_study1_wide$egp_3 <-df_study1_wide$egp_1
+df_study1_wide$egp_4 <-df_study1_wide$egp_1
+df_study1_wide$egp_5 <-df_study1_wide$egp_1
+df_study1_wide$egp_6 <-df_study1_wide$egp_1
+df_study1_wide$egp_7 <-df_study1_wide$egp_1
 
 
 df_study1_wide$age_2 <-df_study1_wide$age_1 #age
@@ -518,8 +481,8 @@ df_study1_long <- data.table::melt.data.table(data.table::setDT(df_study1_wide),
               id.vars = c("idencuesta","muestra"),
               variable.name = c("ola"),
               measure = 
-patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^class1_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^ideo_"),
-              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","class","merit_effort","merit_talent",  "educ","educyear","sex", "age", "ideo"),
+patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^ideo_"),
+              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "ideo"),
               na.rm = F,value.factor = TRUE
               )
 ```
