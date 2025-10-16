@@ -330,12 +330,12 @@ elsoc_long_2016_2023$sex <- sjlabelled::set_label(elsoc_long_2016_2023$sex,
 # age
 frq(elsoc_long_2016_2023$age)
 
-elsoc_long_2016_2023$age <- 
+elsoc_long_2016_2023$aget <- 
   factor(car::recode(elsoc_long_2016_2023$age, 
                      "18:29=1;30:49=2;50:64=3;65:150=4"),
          labels = c('18-29', '30-49', '50-64', '65 or more'))
-elsoc_long_2016_2023$age <-
-  sjlabelled::set_label(elsoc_long_2016_2023$age, 
+elsoc_long_2016_2023$aget <-
+  sjlabelled::set_label(elsoc_long_2016_2023$aget, 
                         label = c("Age groups")) 
 
 
@@ -415,6 +415,7 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          educyear,
          sex,
          age,
+         aget,
          ideo)
 
 df_study1_wide <- df_study1_long %>% 
@@ -430,13 +431,19 @@ df_study1_wide$egp_5 <-df_study1_wide$egp_1
 df_study1_wide$egp_6 <-df_study1_wide$egp_1
 df_study1_wide$egp_7 <-df_study1_wide$egp_1
 
-
 df_study1_wide$age_2 <-df_study1_wide$age_1 #age
 df_study1_wide$age_3 <-df_study1_wide$age_1
 df_study1_wide$age_4 <-df_study1_wide$age_1
 df_study1_wide$age_5 <-df_study1_wide$age_1
 df_study1_wide$age_6 <-df_study1_wide$age_1
 df_study1_wide$age_7 <-df_study1_wide$age_1
+
+df_study1_wide$aget_2 <-df_study1_wide$aget_1 #age
+df_study1_wide$aget_3 <-df_study1_wide$aget_1
+df_study1_wide$aget_4 <-df_study1_wide$aget_1
+df_study1_wide$aget_5 <-df_study1_wide$aget_1
+df_study1_wide$aget_6 <-df_study1_wide$aget_1
+df_study1_wide$aget_7 <-df_study1_wide$aget_1
 
 df_study1_wide$sex_2 <-df_study1_wide$sex_1 #sex
 df_study1_wide$sex_3 <-df_study1_wide$sex_1
@@ -459,7 +466,6 @@ df_study1_wide$educyear_5 <-df_study1_wide$educyear_1
 df_study1_wide$educyear_6 <-df_study1_wide$educyear_1
 df_study1_wide$educyear_7 <-df_study1_wide$educyear_1
 
-
 df_study1_wide$ideo_2 <-df_study1_wide$ideo_1 # political position
 df_study1_wide$ideo_3 <-df_study1_wide$ideo_1
 df_study1_wide$ideo_4 <-df_study1_wide$ideo_1
@@ -481,8 +487,8 @@ df_study1_long <- data.table::melt.data.table(data.table::setDT(df_study1_wide),
               id.vars = c("idencuesta","muestra"),
               variable.name = c("ola"),
               measure = 
-patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^ideo_"),
-              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "ideo"),
+patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^aget_", "^ideo_"),
+              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "aget","ideo"),
               na.rm = F,value.factor = TRUE
               )
 ```
@@ -523,6 +529,13 @@ df_study1_long_t7 <-
 names(df_study1_long_t7)
 dim(df_study1_long_t7)
 sjmisc::frq(df_study1_long_t7$ola)
+
+df_study1_long_t7 <- df_study1_long_t7 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1_long_t7 <- df_study1_long_t7 %>% filter(n_participaciones>1)
 ```
 
 
