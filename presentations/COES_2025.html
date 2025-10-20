@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="COES_2025_files/libs/clipboard/clipboard.min.js"></script>
+<script src="COES_2025_files/libs/quarto-html/tabby.min.js"></script>
+<script src="COES_2025_files/libs/quarto-html/popper.min.js"></script>
+<script src="COES_2025_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="COES_2025_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="COES_2025_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="COES_2025_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.33">
+
+  <title>coes_2025</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="COES_2025_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="COES_2025_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="COES_2025_files/libs/revealjs/dist/theme/quarto-c6f1d92a3e159421453e4d6e65d5aef2.css">
+  <link href="COES_2025_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="COES_2025_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="COES_2025_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="COES_2025_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section class="slide level2">
+
+<div class="columns">
+<div class="column" style="width:20%;">
+<p><br><br></p>
+<p><img data-src="images/jusmer_trans.png"></p>
+<p><img data-src="images/coes.png"></p>
+</div><div class="column column-right" style="width:80%;">
+<section id="preferencias-por-la-comodificación-de-pensiones-clase-y-meritocracia-en-chile-20162023" class="title-slide slide level1 center">
+<h1><strong>Preferencias por la comodificación de pensiones: clase y meritocracia en Chile (2016–2023)</strong></h1>
+<hr>
+<p><strong>Andreas Laffert<sup>1</sup>, Juan Carlos Castillo<sup>2</sup></strong> <br> <strong>René Canales<sup>1</sup>, Tomás Urzúa<sup>2</sup> &amp; Kevin Carrasco<sup>2</sup></strong></p>
+<div class="blue2 medium">
+<p><strong><sup>1</sup>Instituto de Sociología, Pontificia Universidad Católica de Chile</strong></p>
+<p><strong><sup>2</sup>Departamento de Sociología, Universidad de Chile</strong></p>
+<p><strong>Centro de Estudios de Conflicto y Cohesión Social - COES</strong></p>
+</div>
+<p>XII Conferencia Internacional COES - 22 Octubre 2025, Santiago</p>
+</section>
+
+</div></div>
+</section>
+<section>
+<section id="contexto-y-motivación" class="title-slide slide level1 xlarge center" data-background-color="#92220C">
+<h1>Contexto y motivación</h1>
+
+</section>
+<section id="contexto-y-motivación-1" class="slide level2">
+<h2>Contexto y motivación</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img data-src="images/jusmer_trans.png"></p>
+</div><div class="column" style="width:70%;">
+<div class="highlight-last" style="font-size: 110%;">
+<ul>
+<li class="fragment"><p>ANID/FONDECYT N°1250518 2025-2028 - Justicia de mercado y merecimiento del bienestar social</p></li>
+<li class="fragment"><p>Primera etapa:</p>
+<ul>
+<li class="fragment">Estudios con datos secundarios comparados y nacionales</li>
+<li class="fragment">Encuesta “Mercado, merecimiento y mérito”</li>
+</ul></li>
+<li class="fragment"><p>Segunda etapa:</p>
+<ul>
+<li class="fragment">Estudios con análisis de experimento de encuesta</li>
+<li class="fragment">Análisis discusiones legislativas pensiones</li>
+</ul></li>
+<li class="fragment"><p>Más información: <a href="jc-castillo.com/project/fondecyt-jusmer/">jc-castillo.com/project/fondecyt-jusmer/</a></p></li>
+</ul>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="antecedentes" class="title-slide slide level1 xlarge center" data-background-color="#92220C">
+<h1>Antecedentes</h1>
+
+</section>
+<section id="antecedentes-1" class="slide level2">
+<h2>Antecedentes</h2>
+<div class="box-inv-4 sp-after fragment" style="font-size: 110%;">
+<ol type="1">
+<li>Privatización y mercantilización de bienes públicos, políticas de bienestar y servicios sociales <span class="citation" data-cites="gingrich_making_2011 streeck_how_2016">(<a href="#/referencias" role="doc-biblioref" onclick="">Gingrich, 2011</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Streeck, 2016</a>)</span></li>
+</ol>
+</div>
+<div class="box-inv-4 sp-after fragment" style="font-size: 110%;">
+<ol start="2" type="1">
+<li>Cambios en la arquitectura de las instituciones del bienestar social; expansión del mercado <span class="citation" data-cites="ferre_welfare_2023 busemeyer_welfare_2020">(<a href="#/referencias" role="doc-biblioref" onclick="">Busemeyer &amp; Iversen, 2020</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Ferre, 2023</a>)</span></li>
+</ol>
+</div>
+<div class="box-inv-4 sp-after fragment" style="font-size: 110%;">
+<ol start="3" type="1">
+<li>Este orden económico se refleja en una economía moral específica/policy-feedback effects <span class="citation" data-cites="mau_inequality_2015 campbell_institutional_2020 fernandez_positive_2013">(<a href="#/referencias" role="doc-biblioref" onclick="">Campbell, 2020</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Fernandez &amp; Jaime-Castillo, 2013</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Mau, 2015</a>)</span></li>
+</ol>
+</div>
+<div class="box-inv-5 sp-after-half fragment" style="font-size: 110%;">
+<p>Preferencias por justicia de mercado <span class="citation" data-cites="busemeyer_skills_2014 castillo_perceptions_2025 koos_moral_2019 lindh_public_2015">(<a href="#/referencias" role="doc-biblioref" onclick="">Busemeyer, 2014</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2025</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Koos &amp; Sachweh, 2019</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Lindh, 2015</a>)</span></p>
+</div>
+</section>
+<section id="el-caso-de-chile" class="slide level2">
+<h2>El caso de Chile</h2>
+<div class="highlight-last" style="font-size: 110%;">
+<ul>
+<li class="fragment">Crecimiento con elevada desigualdad <span class="citation" data-cites="llorca-jana_historia_2021 flores_top_2020">(<a href="#/referencias" role="doc-biblioref" onclick="">Flores et&nbsp;al., 2020</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Llorca-Jaña &amp; Miller, 2021</a>)</span></li>
+<li class="fragment">Rigida movilidad relativa y fuerte clausura cúspide <span class="citation" data-cites="lopez-roldan_comparative_2021 torche_intergenerational_2014">(<a href="#/referencias" role="doc-biblioref" onclick="">López-Roldán &amp; Fachelli, 2021</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Torche, 2014</a>)</span></li>
+<li class="fragment">Profunda privatización y comodificación de áreas de reproducción social con fuerte dependencia Estatal <span class="citation" data-cites="madariaga_three_2020 boccardo_30_2020">(<a href="#/referencias" role="doc-biblioref" onclick="">Boccardo, 2020</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Madariaga, 2020</a>)</span></li>
+<li class="fragment">Pensiones: sistema de <strong>capitalización individual</strong> administrado por <strong>AFPs</strong>; cubre ~11 millones de cotizantes, pero <strong>27% de la fuerza laboral</strong> queda fuera por <strong>informalidad</strong> <span class="citation" data-cites="superintendenciadepensiones_estadisticas_2024">(<a href="#/referencias" role="doc-biblioref" onclick="">Superintendencia de Pensiones, 2024</a>)</span></li>
+<li class="fragment">Conflictividad social previsional <span class="citation" data-cites="somma_no_2021">(<a href="#/referencias" role="doc-biblioref" onclick="">Somma et&nbsp;al., 2021</a>)</span> y legitimidad del sistema (“con mi plata no”) <span class="citation" data-cites="castillo_perceptions_2025 canalesceron_sujeto_2021">(<a href="#/referencias" role="doc-biblioref" onclick="">Canales Cerón et&nbsp;al., 2021</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2025</a>)</span></li>
+</ul>
+</div>
+</section>
+<section id="preferencias-por-justicia-de-mercado" class="slide level2">
+<h2>Preferencias por justicia de mercado</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p>Lane <span class="citation" data-cites="lane_market_1986">(<a href="#/referencias" role="doc-biblioref" onclick="">1986</a>)</span>: market justice vs.&nbsp;political justice</p></li>
+<li class="fragment"><p>Creencias normativas que legitiman la idea de que el acceso a los servicios sociales esenciales —como la salud, la educación o las pensiones— debe determinarse según criterios basados en el mercado <span class="citation" data-cites="lindh_public_2015">(<a href="#/referencias" role="doc-biblioref" onclick="">Lindh, 2015, p. 895</a>)</span></p></li>
+<li class="fragment"><p>Medición: evaluar si las personas consideran justo que el acceso a dichos servicios dependa de los ingresos <span class="citation" data-cites="lindh_public_2015 kluegel_legitimation_1999 castillo_perceptions_2025">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2025</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Kluegel et&nbsp;al., 1999</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Lindh, 2015</a>)</span></p></li>
+</ul>
+</div>
+</section>
+<section id="preferencias-por-justicia-de-mercado-1" class="slide level2">
+<h2>Preferencias por justicia de mercado</h2>
+<div class="columns">
+<div class="column highlight-last" style="font-size: 110%;">
+<h3 id="contextual">Contextual</h3>
+<ul>
+<li class="fragment">Gasto social <span class="citation" data-cites="immergut_it_2020 busemeyer_skills_2014 busemeyer_welfare_2020">(<a href="#/referencias" role="doc-biblioref" onclick="">Busemeyer, 2014</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Busemeyer &amp; Iversen, 2020</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Immergut &amp; Schneider, 2020</a>)</span></li>
+<li class="fragment">Desigualdad económica <span class="citation" data-cites="koos_moral_2019">(<a href="#/referencias" role="doc-biblioref" onclick="">Koos &amp; Sachweh, 2019</a>)</span></li>
+<li class="fragment">Nivel de privatización de servicios y regulación del mercado <span class="citation" data-cites="lindh_public_2015 koos_moral_2019">(<a href="#/referencias" role="doc-biblioref" onclick="">Koos &amp; Sachweh, 2019</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Lindh, 2015</a>)</span></li>
+</ul>
+</div><div class="column highlight-last" style="font-size: 110%;">
+<h3 id="individual">Individual</h3>
+<ul>
+<li class="fragment">Estatus socioeconómico -ingresos, educación y ocupación- <span class="citation" data-cites="lindh_public_2015 koos_moral_2019 busemeyer_welfare_2020 svallfors_political_2007">Otero &amp; Mendoza (<a href="#/referencias" role="doc-biblioref" onclick="">2024</a>)</span></li>
+<li class="fragment">Percepciones sobre la desigualdad y meritocracia <span class="citation" data-cites="castillo_perceptions_2025 castillo_socialization_2024">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2025</a>, <a href="#/referencias" role="doc-biblioref" onclick="">2024</a>)</span></li>
+<li class="fragment">Conservadurismo/liberalismo económico <span class="citation" data-cites="lee_fairness_2023">(<a href="#/referencias" role="doc-biblioref" onclick="">Lee &amp; Stacey, 2023</a>)</span></li>
+</ul>
+</div></div>
+</section>
+<section id="este-estudio" class="slide level2">
+<h2>Este estudio</h2>
+<p><br></p>
+<div class="pull-left box-inv-5 sp-after fragment" style="font-size: 125%;">
+<p>Analizar la relación entre clase social y preferencias por la comodificación de pensiones en Chile y sus cambios en el tiempo</p>
+</div>
+<p><br><br><br></p>
+<div class="pull-right box-inv-5 sp-after fragment" style="font-size: 125%;">
+<p>Examinar el rol de la meritocracia en la relación entre clase y apoyo a la comodificación de pensiones</p>
+</div>
+</section>
+<section id="hipótesis" class="slide level2">
+<h2>Hipótesis</h2>
+<div class="highlight-last" style="font-size: 110%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(H1_ \; (\text{Between-person}):\)</span> quienes pertenecen a clases altas exhiben, en promedio, mayor apoyo a la comodificación de pensiones que quienes pertenecen a clases bajas</p></li>
+<li class="fragment"><p><span class="math inline">\(H2_{a} \; (\text{Between-person}):\)</span> las personas que perciben más meritocracia suelen mostrar mayor apoyo a la comodificación de las pensiones que quienes sostienen esas percepciones con menos fuerza</p></li>
+<li class="fragment"><p><span class="math inline">\(H2_{b} \; (\text{Within-person}):\)</span> cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su apoyo a la comodificación de las pensiones aumenta</p></li>
+<li class="fragment"><p><span class="math inline">\(H3_{a} \; (\text{Between-person}):\)</span> la asociación positiva entre meritocracia (BE) y apoyo a la comodificación es más fuerte en clases altas</p></li>
+<li class="fragment"><p><span class="math inline">\(H3_{b} \; (\text{Within-person}):\)</span> cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su apoyo a la comodificación sube más que en clases bajas</p></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="datos-variables-y-métodos" class="title-slide slide level1 xlarge center" data-background-color="#92220C">
+<h1>Datos, variables y métodos</h1>
+
+</section>
+<section id="datos" class="slide level2">
+<h2>Datos</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p><a href="https://coes.cl/elsoc/">ELSOC (COES)</a>: encuesta panel urbana en 40 ciudades (92 comunas, 13 regiones) y diseño muestral complejo</p></li>
+<li class="fragment"><p>Periodo: seis olas (2016, 2017, 2018, 2019, 2022 y 2023)</p></li>
+<li class="fragment"><p>Muestra analítica (<strong>panel balanceado 6 olas</strong>):</p>
+<ul>
+<li class="fragment"><strong>N = 5.755 observaciones</strong> (nivel 1) anidadas en</li>
+<li class="fragment"><strong>N = 1.027 individuos</strong> (nivel 2)</li>
+</ul></li>
+<li class="fragment"><p>Atrición 2016→2023: ~ 40%</p></li>
+</ul>
+</div>
+</section>
+<section id="método" class="slide level2">
+<h2>Método</h2>
+<div style="font-size: 110%;">
+<p><strong>Modelos multinivel de enlace acumulativo (CLMM)</strong>:</p>
+<ul>
+<li class="fragment"><p>Estructura de panel: observaciones repetidas (nivel 1) anidadas en individuos (nivel 2)</p></li>
+<li class="fragment"><p>Modela efectos <em>dentro</em> de persona (WE) y <em>entre</em> personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)</p></li>
+<li class="fragment"><p>Descomposición WE/BE (centrado por persona):</p>
+<ul>
+<li class="fragment">Within: <span class="math inline">\(X^{WE}_{it}=X_{it}-\bar X_i\)</span></li>
+<li class="fragment">Between: <span class="math inline">\(X^{BE}_{i}=\bar X_i\)</span></li>
+</ul></li>
+<li class="fragment"><p>Formalmente:</p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\begin{aligned}
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{tiempo}_{it} +\beta_2\,X^{WE}_{it} +\beta_3\,X^{BE}_{i} +\beta_4\,\mathrm{EGP}_i +
+    \end{aligned}\]</span></p>
+<p><span class="math display">\[\beta_5\,(\mathrm{EGP}_i\!\times\! X^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\times\! X^{BE}_{i}) +u_{0i}+u_{1i}\,\text{tiempo}_{it}\\\]</span></p>
+</div>
+</div>
+</section>
+<section id="variable-dependiente" class="slide level2">
+<h2>Variable dependiente</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-desc" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-desc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Distribución de respuestas para las preferencias por comodificación de pensiones Chile (2016-2023)
+</figcaption>
+<div aria-describedby="fig-desc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="COES_2025_files/figure-revealjs/fig-desc-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="variables-independientes-nivel-1-intra-individual" class="slide level2">
+<h2>Variables independientes: Nivel 1 (intra-individual)</h2>
+<div style="font-size: 120%;">
+<p><strong>Meritocracia</strong>:</p>
+<ul>
+<li class="fragment"><p>Se operacionaliza a partir del esfuerzo y el talento <span class="citation" data-cites="young_rise_1958 castillo_multidimensional_2023">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2023</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Young, 1958</a>)</span></p></li>
+<li class="fragment"><p>Medición (Likert 1–5):</p>
+<ul>
+<li class="fragment">“En Chile, se recompensa a las personas por su esfuerzo.”</li>
+<li class="fragment">“En Chile, se recompensa a las personas por inteligencia y habilidad.”</li>
+</ul></li>
+<li class="fragment"><p>Estimación de efectos WE y BE <span class="citation" data-cites="singer_applied_2009">(<a href="#/referencias" role="doc-biblioref" onclick="">Singer &amp; Willett, 2009</a>)</span></p></li>
+</ul>
+</div>
+</section>
+<section id="variables-independientes-nivel-2-inter-individual" class="slide level2">
+<h2>Variables independientes: Nivel 2 (inter-individual)</h2>
+<div style="font-size: 115%;">
+<p><strong>Posición de clase</strong>:</p>
+<ul>
+<li class="fragment"><p>Se operacionaliza utilizando el esquema de clases de Erikson-Goldthorpe-Portocarrero (EGP) <span class="citation" data-cites="eriksonCASMINProjectAmerican1992">(<a href="#/referencias" role="doc-biblioref" onclick="">1992</a>)</span></p></li>
+<li class="fragment"><p>Medición → Versión colapsada de tres categorías de clase:</p>
+<ul>
+<li class="fragment">Clase de Servicios (I+II)</li>
+<li class="fragment">Clase Intermedia (III+IV)</li>
+<li class="fragment">Clase Trabajadora (V+VI+VII)</li>
+</ul></li>
+<li class="fragment"><p>Fijada a valor de la primera ola (i.e.&nbsp;time-invariant) → captura diferencias promedio (BE = <span class="math inline">\(\bar X_{i}\)</span>)</p></li>
+</ul>
+</div>
+<div class="fragment" style="font-size: 80%;">
+<ul>
+<li>Controles = educación (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo <span class="citation" data-cites="singer_applied_2009">(<a href="#/referencias" role="doc-biblioref" onclick="">Singer &amp; Willett, 2009</a>)</span></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="resultados" class="title-slide slide level1 xlarge center" data-background-color="#92220C">
+<h1>Resultados</h1>
+
+</section>
+<section id="modelos" class="slide level2">
+<h2>Modelos</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-model_time" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-model_time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Efectos por ola en las preferencias de comodificación de pensiones
+</figcaption>
+<div aria-describedby="fig-model_time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="COES_2025_files/figure-revealjs/fig-model_time-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 80%;">
+<ul>
+<li>ICC = 0.23 between, 0.77 within</li>
+</ul>
+</div>
+</section>
+<section id="modelos-1" class="slide level2">
+<h2>Modelos</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-model_be_we" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-model_be_we-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Efectos principales WE and BE en las preferencias de comodificación de pensiones
+</figcaption>
+<div aria-describedby="fig-model_be_we-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="COES_2025_files/figure-revealjs/fig-model_be_we-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modelos-2" class="slide level2">
+<h2>Modelos</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-model_be_we_controls" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-model_be_we_controls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Efectos WE and BE en las preferencias de comodificación de pensiones con controles
+</figcaption>
+<div aria-describedby="fig-model_be_we_controls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="COES_2025_files/figure-revealjs/fig-model_be_we_controls-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modelos-3" class="slide level2">
+<h2>Modelos</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-model_interactions" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-model_interactions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Interacciones por clase, meritocracia y preferencias por comodificación de pensiones
+</figcaption>
+<div aria-describedby="fig-model_interactions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="COES_2025_files/figure-revealjs/fig-model_interactions-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section></section>
+<section id="discusión-y-conclusiones" class="title-slide slide level1 center" data-background-color="#92220C">
+<h1>Discusión y conclusiones</h1>
+<div style="font-size: 120%;">
+<ol type="1">
+<li class="fragment"><p><strong>Tiempo</strong>: las preferencias por comodificación de las pensiones han aumentado en los últimos años</p></li>
+<li class="fragment"><p><strong>Clase social</strong>: clases altas muestran mayor apoyo a la comodificación que clases bajas (H1) <span class="citation" data-cites="mau_inequality_2015 otero_power_2024 lindh_public_2015">(<a href="#/referencias" role="doc-biblioref" onclick="">Lindh, 2015</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Mau, 2015</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Otero &amp; Mendoza, 2024</a>)</span>.</p></li>
+<li class="fragment"><p><strong>Meritocracia</strong>: creer que el esfuerzo es recompensado se asocia con más apoyo a la comodificación (H2a y H2b) <span class="citation" data-cites="castillo_perceptions_2025">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2025</a>)</span>.</p></li>
+<li class="fragment"><p><strong>Clase × Meritocracia</strong>: no hay evidencia de amplificación (H3a/H3b)</p></li>
+<li class="fragment"><p><strong>Proyecciones</strong>: incorporar desocupados, informales y fuera de la FT y refinar estimación (robustez, especificaciones ordinales)</p></li>
+</ol>
+</div>
+</section>
+
+<section>
+<section id="gracias-por-su-atención" class="title-slide slide level1 center">
+<h1>Gracias por su atención!</h1>
+<ul>
+<li><strong>Github del proyecto:</strong> <a href="https://github.com/jus-mer" class="uri">https://github.com/jus-mer</a></li>
+</ul>
+</section>
+<section id="referencias" class="slide level2 smaller scrollable">
+<h2>Referencias</h2>
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-boccardo_30_2020" class="csl-entry" role="listitem">
+Boccardo, G. (2020). <em>30 A<span>ñ</span>os de Privatizaciones En <span>Chile</span>: Lo Que La Pandemia Revel<span>ó</span></em> (Nodo XXI). Santiago.
+</div>
+<div id="ref-busemeyer_skills_2014" class="csl-entry" role="listitem">
+Busemeyer, M. (2014). <em>Skills and <span>Inequality</span>: <span>Partisan Politics</span> and the <span>Political Economy</span> of <span>Education Reforms</span> in <span>Western Welfare States</span></em>. Cambridge University Press.
+</div>
+<div id="ref-busemeyer_welfare_2020" class="csl-entry" role="listitem">
+Busemeyer, M., &amp; Iversen, T. (2020). The <span>Welfare State</span> with <span>Private Alternatives</span>: <span>The Transformation</span> of <span>Popular Support</span> for <span>Social Insurance</span>. <em>The Journal of Politics</em>, <em>82</em>(2), 671-686. <a href="https://doi.org/10.1086/706980">https://doi.org/10.1086/706980</a>
+</div>
+<div id="ref-campbell_institutional_2020" class="csl-entry" role="listitem">
+Campbell, J. L. (2020). <em>Institutional <span>Change</span> and <span>Globalization</span></em>. Princeton University Press. <a href="https://doi.org/10.2307/j.ctv131bw68">https://doi.org/10.2307/j.ctv131bw68</a>
+</div>
+<div id="ref-canalesceron_sujeto_2021" class="csl-entry" role="listitem">
+Canales Cerón, M., Orellana Calderón, V. S., &amp; Guajardo Mañán, F. (2021). Sujeto y Cotidiano En La Era Neoliberal: El Caso de La Educaci<span>ó</span>n Chilena. <em>Revista Mexicana de Ciencias Pol<span>í</span>ticas y Sociales</em>, <em>67</em>(244). <a href="https://doi.org/10.22201/fcpys.2448492xe.2022.244.70386">https://doi.org/10.22201/fcpys.2448492xe.2022.244.70386</a>
+</div>
+<div id="ref-castillo_multidimensional_2023" class="csl-entry" role="listitem">
+Castillo, J. C., Iturra, J., Maldonado, L., Atria, J., &amp; Meneses, F. (2023). A <span>Multidimensional Approach</span> for <span>Measuring Meritocratic Beliefs</span>: <span>Advantages</span>, <span>Limitations</span> and <span>Alternatives</span> to the <span>ISSP Social Inequality Survey</span>. <em>International Journal of Sociology</em>, 1-25. <a href="https://doi.org/10.1080/00207659.2023.2274712">https://doi.org/10.1080/00207659.2023.2274712</a>
+</div>
+<div id="ref-castillo_perceptions_2025" class="csl-entry" role="listitem">
+Castillo, J. C., Laffert, A., Carrasco, K., &amp; Iturra, J. (2025). Perceptions of <span>Inequality</span> and <span>Meritocracy</span>: <span>Their Interplay</span> in <span>Shaping Preferences</span> for <span>Market Justice</span> in <span>Chile</span> (2016-2023). <em>Under Review at Frontiers in Sociology</em>.
+</div>
+<div id="ref-castillo_socialization_2024" class="csl-entry" role="listitem">
+Castillo, J. C., Salgado, M., Carrasco, K., &amp; Laffert, A. (2024). The <span>Socialization</span> of <span>Meritocracy</span> and <span>Market Justice Preferences</span> at <span>School</span>. <em>Societies</em>, <em>14</em>(11), 214. <a href="https://doi.org/10.3390/soc14110214">https://doi.org/10.3390/soc14110214</a>
+</div>
+<div id="ref-eriksonCASMINProjectAmerican1992" class="csl-entry" role="listitem">
+Erikson, R., &amp; Goldthorpe, J. H. (1992). The <span>CASMIN</span> Project and the <span>American</span> Dream. <em>European Sociological Review</em>, <em>8</em>(3), 283-305. <a href="https://doi.org/10.1093/oxfordjournals.esr.a036642">https://doi.org/10.1093/oxfordjournals.esr.a036642</a>
+</div>
+<div id="ref-fernandez_positive_2013" class="csl-entry" role="listitem">
+Fernandez, J. J., &amp; Jaime-Castillo, A. M. (2013). Positive or <span>Negative Policy Feedbacks</span>? <span>Explaining Popular Attitudes Towards Pragmatic Pension Policy Reforms</span>. <em>European Sociological Review</em>, <em>29</em>(4), 803-815. <a href="https://doi.org/10.1093/esr/jcs059">https://doi.org/10.1093/esr/jcs059</a>
+</div>
+<div id="ref-ferre_welfare_2023" class="csl-entry" role="listitem">
+Ferre, J. C. (2023). Welfare Regimes in Twenty-First-Century <span>Latin America</span>. <em>Journal of International and Comparative Social Policy</em>, <em>39</em>(2), 101-127. <a href="https://doi.org/10.1017/ics.2023.16">https://doi.org/10.1017/ics.2023.16</a>
+</div>
+<div id="ref-flores_top_2020" class="csl-entry" role="listitem">
+Flores, I., Sanhueza, C., Atria, J., &amp; Mayer, R. (2020). Top <span>Incomes</span> in <span>Chile</span>: <span>A Historical Perspective</span> on <span>Income Inequality</span>, 1964–2017. <em>Review of Income and Wealth</em>, <em>66</em>(4), 850-874. <a href="https://doi.org/10.1111/roiw.12441">https://doi.org/10.1111/roiw.12441</a>
+</div>
+<div id="ref-gingrich_making_2011" class="csl-entry" role="listitem">
+Gingrich, J. R. (2011). <em>Making <span>Markets</span> in the <span>Welfare State</span>: <span>The Politics</span> of <span>Varying Market Reforms</span></em> (1.ª ed.). Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511791529">https://doi.org/10.1017/CBO9780511791529</a>
+</div>
+<div id="ref-immergut_it_2020" class="csl-entry" role="listitem">
+Immergut, E. M., &amp; Schneider, S. M. (2020). Is It Unfair for the Affluent to Be Able to Purchase <span>«Better»</span> Healthcare? <span>Existential</span> Standards and Institutional Norms in Healthcare Attitudes across 28 Countries. <em>Social Science &amp; Medicine</em>, <em>267</em>, 113146. <a href="https://doi.org/10.1016/j.socscimed.2020.113146">https://doi.org/10.1016/j.socscimed.2020.113146</a>
+</div>
+<div id="ref-kluegel_legitimation_1999" class="csl-entry" role="listitem">
+Kluegel, J. R., Mason, D. S., &amp; Wegener, B. (1999). The <span>Legitimation</span> of <span>Capitalism</span> in the <span>Postcommunist Transition</span>: <span>Public Opinion</span> about <span>Market Justice</span>, 1991-1996. <em>European Sociological Review</em>, <em>15</em>(3), 251-283. Recuperado de <a href="https://www.jstor.org/stable/522731">https://www.jstor.org/stable/522731</a>
+</div>
+<div id="ref-koos_moral_2019" class="csl-entry" role="listitem">
+Koos, S., &amp; Sachweh, P. (2019). The Moral Economies of Market Societies: Popular Attitudes towards Market Competition, Redistribution and Reciprocity in Comparative Perspective. <em>Socio-Economic Review</em>, <em>17</em>(4), 793-821. <a href="https://doi.org/10.1093/ser/mwx045">https://doi.org/10.1093/ser/mwx045</a>
+</div>
+<div id="ref-lane_market_1986" class="csl-entry" role="listitem">
+Lane, R. E. (1986). Market <span>Justice</span>, <span>Political Justice</span>. <em>American Political Science Review</em>, <em>80</em>(2), 383-402. <a href="https://doi.org/10.2307/1958264">https://doi.org/10.2307/1958264</a>
+</div>
+<div id="ref-lee_fairness_2023" class="csl-entry" role="listitem">
+Lee, J.-S., &amp; Stacey, M. (2023). Fairness Perceptions of Educational Inequality: The Effects of Self-Interest and Neoliberal Orientations. <em>The Australian Educational Researcher</em>. <a href="https://doi.org/10.1007/s13384-023-00636-6">https://doi.org/10.1007/s13384-023-00636-6</a>
+</div>
+<div id="ref-lindh_public_2015" class="csl-entry" role="listitem">
+Lindh, A. (2015). Public <span>Opinion</span> against <span>Markets</span>? <span>Attitudes</span> towards <span>Market Distribution</span> of <span>Social Services</span> – <span>A Comparison</span> of 17 <span>Countries</span>. <em>Social Policy &amp; Administration</em>, <em>49</em>(7), 887-910. <a href="https://doi.org/10.1111/spol.12105">https://doi.org/10.1111/spol.12105</a>
+</div>
+<div id="ref-llorca-jana_historia_2021" class="csl-entry" role="listitem">
+Llorca-Jaña, M., &amp; Miller, R. M. D. (2021). <em><span>Historia econ<span>ó</span>mica de Chile desde la independencia</span></em>. Santiago de Chile: RIL editores.
+</div>
+<div id="ref-lopez-roldan_comparative_2021" class="csl-entry" role="listitem">
+López-Roldán, P., &amp; Fachelli, S. (Eds.). (2021). <em>Towards a <span>Comparative Analysis</span> of <span>Social Inequalities</span> between <span>Europe</span> and <span>Latin America</span></em>. Cham: Springer International Publishing. <a href="https://doi.org/10.1007/978-3-030-48442-2">https://doi.org/10.1007/978-3-030-48442-2</a>
+</div>
+<div id="ref-madariaga_three_2020" class="csl-entry" role="listitem">
+Madariaga, A. (2020). The Three Pillars of Neoliberalism: <span>Chile</span>’s Economic Policy Trajectory in Comparative Perspective. <em>Contemporary Politics</em>, <em>26</em>(3), 308-329. <a href="https://doi.org/10.1080/13569775.2020.1735021">https://doi.org/10.1080/13569775.2020.1735021</a>
+</div>
+<div id="ref-mau_inequality_2015" class="csl-entry" role="listitem">
+Mau, S. (2015). <em>Inequality, <span>Marketization</span> and the <span>Majority Class</span>: <span>Why Did</span> the <span>European Middle Classes Accept Neo-Liberalism</span>?</em> Houndmills: Palgrave Macmillan.
+</div>
+<div id="ref-otero_power_2024" class="csl-entry" role="listitem">
+Otero, G., &amp; Mendoza, M. (2024). The <span>Power</span> of <span>Diversity</span>: <span>Class</span>, <span>Networks</span> and <span>Attitudes Towards Inequality</span>. <em>Sociology</em>, <em>58</em>(4), 851-876. <a href="https://doi.org/10.1177/00380385231217625">https://doi.org/10.1177/00380385231217625</a>
+</div>
+<div id="ref-singer_applied_2009" class="csl-entry" role="listitem">
+Singer, J. D., &amp; Willett, J. B. (2009). <em>Applied Longitudinal Data Analysis: Modeling Change and Event Occurence</em>. New York: Oxford University Press, Incorporated.
+</div>
+<div id="ref-somma_no_2021" class="csl-entry" role="listitem">
+Somma, N. M., Bargsted, M., Disi Pavlic, R., &amp; Medel, R. M. (2021). No Water in the Oasis: The <span>Chilean Spring</span> of 2019–2020. <em>Social Movement Studies</em>, <em>20</em>(4), 495-502. <a href="https://doi.org/10.1080/14742837.2020.1727737">https://doi.org/10.1080/14742837.2020.1727737</a>
+</div>
+<div id="ref-streeck_how_2016" class="csl-entry" role="listitem">
+Streeck, W. (2016). <em>How Will Capitalism End? Essays on a Failing System</em>. London: Verso.
+</div>
+<div id="ref-superintendenciadepensiones_estadisticas_2024" class="csl-entry" role="listitem">
+Superintendencia de Pensiones. (2024). <em>Estad<span>í</span>sticas de <span>Afiliados</span> En <span>AFP</span> En <span>Sistema</span> de <span>Pensiones</span>. <span>Abril</span> 2024</em>. Superintendencia de Pensiones.
+</div>
+<div id="ref-svallfors_political_2007" class="csl-entry" role="listitem">
+Svallfors, S. (Ed.). (2007). <em>The <span>Political Sociology</span> of the <span>Welfare State</span>: <span>Institutions</span>, <span>Social Cleavages</span>, and <span>Orientations</span></em> (1.ª ed.). Stanford University Press. <a href="https://doi.org/10.2307/j.ctvr0qv0q">https://doi.org/10.2307/j.ctvr0qv0q</a>
+</div>
+<div id="ref-torche_intergenerational_2014" class="csl-entry" role="listitem">
+Torche, F. (2014). Intergenerational <span>Mobility</span> and <span>Inequality</span>: <span>The Latin American Case</span>. <em>Annual Review of Sociology</em>, <em>40</em>(1), 619-642. <a href="https://doi.org/10.1146/annurev-soc-071811-145521">https://doi.org/10.1146/annurev-soc-071811-145521</a>
+</div>
+<div id="ref-young_rise_1958" class="csl-entry" role="listitem">
+Young, M. (1958). <em>The Rise of the Meritocracy</em>. New Brunswick, N.J., U.S.A: Transaction Publishers.
+</div>
+</div>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="COES_2025_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="COES_2025_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="COES_2025_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="COES_2025_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: true,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'slow',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiado");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiado");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
