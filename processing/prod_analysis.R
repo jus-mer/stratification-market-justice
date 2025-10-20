@@ -170,7 +170,7 @@ g1 <- datos.pension %>%
        x = NULL,
        fill = NULL,
        title = "It is fair that people with higher incomes have better pensions than people\nwith lower incomes?",
-       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 9,371)") +
+       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 5,755)") +
   theme_ggdist() +
   theme(legend.position = "top",
         plot.title = element_text(face = "bold"),

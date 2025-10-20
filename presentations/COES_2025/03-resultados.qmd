@@ -1,0 +1,190 @@
+
+## Modelos
+
+```{r}
+#| label: fig-model_time
+#| fig-cap-location: top
+#| fig-cap: "Efectos por ola en las preferencias de comodificación de pensiones"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.5
+#| echo: false
+
+sjPlot::plot_model(
+  m1.1,
+  type = "est",
+  terms = c("ola2017","ola2018","ola2019","ola2022","ola2023"),
+  axis.labels = c("Wave 2023","Wave 2022","Wave 2019","Wave 2018","Wave 2017"),
+  transform = NULL,
+  show.ci = TRUE,     # <— muestra intervalos
+  ci.lvl  = 0.95,     # <— nivel de confianza
+  show.values = TRUE,
+  p.style = "stars",
+  vline.color = "grey40",
+  value.size = 4.5
+) +
+  scale_y_continuous(limits = c(-1,1.5))+
+  labs(title = NULL) +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16)) 
+
+
+```
+::: {style="font-size: 80%;"}
+- ICC = 0.23 between, 0.77 within
+::::
+
+## Modelos
+
+```{r}
+#| label: fig-model_be_we
+#| fig-cap-location: top
+#| fig-cap: "Efectos principales WE and BE en las preferencias de comodificación de pensiones"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
+
+sjPlot::plot_model(
+  m5,
+  type = "est",
+  terms = c("ola_num","egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
+  
+   axis.labels = c("Merit: Talent (BE)",
+                   "Merit: Effort (BE)",
+                   "Merit: Talent (WE)",
+                   "Merit: Effort (WE)",
+                   "Service class (I+II)",
+                   "Intermediate class (III+IV)",
+                   "Wave"),
+  transform = NULL,
+  show.ci = TRUE,     # <— muestra intervalos
+  ci.lvl  = 0.95,     # <— nivel de confianza
+  show.values = TRUE,
+  p.style = "stars",
+  vline.color = "grey40",
+  value.size = 4.5
+) +
+  scale_y_continuous(limits = c(-1,1.5))+
+  labs(title = NULL) +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16)) 
+
+
+```
+
+## Modelos
+
+```{r}
+#| label: fig-model_be_we_controls
+#| fig-cap-location: top
+#| fig-cap: "Efectos WE and BE en las preferencias de comodificación de pensiones con controles"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
+
+sjPlot::plot_model(
+  m6,
+  type = "est",
+  terms = c("ola_num","egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
+  
+   axis.labels = c("Merit: Talent (BE)",
+                   "Merit: Effort (BE)",
+                   "Merit: Talent (WE)",
+                   "Merit: Effort (WE)",
+                   "Service class (I+II)",
+                   "Intermediate class (III+IV)",
+                   "Wave"),
+  transform = NULL,
+  show.ci = TRUE,     # <— muestra intervalos
+  ci.lvl  = 0.95,     # <— nivel de confianza
+  show.values = TRUE,
+  p.style = "stars",
+  vline.color = "grey40",
+  value.size = 4.5
+) +
+  scale_y_continuous(limits = c(-1,1.5))+
+  labs(title = NULL) +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16)) 
+```
+
+
+## Modelos
+
+```{r}
+#| label: fig-model_interactions
+#| fig-cap-location: top
+#| fig-cap: "Interacciones por clase, meritocracia y preferencias por comodificación de pensiones"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
+
+library(broom.mixed)
+library(broom)
+
+df_pension <- bind_rows(
+  tidy(m7, conf.int = TRUE) %>%
+    filter(term %in% c("egpIntermediate class (III+IV):merit_effort_cwc", "egpService class (I+II):merit_effort_cwc")) %>%
+    mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_effort_cwc" ~ "Intermediate class (III+IV) x Merit: Effort (WE)",
+                            term == "egpService class (I+II):merit_effort_cwc" ~ "Service class (I+II) x Merit: Effort (WE)"))
+  ,
+  tidy(m8, conf.int = TRUE) %>%
+    filter(term %in% c("egpIntermediate class (III+IV):merit_talent_cwc", "egpService class (I+II):merit_talent_cwc")) %>%
+    mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_talent_cwc" ~ "Intermediate class (III+IV) x Merit: Talent (WE)",
+                            term == "egpService class (I+II):merit_talent_cwc" ~ "Service class (I+II) x Merit: Talent (WE)"))
+ ,
+ tidy(m9, conf.int = TRUE) %>%
+   filter(term %in% c("egpIntermediate class (III+IV):merit_effort_mean", "egpService class (I+II):merit_effort_mean")) %>%
+   mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_effort_mean" ~ "Intermediate class (III+IV) x Merit: Effort (BE)",
+                           term == "egpService class (I+II):merit_effort_mean" ~ "Service class (I+II) x Merit: Effort (BE)"))
+ ,
+ tidy(m10, conf.int = TRUE) %>%
+   filter(term %in% c("egpIntermediate class (III+IV):merit_talent_mean", "egpService class (I+II):merit_talent_mean")) %>%
+   mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_talent_mean" ~ "Intermediate class (III+IV) x Merit: Talent (BE)",
+                           term == "egpService class (I+II):merit_talent_mean" ~ "Service class (I+II) x Merit: Talent (BE)"))
+  
+)
+
+df_pension_lab <- df_pension %>%
+  mutate(
+    sig     = ifelse(conf.low * conf.high > 0, "*", ""),  # IC no cruza 0
+    est_lab = sprintf("%.2f%s", estimate, sig),
+    low_lab = sprintf("%.2f", conf.low),
+    high_lab= sprintf("%.2f", conf.high)
+  )
+
+df_pension_lab <- df_pension_lab %>%
+  mutate(
+    term = factor(
+      term,
+      levels = term
+      )
+  )
+
+ggplot(df_pension_lab, aes(x = estimate, y = term)) +
+  geom_vline(xintercept = 0, linetype = "solid", color = "grey40", size = 0.5, alpha = 1) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, color = "red") +
+  geom_point(size = 3, color = "red") +
+  scale_x_continuous(limits = c(-1, 1), breaks = seq(-1, 1, 0.5)) +
+  geom_text(aes(label = est_lab), hjust = -0.2, size = 4, vjust = 1.5, color = "red") +
+  labs(x = "Log-Odds", y = NULL) +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16)) 
+
+# library(ggeffects)
+# ggpredict(m10, terms = c("merit_talent_mean[meansd]", "egp"), type = "fixed") %>% plot()
+
+```
+
+

@@ -1,0 +1,115 @@
+---
+bibliography: "bib/tesis-magister.bib"
+csl: "bib/apa6.csl"
+lang: es
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    R.options:
+      
+      knitr.graphics.auto_pdf: true
+format:
+  revealjs:
+    #logo: images/edumer.png
+    slide-number: true
+    theme: "libs/edumer.scss"
+    auto-stretch: false
+    title-slide-attributes:
+      visibility: false
+    transition: fade
+    transition-speed: slow
+# data-background-image: images/cover.jpg
+# data-background-size: cover
+    auto-play-media: true
+    mathjax: "default"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      error = F, 
+                      message = F) 
+```
+
+```{r}
+#| label: packages
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               here,
+               kableExtra)
+
+options(scipen=999)
+rm(list = ls())
+```
+
+
+```{r}
+#| label: data
+#| include: false
+#| echo: false
+#| results: false
+
+source(file = here("processing/prod_analysis.R"))
+
+```
+
+::: columns
+
+
+::: {.column width="20%"}
+
+</br></br>
+
+![](images/jusmer_trans.png)
+
+
+![](images/coes.png)
+:::
+
+::: {.column .column-right width="80%"}
+
+
+# **Preferencias por la comodificación de pensiones: clase y meritocracia en Chile (2016–2023)**
+
+------------------------------------------------------------------------
+
+**Juan Carlos Castillo^1^, Andreas Laffert^2^** 
+</br>
+**René Canales^2^, Tomás Urzúa^1^ & Kevin Carrasco^1^**
+
+::: {.blue2 .medium}
+
+**^1^Departamento de Sociología, Universidad de Chile**
+
+**^2^Instituto de Sociología, Pontificia Universidad Católica de Chile**
+
+**Centro de Estudios de Conflicto y Cohesión Social - COES**
+
+:::
+
+XII Conferencia Internacional COES - 22 Octubre 2025, Santiago
+
+:::
+:::
+
+{{< include 01-introduccion.qmd >}}
+
+{{< include 02-metodos.qmd >}}
+
+{{< include 03-resultados.qmd >}}
+
+{{< include 04-conclusiones.qmd >}}
+
+## Referencias
+
+::: {#refs}
+:::

@@ -1,0 +1,143 @@
+## Contexto y motivación
+
+::: {.columns}
+
+::: {.column width="30%"}
+
+![](images/jusmer_trans.png)
+
+:::
+
+::: {.column width="70%"}
+::: {.incremental .highlight-last style="font-size: 110%;"}
+- ANID/FONDECYT N°1250518 2025-2028 - Justicia de mercado y merecimiento del bienestar social
+
+- Primera etapa:
+  * Estudios con datos secundarios comparados y nacionales
+  * Encuesta "Mercado, merecimiento y mérito"
+ 
+- Segunda etapa:
+  * Estudios con análisis de experimento de encuesta
+  * Análisis discusiones legislativas pensiones
+  
+- Más información: [jc-castillo.com/project/fondecyt-jusmer/](jc-castillo.com/project/fondecyt-jusmer/)
+
+:::
+:::
+:::
+
+## Antecedentes 
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+1) Privatización y mercantilización de  bienes públicos, políticas de bienestar y servicios sociales [@gingrich_making_2011; @streeck_how_2016]
+
+:::
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+2) Cambios en la arquitectura de las instituciones del bienestar social; expansión del mercado [@ferre_welfare_2023; @busemeyer_welfare_2020]
+
+:::
+
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+3) Este orden económico se refleja en una economía moral específica/policy-feedback effects [@mau_inequality_2015; @campbell_institutional_2020; @fernandez_positive_2013] 
+
+:::
+
+::: {.box-inv-5 .sp-after-half .fragment style="font-size: 110%;"}
+
+Preferencias por justicia de mercado [@busemeyer_skills_2014; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
+
+:::
+
+
+## El caso de Chile
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+- Crecimiento con elevada desigualdad [@llorca-jana_historia_2021; @flores_top_2020]
+- Rigida movilidad relativa y fuerte clausura cúspide [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
+- Profunda privatización y comodificación de áreas de reproducción social con fuerte dependencia Estatal [@madariaga_three_2020; @boccardo_30_2020]
+- Pensiones: sistema de **capitalización individual** administrado por **AFPs**; cubre ~11 millones de cotizantes, pero **27% de la fuerza laboral** queda fuera por **informalidad** [@superintendenciadepensiones_estadisticas_2024]
+- Conflictividad social previsional [@somma_no_2021] y legitimidad del sistema ("con mi plata no") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
+:::
+
+
+
+## Preferencias por justicia de mercado
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- Lane [-@lane_market_1986]: market justice vs. political justice
+
+- Creencias normativas que legitiman la idea de que el acceso a los servicios sociales esenciales —como la salud, la educación o las pensiones— debe determinarse según criterios basados en el mercado [@lindh_public_2015, p.895]
+
+- Medición: evaluar si las personas consideran justo que el acceso a dichos servicios dependa de los ingresos [@lindh_public_2015; @kluegel_legitimation_1999; @castillo_perceptions_2025]
+
+:::
+
+
+## Preferencias por la comodificación de servicios
+
+
+::::: columns
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+
+### Contextual
+
+- Gasto social [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
+- Desigualdad económica [@koos_moral_2019]
+- Nivel de privatización de servicios y regulación del mercado [@lindh_public_2015; @koos_moral_2019]
+
+:::
+
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+
+### Individual
+
+- Estatus socioeconómico -ingresos, educación y ocupación- [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
+- Percepciones sobre la desigualdad y meritocracia [@castillo_perceptions_2025]
+- Conservadurismo/liberalismo económico [@lee_fairness_2023]
+
+:::
+:::::
+
+
+## Este estudio
+
+</br>
+
+::: {.pull-left .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Analizar la relación entre clase social y preferencias por la comodificación de pensiones en Chile y sus cambios en el tiempo
+
+
+:::
+
+</br></br></br>
+
+::: {.pull-right .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Examinar el rol de la meritocracia en la relación entre clase y apoyo a la comodificación de pensiones
+
+:::
+
+
+## Hipótesis
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+- $H1_ \; (\text{Between-person}):$ quienes pertenecen a clases altas exhiben, en promedio, mayor apoyo a la comodificación de pensiones que quienes pertenecen a clases bajas
+
+- $H2_{a} \; (\text{Between-person}):$ las personas que perciben más meritocracia suelen mostrar mayor apoyo a la comodificación de las pensiones que quienes sostienen esas percepciones con menos fuerza
+
+- $H2_{b} \; (\text{Within-person}):$ cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su apoyo a la comodificación de las pensiones aumenta
+
+- $H3_{a} \; (\text{Between-person}):$ la asociación positiva entre meritocracia (BE) y apoyo a la comodificación es más fuerte en clases altas
+
+- $H3_{b} \; (\text{Within-person}):$ cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su apoyo a la comodificación sube más que en clases bajas
+
+:::
+

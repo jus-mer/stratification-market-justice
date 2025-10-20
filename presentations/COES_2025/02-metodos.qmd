@@ -1,0 +1,101 @@
+
+
+## Datos
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- [ELSOC (COES)](https://coes.cl/elsoc/): encuesta panel urbana en 40 ciudades (92 comunas, 13 regiones) y diseño muestral complejo
+
+- Periodo: seis olas (2016, 2017, 2018, 2019, 2022 y 2023)
+
+- Muestra analítica (**panel balanceado 6 olas**): 
+
+    * **N = 5.755 observaciones** (nivel 1) anidadas en 
+    * **N = 1.027 individuos** (nivel 2)
+
+- Atrición 2016→2023: ~ 40%
+
+:::
+
+## Método
+
+:::: {.incremental style="font-size: 110%;"}
+
+**Modelos multinivel de enlace acumulativo (CLMM)**:
+
+- Estructura de panel: observaciones repetidas (nivel 1) anidadas en individuos (nivel 2)
+
+- Modela efectos _dentro_ de persona (WE) y _entre_ personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)
+
+- Descomposición WE/BE (centrado por persona):
+
+     * Within: $X^{WE}_{it}=X_{it}-\bar X_i$
+     * Between: $X^{BE}_{i}=\bar X_i$
+
+- Formalmente: 
+
+::: {.fragment}
+$$\begin{aligned}
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{tiempo}_{it} +\beta_2\,X^{WE}_{it} +\beta_3\,X^{BE}_{i} +\beta_4\,\mathrm{EGP}_i +
+    \end{aligned}$$
+    
+$$\beta_5\,(\mathrm{EGP}_i\!\times\! X^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\times\! X^{BE}_{i}) +u_{0i}+u_{1i}\,\text{tiempo}_{it}\\$$
+:::
+
+::::
+
+
+## Variable dependiente
+
+```{r}
+#| label: fig-desc
+#| fig-cap-location: top
+#| fig-cap: "Distribución de respuestas para las preferencias por comodificación de pensiones Chile (2016-2023)"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
+
+g1
+
+```
+
+
+## Variables independientes: Nivel 1
+
+:::: {.incremental style="font-size: 120%;"}
+
+**Meritocracia**:
+
+- Se operacionaliza a partir del esfuerzo y el talento [@young_rise_1958; @castillo_multidimensional_2023]
+- Medición (Likert 1–5):
+  
+    * “En Chile, se recompensa a las personas por su esfuerzo.”
+    * “En Chile, se recompensa a las personas por inteligencia y habilidad.”
+
+- Estimación de efectos WE y BE [@singer_applied_2009]
+::::
+
+
+## Variables independientes: Nivel 2
+
+:::: {.incremental style="font-size: 115%;"}
+**Posición de clase**: 
+
+- Se operacionaliza utilizando el esquema de clases de Erikson-Goldthorpe-Portocarrero (EGP) [-@eriksonCASMINProjectAmerican1992]
+
+- Medición → Versión colapsada de tres categorías de clase: 
+   
+    * Clase de Servicios (I+II) 
+    * Clase Intermedia (III+IV) 
+    * Clase Trabajadora (V+VI+VII) 
+    
+- Fijada a valor de la primera ola (i.e. time-invariant) → captura diferencias promedio (BE = $\bar X_{i}$)
+
+::::
+
+
+::: {.fragment style="font-size: 80%;"}
+- Controles = educación (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo [@singer_applied_2009]
+::::
+
