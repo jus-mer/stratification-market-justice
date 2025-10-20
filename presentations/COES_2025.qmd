@@ -102,9 +102,6 @@ XII Conferencia Internacional COES - 22 Octubre 2025, Santiago
 :::
 
 
-# Contexto y motivación {.xlarge data-background-color="#92220C"}
-
-
 ## Contexto y motivación
 
 ::: {.columns}
@@ -132,7 +129,7 @@ XII Conferencia Internacional COES - 22 Octubre 2025, Santiago
 :::
 :::
 :::
-# Antecedentes {.xlarge data-background-color="#92220C"}
+
 ## Antecedentes 
 
 ::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
@@ -186,19 +183,28 @@ Preferencias por justicia de mercado [@busemeyer_skills_2014; @castillo_percepti
 :::
 
 
-## Preferencias por justicia de mercado
+## Preferencias por la comodificación de servicios
+
+
 ::::: columns
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+
 ### Contextual
+
 - Gasto social [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
 - Desigualdad económica [@koos_moral_2019]
 - Nivel de privatización de servicios y regulación del mercado [@lindh_public_2015; @koos_moral_2019]
+
 :::
+
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+
 ### Individual
-- Estatus socioeconómico -ingresos, educación y ocupación- [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007, @otero_power_2024]
-- Percepciones sobre la desigualdad y meritocracia [@castillo_perceptions_2025; @castillo_socialization_2024]
+
+- Estatus socioeconómico -ingresos, educación y ocupación- [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
+- Percepciones sobre la desigualdad y meritocracia [@castillo_perceptions_2025]
 - Conservadurismo/liberalismo económico [@lee_fairness_2023]
+
 :::
 :::::
 
@@ -240,7 +246,6 @@ Examinar el rol de la meritocracia en la relación entre clase y apoyo a la como
 :::
 
 
-# Datos, variables y métodos {.xlarge data-background-color="#92220C"}
 
 ## Datos
 
@@ -340,10 +345,6 @@ g1
 ::: {.fragment style="font-size: 80%;"}
 - Controles = educación (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo [@singer_applied_2009]
 ::::
-
-
-
-# Resultados {.xlarge data-background-color="#92220C"}
 
 
 ## Modelos
