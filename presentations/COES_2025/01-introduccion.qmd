@@ -1,5 +1,6 @@
-## Contexto y motivación
+# Contexto y Antecedentes {background-color="#491106ff"}
 
+## Proyecto
 ::: {.columns}
 
 ::: {.column width="30%"}
@@ -26,7 +27,7 @@
 :::
 :::
 
-## Antecedentes 
+## Problema 
 
 ::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
 

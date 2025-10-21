@@ -1,4 +1,4 @@
-
+# Métodología {background-color="#491106ff"}
 
 ## Datos
 
@@ -17,7 +17,7 @@
 
 :::
 
-## Método
+## Método de estimación
 
 :::: {.incremental style="font-size: 110%;"}
 

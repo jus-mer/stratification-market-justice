@@ -14,6 +14,18 @@ $backgroundColor: #ffffff;
 
 // Primary/body text
 $mainFont: 'Noto Serif', sans-serif; /* Updated font */
+
+// Style for slides with first-level headings
+.reveal .slides section h1 {
+  &:first-child {
+    & + p, & + div {
+      // This targets slides where h1 is the first element
+      & ~ * {
+        background-color: #62190a; // Light version of #92220C (the heading color)
+      }
+    }
+  }
+}
 $mainFontSize: 27px;
 $mainColor: #272828;
 
