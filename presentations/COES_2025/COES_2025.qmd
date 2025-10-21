@@ -67,36 +67,35 @@ source(file = here("processing/prod_analysis.R"))
 
 ::: {.column width="20%"}
 
-</br></br>
+</br></br> </br></br></br></br> </br></br>
 
-![](images/jusmer_trans.png)
+![](images/jusmer-logo-vert.png)
 
 
-![](images/coes.png)
 :::
 
 ::: {.column .column-right width="80%"}
 
 
-# **Preferencias por la comodificación de pensiones: clase y meritocracia en Chile (2016–2023)**
+# Cambios en la justificación en la desigualdad de pensiones en Chile 2016–2023 {style="font-size:20px; text-align:right; line-height:1.1;"}
+
+### **Asociaciones con estratificación social y creencias en la meritocracia**{style="font-size:35px; text-align:right; line-height:1.1; margin-top:10px;"}
 
 ------------------------------------------------------------------------
-
-**Juan Carlos Castillo^1^, Andreas Laffert^2^** 
 </br>
-**René Canales^2^, Tomás Urzúa^1^ & Kevin Carrasco^1^**
+**Juan Carlos Castillo^1,3^, Andreas Laffert^2,3^, Tomás Urzúa^1,3^, </br> René Canales^2,3^ & Kevin Carrasco^3^**
 
-::: {.blue2 .medium}
+::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
 
-**^1^Departamento de Sociología, Universidad de Chile**
-
-**^2^Instituto de Sociología, Pontificia Universidad Católica de Chile**
-
-**Centro de Estudios de Conflicto y Cohesión Social - COES**
+**^1^Departamento de Sociología, Universidad de Chile** </br>
+**^2^Instituto de Sociología, Pontificia Universidad Católica de Chile** </br>
+**^3^Centro de Estudios de Conflicto y Cohesión Social - COES**
 
 :::
 
-XII Conferencia Internacional COES - 22 Octubre 2025, Santiago
+</br>
+
+### XII Conferencia Internacional COES - 22 Octubre 2025, Santiago {style="color:black"}
 
 :::
 :::
