@@ -1,7 +1,7 @@
 
 # Discusión y conclusiones {background-color="#491106ff"}
 
-## 
+## Discusión y conclusiones
 :::: {.incremental style="font-size: 120%;"}
 
 1. **Tiempo**: las preferencias por comodificación de las pensiones han aumentado en los últimos años 

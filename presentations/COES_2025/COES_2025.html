@@ -176,9 +176,9 @@
 <section id="proyecto" class="slide level2">
 <h2>Proyecto</h2>
 <div class="columns">
-<div class="column" style="width:30%;">
-<p><img data-src="images/jusmer_trans.png"></p>
-</div><div class="column" style="width:70%;">
+<div class="column" style="width:20%;">
+<p><img data-src="images/jusmer-logo-vert.png"></p>
+</div><div class="column" style="width:80%;">
 <div class="highlight-last" style="font-size: 110%;">
 <ul>
 <li class="fragment"><p>ANID/FONDECYT N°1250518 2025-2028 - Justicia de mercado y merecimiento del bienestar social</p></li>
@@ -283,32 +283,32 @@
 </div>
 </section></section>
 <section>
-<section id="métodos" class="title-slide slide level1 center" data-background-color="#491106ff">
-<h1>Métodos</h1>
+<section id="métodología" class="title-slide slide level1 center" data-background-color="#491106ff">
+<h1>Métodología</h1>
 
 </section>
 <section id="datos" class="slide level2">
 <h2>Datos</h2>
 <div class="highlight-last" style="font-size: 120%;">
 <ul>
-<li class="fragment"><p><a href="https://coes.cl/elsoc/">ELSOC (COES)</a>: encuesta panel urbana en 40 ciudades (92 comunas, 13 regiones) y diseño muestral complejo</p></li>
+<li class="fragment"><p><a href="https://coes.cl/elsoc/">ELSOC (COES)</a>: panel representativo de la población adulta urbana de Chile, con muestreo probabilístico, estratificado, por conglomerados y multietápico en ciudades grandes y pequeñas</p></li>
 <li class="fragment"><p>Periodo: seis olas (2016, 2017, 2018, 2019, 2022 y 2023)</p></li>
+<li class="fragment"><p>Atrición 2016→2023: ~ 40%</p></li>
 <li class="fragment"><p>Muestra analítica (<strong>panel balanceado 6 olas</strong>):</p>
 <ul>
 <li class="fragment"><strong>N = 5.755 observaciones</strong> (nivel 1) anidadas en</li>
 <li class="fragment"><strong>N = 1.027 individuos</strong> (nivel 2)</li>
 </ul></li>
-<li class="fragment"><p>Atrición 2016→2023: ~ 40%</p></li>
 </ul>
 </div>
 </section>
-<section id="método" class="slide level2">
-<h2>Método</h2>
+<section id="método-de-estimación" class="slide level2">
+<h2>Método de estimación</h2>
 <div style="font-size: 110%;">
 <p><strong>Modelos multinivel de enlace acumulativo (CLMM)</strong>:</p>
 <ul>
 <li class="fragment"><p>Estructura de panel: observaciones repetidas (nivel 1) anidadas en individuos (nivel 2)</p></li>
-<li class="fragment"><p>Modela efectos <em>dentro</em> de persona (WE) y <em>entre</em> personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)</p></li>
+<li class="fragment"><p>Modela efectos <em>dentro</em> de las personas (WE) y <em>entre</em> personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)</p></li>
 <li class="fragment"><p>Descomposición WE/BE (centrado por persona):</p>
 <ul>
 <li class="fragment">Within: <span class="math inline">\(X^{WE}_{it}=X_{it}-\bar X_i\)</span></li>
@@ -346,7 +346,7 @@ Figura&nbsp;1: Distribución de respuestas para las preferencias por comodificac
 <div style="font-size: 120%;">
 <p><strong>Meritocracia</strong>:</p>
 <ul>
-<li class="fragment"><p>Se operacionaliza a partir del esfuerzo y el talento <span class="citation" data-cites="young_rise_1958 castillo_multidimensional_2023">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2023</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Young, 1958</a>)</span></p></li>
+<li class="fragment"><p>Se operacionaliza a partir dos componentes: esfuerzo y talento <span class="citation" data-cites="young_rise_1958 castillo_multidimensional_2023">(<a href="#/referencias" role="doc-biblioref" onclick="">Castillo et&nbsp;al., 2023</a>; <a href="#/referencias" role="doc-biblioref" onclick="">Young, 1958</a>)</span></p></li>
 <li class="fragment"><p>Medición (Likert 1–5):</p>
 <ul>
 <li class="fragment">“En Chile, se recompensa a las personas por su esfuerzo.”</li>
@@ -368,12 +368,12 @@ Figura&nbsp;1: Distribución de respuestas para las preferencias por comodificac
 <li class="fragment">Clase Intermedia (III+IV)</li>
 <li class="fragment">Clase Trabajadora (V+VI+VII)</li>
 </ul></li>
-<li class="fragment"><p>Fijada a valor de la primera ola (i.e.&nbsp;time-invariant) → captura diferencias promedio (BE = <span class="math inline">\(\bar X_{i}\)</span>)</p></li>
+<li class="fragment"><p>Fijada al valor de la primera ola (i.e.&nbsp;time-invariant) → captura diferencias promedio (BE = <span class="math inline">\(\bar X_{i}\)</span>)</p></li>
 </ul>
 </div>
-<div class="fragment" style="font-size: 80%;">
+<div class="fragment" style="font-size: 90%;">
 <ul>
-<li>Controles = educación (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo <span class="citation" data-cites="singer_applied_2009">(<a href="#/referencias" role="doc-biblioref" onclick="">Singer &amp; Willett, 2009</a>)</span></li>
+<li>Controles = educación universitaria (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo <span class="citation" data-cites="singer_applied_2009">(<a href="#/referencias" role="doc-biblioref" onclick="">Singer &amp; Willett, 2009</a>)</span></li>
 </ul>
 </div>
 </section></section>
@@ -460,8 +460,8 @@ Figura&nbsp;5: Interacciones por clase, meritocracia y preferencias por comodifi
 <h1>Discusión y conclusiones</h1>
 
 </section>
-<section id="section" class="slide level2">
-<h2></h2>
+<section id="discusión-y-conclusiones-1" class="slide level2">
+<h2>Discusión y conclusiones</h2>
 <div style="font-size: 120%;">
 <ol type="1">
 <li class="fragment"><p><strong>Tiempo</strong>: las preferencias por comodificación de las pensiones han aumentado en los últimos años</p></li>

@@ -4,16 +4,16 @@
 
 ::: {.incremental .highlight-last style="font-size: 120%;"}
 
-- [ELSOC (COES)](https://coes.cl/elsoc/): encuesta panel urbana en 40 ciudades (92 comunas, 13 regiones) y diseño muestral complejo
+- [ELSOC (COES)](https://coes.cl/elsoc/): panel representativo de la población adulta urbana de Chile, con muestreo probabilístico, estratificado, por conglomerados y multietápico en ciudades grandes y pequeñas
 
 - Periodo: seis olas (2016, 2017, 2018, 2019, 2022 y 2023)
+
+- Atrición 2016→2023: ~ 40%
 
 - Muestra analítica (**panel balanceado 6 olas**): 
 
     * **N = 5.755 observaciones** (nivel 1) anidadas en 
     * **N = 1.027 individuos** (nivel 2)
-
-- Atrición 2016→2023: ~ 40%
 
 :::
 
@@ -25,7 +25,7 @@
 
 - Estructura de panel: observaciones repetidas (nivel 1) anidadas en individuos (nivel 2)
 
-- Modela efectos _dentro_ de persona (WE) y _entre_ personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)
+- Modela efectos _dentro_ de las personas (WE) y _entre_ personas (BE); incluye efectos aleatorios (intercepto y pendiente en tiempo)
 
 - Descomposición WE/BE (centrado por persona):
 
@@ -67,7 +67,8 @@ g1
 
 **Meritocracia**:
 
-- Se operacionaliza a partir del esfuerzo y el talento [@young_rise_1958; @castillo_multidimensional_2023]
+- Se operacionaliza a partir dos componentes: esfuerzo y talento [@young_rise_1958; @castillo_multidimensional_2023]
+
 - Medición (Likert 1–5):
   
     * “En Chile, se recompensa a las personas por su esfuerzo.”
@@ -90,12 +91,12 @@ g1
     * Clase Intermedia (III+IV) 
     * Clase Trabajadora (V+VI+VII) 
     
-- Fijada a valor de la primera ola (i.e. time-invariant) → captura diferencias promedio (BE = $\bar X_{i}$)
+- Fijada al valor de la primera ola (i.e. time-invariant) → captura diferencias promedio (BE = $\bar X_{i}$)
 
 ::::
 
 
-::: {.fragment style="font-size: 80%;"}
-- Controles = educación (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo [@singer_applied_2009]
+::: {.fragment style="font-size: 90%;"}
+- Controles = educación universitaria (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo [@singer_applied_2009]
 ::::
 

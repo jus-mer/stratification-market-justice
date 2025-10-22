@@ -3,13 +3,13 @@
 ## Proyecto
 ::: {.columns}
 
-::: {.column width="30%"}
+::: {.column width="20%"}
 
-![](images/jusmer_trans.png)
+![](images/jusmer-logo-vert.png)
 
 :::
 
-::: {.column width="70%"}
+::: {.column width="80%"}
 ::: {.incremental .highlight-last style="font-size: 110%;"}
 - ANID/FONDECYT N°1250518 2025-2028 - Justicia de mercado y merecimiento del bienestar social
 
