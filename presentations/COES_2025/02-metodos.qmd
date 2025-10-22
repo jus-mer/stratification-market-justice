@@ -1,4 +1,4 @@
-# Métodología {background-color="#491106ff"}
+# Metodología {background-color="#491106ff"}
 
 ## Datos
 
