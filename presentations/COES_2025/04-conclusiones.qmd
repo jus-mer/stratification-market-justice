@@ -6,9 +6,9 @@
 
 1. **Tiempo**: las preferencias por comodificación de las pensiones han aumentado en los últimos años 
 
-2. **Clase social**: clases altas muestran mayor apoyo a la comodificación que clases bajas (H1) [@mau_inequality_2015; @otero_power_2024; @lindh_public_2015].
+2. **Clase social**: clases altas muestran mayor apoyo a la comodificación que clases bajas (H1) [@mau_inequality_2015; @otero_power_2024; @lindh_public_2015]
 
-3. **Meritocracia**: creer que el esfuerzo es recompensado se asocia con más apoyo a la comodificación (H2a y H2b) [@castillo_perceptions_2025].
+3. **Meritocracia**: creer que el esfuerzo es recompensado se asocia con más apoyo a la comodificación (H2a y H2b) [@castillo_perceptions_2025]
 
 4. **Clase × Meritocracia**: no hay evidencia de amplificación (H3a/H3b) 
 

@@ -25,11 +25,13 @@ sjPlot::plot_model(
   value.size = 4.5
 ) +
   scale_y_continuous(limits = c(-1,1.5))+
-  labs(title = NULL) +
+  labs(title = NULL,
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
   theme_ggdist() +
   theme(legend.position = "top",
         plot.title = element_text(face = "bold"),
-        text = element_text(size = 16)) 
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
 
 
 ```
@@ -51,7 +53,7 @@ sjPlot::plot_model(
 sjPlot::plot_model(
   m5,
   type = "est",
-  terms = c("ola_num","egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
+  terms = c("ola_num","ola_2", "egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
   
    axis.labels = c("Merit: Talent (BE)",
                    "Merit: Effort (BE)",
@@ -59,6 +61,7 @@ sjPlot::plot_model(
                    "Merit: Effort (WE)",
                    "Service class (I+II)",
                    "Intermediate class (III+IV)",
+                   "Wave^2",
                    "Wave"),
   transform = NULL,
   show.ci = TRUE,     # <— muestra intervalos
@@ -69,11 +72,14 @@ sjPlot::plot_model(
   value.size = 4.5
 ) +
   scale_y_continuous(limits = c(-1,1.5))+
-  labs(title = NULL) +
+  labs(title = NULL,
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
   theme_ggdist() +
   theme(legend.position = "top",
         plot.title = element_text(face = "bold"),
-        text = element_text(size = 16)) 
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
+
 
 
 ```
@@ -92,7 +98,7 @@ sjPlot::plot_model(
 sjPlot::plot_model(
   m6,
   type = "est",
-  terms = c("ola_num","egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
+  terms = c("ola_num","ola_2","egpIntermediate class (III+IV)","egpService class (I+II)","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
   
    axis.labels = c("Merit: Talent (BE)",
                    "Merit: Effort (BE)",
@@ -100,6 +106,7 @@ sjPlot::plot_model(
                    "Merit: Effort (WE)",
                    "Service class (I+II)",
                    "Intermediate class (III+IV)",
+                   "Wave^2",
                    "Wave"),
   transform = NULL,
   show.ci = TRUE,     # <— muestra intervalos
@@ -110,11 +117,12 @@ sjPlot::plot_model(
   value.size = 4.5
 ) +
   scale_y_continuous(limits = c(-1,1.5))+
-  labs(title = NULL) +
+  labs(title = NULL, caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
   theme_ggdist() +
   theme(legend.position = "top",
         plot.title = element_text(face = "bold"),
-        text = element_text(size = 16)) 
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
 ```
 
 
@@ -176,12 +184,14 @@ ggplot(df_pension_lab, aes(x = estimate, y = term)) +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, color = "red") +
   geom_point(size = 3, color = "red") +
   scale_x_continuous(limits = c(-1, 1), breaks = seq(-1, 1, 0.5)) +
-  geom_text(aes(label = est_lab), hjust = -0.2, size = 4, vjust = 1.5, color = "red") +
-  labs(x = "Log-Odds", y = NULL) +
+  geom_text(aes(label = est_lab), hjust = -0.2, size = 4, vjust = -0.5, color = "red") +
+  labs(x = "Log-Odds", y = NULL,  caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
   theme_ggdist() +
   theme(legend.position = "top",
         plot.title = element_text(face = "bold"),
-        text = element_text(size = 16)) 
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
+
 
 # library(ggeffects)
 # ggpredict(m10, terms = c("merit_talent_mean[meansd]", "egp"), type = "fixed") %>% plot()

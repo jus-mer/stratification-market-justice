@@ -392,24 +392,24 @@ performance::icc(m0, by_group = T) # 0.23 es between, 0.77 within
 ```{r}
 #| results: asis
 
-#m1.1 <- clmm(just_pension ~ 1 + ola + (1 | idencuesta),
-#                link = "logit",
-#  Hess = TRUE,
-#  data = df_study1)
-#
-#m1.2 <- clmm(just_pension ~ 1 + ola_num + (1 | idencuesta),
-#                link = "logit",
-#  Hess = TRUE, data = df_study1)
-#
-#m1.3 <- clmm(just_pension ~ 1 + ola_num + ola_2 + (1| idencuesta),
-#                link = "logit",
-#  Hess = TRUE, data = df_study1)
-#
-#m1.4 <- clmm(just_pension ~ 1 + ola_num + (1 + ola_num | idencuesta),
-#                link = "logit",
-#  Hess = TRUE, data = df_study1)
-#
-#save(m1.1,m1.2,m1.3,m1.4, file = here("output/time_effects.RData"))
+m1.1 <- clmm(just_pension ~ 1 + ola + (1 | idencuesta),
+                link = "logit",
+  Hess = TRUE,
+  data = df_study1)
+
+m1.2 <- clmm(just_pension ~ 1 + ola_num + (1 | idencuesta),
+                link = "logit",
+  Hess = TRUE, data = df_study1)
+
+m1.3 <- clmm(just_pension ~ 1 + ola_num + ola_2 + (1| idencuesta),
+                link = "logit",
+  Hess = TRUE, data = df_study1)
+
+m1.4 <- clmm(just_pension ~ 1 + ola_num + ola_2 + (1 + ola_num | idencuesta),
+                link = "logit",
+  Hess = TRUE, data = df_study1)
+
+save(m1.1,m1.2,m1.3,m1.4, file = here("output/time_effects.RData"))
 
 load(file = here("output/time_effects.RData"))
 
@@ -447,7 +447,7 @@ texreg::htmlreg(list(m1.1,m1.2,m1.3,m1.4),
 ### Anova
 
 ```{r}
-anova(m1.2, m1.4) # quedarse con tiempo continua y con pendiente aleatoria
+anova(m1.3, m1.4) # quedarse con tiempo continua y con pendiente aleatoria
 ```
 
 
@@ -456,27 +456,27 @@ anova(m1.2, m1.4) # quedarse con tiempo continua y con pendiente aleatoria
 ```{r}
 #| results: asis
 ## WE and BE main effects
-#m3 <- clmm(just_pension ~ 1 + ola_num + egp + (1 + ola_num | idencuesta), 
-#           link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m4 <- clmm(just_pension ~ 1 + ola_num + egp +  merit_effort_cwc + #merit_talent_cwc + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m5 <- clmm(just_pension ~ 1 + ola_num + egp +  merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + (1 + ola_num| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m6 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc #+ merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + (1 + ola_num| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m3,m4,m5,m6, file = here("output/main_effects.RData"))
+m3 <- clmm(just_pension ~ 1 + ola_num + ola_2 + egp + (1 + ola_num | idencuesta), 
+           link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m4 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp +  merit_effort_cwc + merit_talent_cwc + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m5 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp +  merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + (1 + ola_num| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m6 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + (1 + ola_num| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m3,m4,m5,m6, file = here("output/main_effects.RData"))
 
 load(file = here("output/main_effects.RData"))
 
@@ -486,6 +486,7 @@ ccoef <- list(
   "Neither agree nor disagree|Agree" = "Neither agree nor disagree|Agree", 
   "Agree|Strongly agree" = "Agree|Strongly agree", 
   ola_num = "Wave",
+  ola_2 = "Wave^2",
   "egpIntermediate class (III+IV)" = "Intermediate class (III+IV)",
   "egpService class (I+II)" = "Service class (I+II)",
   merit_effort_cwc = "Merit: Effort (WE)",
@@ -500,7 +501,7 @@ ccoef <- list(
   age = "Age"
   )
 
-texreg::htmlreg(list(m3,m4,m5,m6),
+texreg::screenreg(list(m3,m4,m5,m6),
                caption.above = T,
                caption = NULL,
                stars = c(0.05, 0.01, 0.001),
