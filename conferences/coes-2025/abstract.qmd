@@ -41,13 +41,9 @@ author:
     affiliations:
       - ref: 4
   - name: René Canales
-    orcid: 0000-0002-9008-2454
-    email: alaffertt@estudiante.uc.cl 
     affiliations:
       - ref: 4
   - name: Tomás Urzúa
-    orcid: 0000-0002-9008-2454
-    email: alaffertt@estudiante.uc.cl 
     affiliations:
       - ref: 1
   # - name: Julio Iturra
@@ -64,8 +60,6 @@ affiliations:
     name: Núcleo milenio de desigualdades y oportunidades digitales (NUDOS)
   - id: 4
     name: Instituto de Sociología, Pontificia Universidad Católica de Chile
-  - id: 5
-    name: International Graduate School of Social Sciencies (BIGSSS), University of Bremen, Germany
 citeproc: true
 abstract: | 
   \newline
@@ -106,7 +100,7 @@ La percepción de desigualdad modula la legitimidad de resultados desiguales: cu
 Utilizando datos del Estudio Longitudinal Social de Chile (2016-2023), esta investigación pretende analizar cómo aceptación de mejores pensiones para personas de mayores ingresos se articula mediante la interacción de la posición de clase, las creencias meritocráticas y la percepción de desigualdad. Esta perspectiva contribuye a comprender cómo se legitima la reproducción de desigualdades estructurales en la vejez dentro de un régimen de justicia de mercado, en el que los intereses privados siguen limitando la adopción de políticas más redistributivas. Así, los resultados aportan evidencia para debatir la sostenibilidad de modelos previsionales altamente mercantilizados y sus tensiones con la cohesión social.
 
 
-*Referencias*
+# Referencias
 
 ::: {#refs}
 :::

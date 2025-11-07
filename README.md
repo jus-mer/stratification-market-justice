@@ -2,7 +2,7 @@
 
 Repository for paper of Market Justice Preferences and Stratification in Chile
 
-[Abstract conferencia COES 2025](l)
+[Abstract conferencia COES 2025](https://jus-mer.github.io/stratification-market-justice/conferences/coes-2025/abstract.html)
 
 [Data preparation](https://jus-mer.github.io/stratification-market-justice/processing/01-proc-data.html)
 
