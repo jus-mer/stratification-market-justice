@@ -260,7 +260,13 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
                                     self.employed = selfemp_egp,
                                     n.classes = 7))
 
-frq(elsoc_long_2016_2023$egp)
+frq(elsoc_long_2016_2023$egp, show.na=TRUE)
+
+sjt.xtab(elsoc_long_2016_2023$egp,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         show.na=TRUE,
+         var.labels=c("EGP","Ola"),
+         show.summary=FALSE,         title=NULL)
 
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
   mutate(egp = factor(str_squish(as.character(egp))),
@@ -284,6 +290,100 @@ sjt.xtab(elsoc_long_2016_2023$egp3,elsoc_long_2016_2023$ola,
          show.summary=FALSE,         title=NULL)
 
 ```
+
+
+```{r}
+# Exploración de NA en EGP
+
+# 1. Distribución general de NA en EGP por ola
+cat("\n=== Distribución de NA en EGP por ola ===\n")
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(egp_na = is.na(egp))
+
+sjt.xtab(elsoc_long_2016_2023$egp_na, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("EGP es NA", "Ola"),
+         show.summary = FALSE,
+         title = NULL)
+
+# 2. Análisis de componentes ocupacionales en casos NA
+cat("\n=== Componentes ocupacionales en casos NA de EGP ===\n")
+elsoc_long_2016_2023 %>% 
+  filter(is.na(egp)) %>% 
+  summarise(
+    total_na = n(),
+    con_isco88 = sum(!is.na(isco88)),
+    pct_con_isco88 = round(100 * con_isco88 / total_na, 2),
+    con_rel_empleo = sum(!is.na(rel_empleo)),
+    pct_con_rel_empleo = round(100 * con_rel_empleo / total_na, 2)
+  ) %>% 
+  print()
+
+# 3. Situación laboral (m02) en casos NA de EGP
+cat("\n=== Distribución de m02 en casos NA de EGP ===\n")
+na_summary <- elsoc_long_2016_2023 %>% 
+  filter(is.na(egp)) %>% 
+  count(m02) %>% 
+  mutate(
+    situacion = case_when( 
+      m02 == 4 ~ "Solo estudia",
+      m02 == 5 ~ "Jubilado o pensionado",
+      m02 == 6 ~ "Desempleado, buscando trabajo",
+      m02 == 7 ~ "Realiza tareas no remuneradas",
+      m02 == 8 ~ "Enfermo o con discapacidad",
+      m02 == 9 ~ "No estudia, no trabaja, no busca trabajo",
+      m02 %in% c(1, 2, 3) ~ "Otra situación laboral",
+      is.na(m02) ~ "Sin respuesta en m02",
+      TRUE ~ "Otro"
+    ),
+    porcentaje = round(100 * n / sum(n), 2)
+  ) %>% 
+  arrange(desc(n))
+
+print(na_summary)
+
+# 4. Verificación: cobertura de m02 en casos NA de EGP
+cat("\n=== Cobertura de m02 en casos NA de EGP ===\n")
+total_na_egp <- sum(is.na(elsoc_long_2016_2023$egp))
+na_con_m02 <- elsoc_long_2016_2023 %>% 
+  filter(is.na(egp) & !is.na(m02)) %>% 
+  nrow()
+
+cat(sprintf("Total NA en EGP: %d\n", total_na_egp))
+cat(sprintf("NA en EGP con respuesta en m02: %d (%.2f%%)\n", 
+            na_con_m02, 100 * na_con_m02 / total_na_egp))
+cat(sprintf("NA en EGP sin respuesta en m02: %d (%.2f%%)\n", 
+            total_na_egp - na_con_m02, 100 * (total_na_egp - na_con_m02) / total_na_egp))
+
+# 5. Categorización de casos NA según situación laboral
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    situacion_na_egp = case_when(
+      !is.na(egp) ~ "Tiene EGP",
+      is.na(egp) & m02 == 4 ~ "Solo estudia",
+      is.na(egp) & m02 == 5 ~ "Jubilado o pensionado",
+      is.na(egp) & m02 == 6 ~ "Desempleado, buscando trabajo",
+      is.na(egp) & m02 == 7 ~ "Realiza tareas no remuneradas",
+      is.na(egp) & m02 == 8 ~ "Enfermo o con discapacidad",
+      is.na(egp) & m02 == 9 ~ "No estudia, no trabaja, no busca trabajo",
+      is.na(egp) & m02 %in% c(1, 2, 3) ~ "Otra situación laboral con EGP NA",
+      is.na(egp) & is.na(m02) ~ "Sin respuesta en m02",
+      TRUE ~ "Otro"
+    )
+  )
+
+# 6. Tabla cruzada por ola
+cat("\n=== Situación laboral de casos NA en EGP por ola ===\n")
+sjt.xtab(elsoc_long_2016_2023$situacion_na_egp, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("Situación laboral (casos NA EGP)", "Ola"),
+         show.summary = FALSE,
+         title = NULL)
+
+```
+
+
+
 
 
 ```{r}
