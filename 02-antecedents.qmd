@@ -5,3 +5,23 @@
 ## Social class
 
 ## Meritocracy
+
+## This study
+
+First, findings from previous research have found that higher class position is associated with skepticism toward redistributive policies [@koos_moral_2019]. More specifically, the upper classes tend to prefer market-based distribution to a greater extent than those in less privileged positions [@lindh_public_2015]. When individuals have the ability to pay for quality services, their principles of justice align with this logic, making them more likely to view market mechanisms as legitimate and accept that the distribution of goods depends on purchasing power.
+
+Secondly, the literature has pointed out that perceived meritocracy is positively associated with market preferences for goods and services, especially pensions, both at a specific point in time and longitudinally [@castillo_deserving_2019 ; @castillo_perceptions_2025]. Those who believe that effort and talent determine success tend to support market-oriented distribution, as they consider that this reflects the results of individual effort [@castillo_socialization_2024]. In this way, meritocratic perceptions operate as an argument to legitimize market justice insofar as an individual's ability to pay is proportional to the effort they have put in.
+
+Additionally, this research examines the interaction between class and meritocracy in shapingmarket preferences. Specifically, we argue that the relationship between an individual's socioeconomic position and market preference for pensions is moderated by meritocratic perceptions. When individuals have high meritocratic perceptions, the positive association between class and market preferences for pensions will be stronger in upper classes than in lower classes. This interaction is studied at an inter-individual level, and with an exploratory intent, we also look at how changes over time can reveal an intra-individual evolution in the way class and meritocracy shape market preferences for pensions.
+
+Based on the arguments outlined above, we propose the following hypotheses:
+
+$H1_ \; (\text{Between-person}):$ Those belonging to the upper classes show, on average, greater support for the commodification of pensions than those belonging to the lower classes.
+
+$H2_{a} \; (\text{Between-person}):$ People who perceive more meritocracy tend to show greater support for the commodification of pensions than those who hold these perceptions less strongly.
+
+$H2_{b} \; (\text{Within-person}):$ When the same person strengthens their meritocratic perceptions over time, their support for the commodification of pensions increases.
+
+$H3_{a} \; (\text{Between-person}):$ The positive association between meritocracy (BE) and support for commodification is stronger in upper classes.
+
+$H3_{b} \; (\text{Within-person}):$ When upper-class individuals increase their meritocratic perceptions over time (WE), their support for commodification rises more than in lower classes.
