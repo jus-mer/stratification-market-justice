@@ -1,0 +1,467 @@
+---
+title: "Data preparation"
+subtitle: "Changes in the Justification of Pension Inequality in Chile (2016–2023) and its Relationship to Social Class and Beliefs in Meritocracy"
+author: "René Canales, Research Assistant"
+date: today
+lang: en
+fontsize: 12pt
+format:
+  html:
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    toc-expand: 2
+    toc-title: Contents
+    number-sections: true
+    number-depth: 3
+    theme:
+      - cosmo
+      - edumer_html.scss
+    code-link: true
+    title-block-banner: true
+  pdf:
+    number-sections: true
+    number-depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Presentation
+
+This is the parallel code for exploring the ESEC class scheme for the paper "Changes in the Justification of Pension Inequality in Chile (2016–2023) and its Relationship to Social Class and Beliefs in Meritocracy". The prepared dataset is `ELSOC_Long_2016_2023_1.00.RData`.
+
+```{r}
+#| label: set
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+# Libraries
+
+```{r}
+#| label: packages
+#| include: true
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse,
+               car,
+               sjmisc, 
+               here,
+               sjlabelled,
+               SciViews,
+               naniar,
+               readxl,
+               sjPlot)
+
+
+devtools::install_github("DiogoFerrari/occupar")
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+# Data
+
+```{r}
+#| label: data
+#| echo: true
+#| output: false
+
+load(url("https://dataverse.harvard.edu/api/access/datafile/10797987"))
+
+glimpse(elsoc_long_2016_2023)
+```
+
+# Processing
+
+```{r}
+
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-999] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-888] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-777] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-666] <- NA
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(just_pension = d02_01, 
+         merit_effort = c18_09,
+         merit_talent = c18_10, 
+         age = m0_edad, m01, 
+         sex = m0_sexo, 
+         ideo = c15) %>% 
+  as_tibble() %>% 
+  sjlabelled::drop_labels(., drop.na = FALSE)
+```
+
+
+```{r}
+# Market Justice Preferences
+
+frq(elsoc_long_2016_2023$just_pension)
+
+elsoc_long_2016_2023$just_pension <- car::recode(elsoc_long_2016_2023$just_pension, 
+recodes = c("1='Strongly disagree'; 2='Disagree'; 3='Neither agree nor disagree'; 4='Agree'; 5='Strongly agree'"), 
+levels = c("Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"),
+as.factor = T)
+                                                 
+elsoc_long_2016_2023$just_pension <- sjlabelled::set_label(elsoc_long_2016_2023$just_pension, 
+                        label = "Pension distributive justice")
+```
+
+```{r}
+# Social class scheme ESEC (manual construction)
+
+# isco preparation
+
+frq(elsoc_long_2016_2023$ciuo88_m03)
+
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(ciuo88_m03))
+  ) # only wave 2016
+
+frq(elsoc_long_2016_2023$ciuo08_m03)
+
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(ciuo08_m03))
+  ) # only wave 2018, 2021 and 2023
+
+# Unificar ISCO-88 y convertir ISCO-08 a ISCO-88
+elsoc_long_2016_2023$isco88 <- NA
+elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(1)] <- elsoc_long_2016_2023$ciuo88_m03[elsoc_long_2016_2023$ola %in% c(1)]
+
+elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(3,5,7)] <- occupar::isco08to88(elsoc_long_2016_2023$ciuo08_m03[elsoc_long_2016_2023$ola %in% c(3,5,7)]
+)
+
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(isco88))
+  )
+
+# Carry forward ISCO from previous wave
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  group_by(idencuesta) %>%
+  mutate(isco88_lagged = lag(isco88, n = 1)) %>%
+  ungroup()
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(isco88 = ifelse(!is.na(isco88), isco88, isco88_lagged)) %>%
+  select(-isco88_lagged)
+
+elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  summarise(
+    solo_NA = all(is.na(isco88))
+  )
+
+# Employment relationship (for ESEC self-employment indicator)
+frq(elsoc_long_2016_2023$m07)
+
+labs_sj <- c(
+  `1` = "Empleado u obrero en empresa privada",
+  `2` = "Empleado u obrero del sector público",
+  `3` = "Miembro de las Fuerzas Armadas y de Orden",
+  `4` = "Patrón/a o empleador/a",
+  `5` = "Trabaja solo, no tiene empleados",
+  `6` = "Familiar no remunerado",
+  `7` = "Servicio doméstico"
+)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(m07 = suppressWarnings(as.integer(m07)),
+         m07 = if_else(m07 %in% c(1,2,4,5,7), m07, NA_integer_)) %>%
+  group_by(idencuesta) %>%
+  arrange(idencuesta, ola, .by_group = TRUE) %>%
+  mutate(rel_empleo = coalesce(m07, lag(m07))) %>%
+  ungroup() %>%
+  mutate(
+    rel_empleo = set_labels(rel_empleo, labels = labs_sj),
+    rel_empleo = set_label(rel_empleo, label = "Relación de empleo (1–7)")
+  )
+
+frq(elsoc_long_2016_2023$rel_empleo)
+
+sjt.xtab(elsoc_long_2016_2023$rel_empleo, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("Relación de empleo", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+# Self-employment indicator for ESEC
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(selfemp_esec = case_when(
+    rel_empleo %in% c(4, 5) ~ TRUE,   # Employer or self-employed
+    rel_empleo %in% c(1, 2, 7) ~ FALSE, # Employee
+    TRUE ~ NA
+  ))
+
+frq(elsoc_long_2016_2023$selfemp_esec)
+
+# Supervisor indicator for ESEC (based on m19 - supervision of others)
+frq(elsoc_long_2016_2023$m19)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(is_supervisor = case_when(
+    m19 == 1 ~ TRUE,   # Sí supervisa
+    m19 == 2 ~ FALSE,  # No supervisa
+    TRUE ~ NA
+  ))
+
+frq(elsoc_long_2016_2023$is_supervisor)
+
+# Carry forward is_supervisor from previous wave
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  group_by(idencuesta) %>%
+  mutate(is_supervisor_lagged = lag(is_supervisor, n = 1)) %>%
+  ungroup()
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(is_supervisor = ifelse(!is.na(is_supervisor), is_supervisor, is_supervisor_lagged)) %>%
+  select(-is_supervisor_lagged)
+
+sjt.xtab(elsoc_long_2016_2023$is_supervisor, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("Is supervisor", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+# Number of employees (for ESEC employer distinction)
+frq(elsoc_long_2016_2023$m05)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(m05_rec = case_when(
+    m05 == 1 ~ 1,
+    m05 == 2 ~ 4,
+    m05 == 3 ~ 9,
+    m05 == 4 ~ 49,
+    m05 == 5 ~ 199,
+    m05 == 6 ~ 201,
+    TRUE ~ NA_real_
+  ))
+
+# Number of employees variable
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(n_employees = case_when(
+    selfemp_esec == TRUE & !is.na(m05_rec) ~ m05_rec,
+    selfemp_esec == FALSE ~ 0,
+    TRUE ~ NA_real_
+  ))
+
+frq(elsoc_long_2016_2023$n_employees)
+
+# Carry forward n_employees from previous wave
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  group_by(idencuesta) %>%
+  mutate(n_employees_lagged = lag(n_employees, n = 1)) %>%
+  ungroup()
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(n_employees = ifelse(!is.na(n_employees), n_employees, n_employees_lagged)) %>%
+  select(-n_employees_lagged)
+
+sjt.xtab(elsoc_long_2016_2023$n_employees, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("N employees", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+# Verificar categorías de m02 (situación laboral)
+frq(elsoc_long_2016_2023$m02)
+
+# Manual ESEC construction (9 classes + retired + unemployed)
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    isco1 = floor(isco88 / 1000),  # 1-digit major group
+    isco2 = floor(isco88 / 100),   # 2-digit sub-major group
+    
+    # ESEC extended with labor force status
+    esec_ext = case_when(
+      # Primero: categorías fuera de la fuerza de trabajo (m02)
+      m02 == 3 ~ 10,  # Jubilado/pensionado
+      m02 == 7 ~ 11,  # Desempleado
+      
+      # Luego: ESEC 9-class para quienes tienen ocupación
+      # Class 1: Higher salariat (managers, professionals with employees/supervisory)
+      selfemp_esec == FALSE & is_supervisor == TRUE & isco1 %in% c(1, 2) ~ 1,
+      selfemp_esec == TRUE & n_employees >= 10 & isco1 %in% c(1, 2) ~ 1,
+      
+      # Class 2: Lower salariat (professionals, managers non-supervisory)
+      selfemp_esec == FALSE & is_supervisor == FALSE & isco1 %in% c(1, 2) ~ 2,
+      selfemp_esec == FALSE & isco1 == 3 & isco2 %in% c(31, 32, 34) ~ 2,
+      
+      # Class 3: Higher white collar (technicians, associate professionals supervisory)
+      selfemp_esec == FALSE & is_supervisor == TRUE & isco1 == 3 ~ 3,
+      selfemp_esec == FALSE & is_supervisor == TRUE & isco1 == 4 ~ 3,
+      
+      # Class 4: Lower white collar (clerks, service workers non-supervisory)
+      selfemp_esec == FALSE & is_supervisor == FALSE & isco1 == 3 ~ 4,
+      selfemp_esec == FALSE & is_supervisor == FALSE & isco1 == 4 ~ 4,
+      
+      # Class 5: Higher blue collar (skilled craft workers supervisory)
+      selfemp_esec == FALSE & is_supervisor == TRUE & isco1 %in% c(6, 7, 8) ~ 5,
+      
+      # Class 6: Skilled workers (craft workers non-supervisory)
+      selfemp_esec == FALSE & is_supervisor == FALSE & isco1 %in% c(6, 7) ~ 6,
+      
+      # Class 7: Lower services/sales (service and sales workers)
+      selfemp_esec == FALSE & isco1 == 5 ~ 7,
+      
+      # Class 8: Skilled manual workers (plant/machine operators)
+      selfemp_esec == FALSE & isco1 == 8 ~ 8,
+      
+      # Class 9: Unskilled workers (elementary occupations)
+      selfemp_esec == FALSE & isco1 == 9 ~ 9,
+      
+      # Self-employed with employees (small employers)
+      selfemp_esec == TRUE & n_employees > 0 & n_employees < 10 ~ 3,
+      
+      # Self-employed without employees (own account workers)
+      selfemp_esec == TRUE & n_employees == 0 & isco1 %in% c(1, 2, 3) ~ 4,
+      selfemp_esec == TRUE & n_employees == 0 & isco1 %in% c(4, 5, 6, 7, 8, 9) ~ 6,
+      
+      TRUE ~ NA_real_
+    )
+  )
+
+# Add labels to ESEC extended
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    esec_ext_label = case_when(
+      esec_ext == 1 ~ "1. Higher salariat",
+      esec_ext == 2 ~ "2. Lower salariat",
+      esec_ext == 3 ~ "3. Higher white collar",
+      esec_ext == 4 ~ "4. Lower white collar",
+      esec_ext == 5 ~ "5. Higher blue collar",
+      esec_ext == 6 ~ "6. Skilled workers",
+      esec_ext == 7 ~ "7. Lower services/sales",
+      esec_ext == 8 ~ "8. Skilled manual",
+      esec_ext == 9 ~ "9. Unskilled workers",
+      esec_ext == 10 ~ "10. Retired",
+      esec_ext == 11 ~ "11. Unemployed",
+      TRUE ~ NA_character_
+    ),
+    esec_ext_label = factor(esec_ext_label, levels = paste0(1:11, ". ", 
+                                                      c("Higher salariat", "Lower salariat", 
+                                                        "Higher white collar", "Lower white collar",
+                                                        "Higher blue collar", "Skilled workers",
+                                                        "Lower services/sales", "Skilled manual",
+                                                        "Unskilled workers", "Retired", "Unemployed")))
+  )
+
+# También mantener la versión original de ESEC (9 clases sin retired/unemployed)
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    esec = ifelse(esec_ext %in% 1:9, esec_ext, NA_real_),
+    esec_label = case_when(
+      esec == 1 ~ "1. Higher salariat",
+      esec == 2 ~ "2. Lower salariat",
+      esec == 3 ~ "3. Higher white collar",
+      esec == 4 ~ "4. Lower white collar",
+      esec == 5 ~ "5. Higher blue collar",
+      esec == 6 ~ "6. Skilled workers",
+      esec == 7 ~ "7. Lower services/sales",
+      esec == 8 ~ "8. Skilled manual",
+      esec == 9 ~ "9. Unskilled workers",
+      TRUE ~ NA_character_
+    ),
+    esec_label = factor(esec_label, levels = paste0(1:9, ". ", 
+                                                      c("Higher salariat", "Lower salariat", 
+                                                        "Higher white collar", "Lower white collar",
+                                                        "Higher blue collar", "Skilled workers",
+                                                        "Lower services/sales", "Skilled manual",
+                                                        "Unskilled workers")))
+  )
+
+cat("\n=== ESEC 9-class (sin retired/unemployed) ===\n")
+frq(elsoc_long_2016_2023$esec, show.na = TRUE)
+frq(elsoc_long_2016_2023$esec_label, show.na = TRUE)
+
+sjt.xtab(elsoc_long_2016_2023$esec_label, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         show.na = TRUE,
+         var.labels = c("ESEC 9-class", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+cat("\n=== ESEC Extended (11 classes con retired y unemployed) ===\n")
+frq(elsoc_long_2016_2023$esec_ext, show.na = TRUE)
+frq(elsoc_long_2016_2023$esec_ext_label, show.na = TRUE)
+
+sjt.xtab(elsoc_long_2016_2023$esec_ext_label, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         show.na = TRUE,
+         var.labels = c("ESEC Extended", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+# Collapse ESEC into 3 classes (sin retired/unemployed)
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    esec3 = case_when(
+      esec %in% c(1, 2) ~ "Salariat (1+2)",
+      esec %in% c(3, 4, 5, 6) ~ "Intermediate (3-6)",
+      esec %in% c(7, 8, 9) ~ "Working class (7-9)",
+      TRUE ~ NA_character_
+    ),
+    esec3 = factor(esec3, levels = c("Salariat (1+2)", 
+                                      "Intermediate (3-6)", 
+                                      "Working class (7-9)"))
+  )
+
+cat("\n=== ESEC 3-class (sin retired/unemployed) ===\n")
+frq(elsoc_long_2016_2023$esec3, show.na = TRUE)
+
+sjt.xtab(elsoc_long_2016_2023$esec3, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         show.na = TRUE,
+         var.labels = c("ESEC 3-class", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+# Collapse ESEC Extended into 5 classes (con retired/unemployed)
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    esec5 = case_when(
+      esec_ext %in% c(1, 2) ~ "Salariat (1+2)",
+      esec_ext %in% c(3, 4, 5, 6) ~ "Intermediate (3-6)",
+      esec_ext %in% c(7, 8, 9) ~ "Working class (7-9)",
+      esec_ext == 10 ~ "Retired",
+      esec_ext == 11 ~ "Unemployed",
+      TRUE ~ NA_character_
+    ),
+    esec5 = factor(esec5, levels = c("Salariat (1+2)", 
+                                      "Intermediate (3-6)", 
+                                      "Working class (7-9)",
+                                      "Retired",
+                                      "Unemployed"))
+  )
+
+cat("\n=== ESEC 5-class (con retired y unemployed) ===\n")
+frq(elsoc_long_2016_2023$esec5, show.na = TRUE)
+
+sjt.xtab(elsoc_long_2016_2023$esec5, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         show.na = TRUE,
+         var.labels = c("ESEC 5-class", "Ola"),
+         show.summary = FALSE, title = NULL)
+
+```
+
