@@ -1,10 +1,7 @@
-# Theoretical views on the justification of pension inequality, social class, and meritocracy
-
-## The justification of pension inequality
-
-## Social class
-
-## Meritocracy
+{{< include 02-market.qmd >}}
+{{< include 02-merit.qmd >}}
+{{< include 02-class.qmd >}}
+{{< include 02-pensions.qmd >}}
 
 ## This study
 
