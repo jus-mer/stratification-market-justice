@@ -1,17 +1,201 @@
 
+```{r}
+#| label: set
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+# Libraries
+
+```{r}
+#| label: packages
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               srvyr,
+               ordinal,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
 
 # Data, Variables and Methods
 
 ## Data
 This study draws on data from the Chilean Longitudinal Social Survey (ELSOC), a nationally representative panel study of the urban adult population in Chile, conducted annually between 2016 and 2023. Designed to examine individuals' attitudes, emotions, and behaviors regarding social conflict and cohesion, ELSOC employs a probabilistic, stratified, clustered, and multistage sampling design covering both major urban centers and smaller cities. The sampling frame was proportionally stratified into six categories of urban population size (e.g., large and small cities), followed by the random selection of households within 1,067 city blocks. The target population includes men and women aged 18 to 75 who are habitual residents of private dwellings.
 
-The survey has been conducted every year since 2016, except in 2020, when it was suspended due to the COVID-19 pandemic. This study uses six waves: 2016, 2017, 2018, 2019, 2022, and 2023. The 2021 wave was excluded because a reduced version of the questionnaire omitted key variables of interest. Between waves 1 and 6, panel attrition reached 40%, resulting in a final two-level sample comprising N = 8,643 observations nested within N = 1,687 individuals. Longitudinal weights are applied to adjust for both the sampling design and potential biases from systematic non-response. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
+The survey has been conducted every year since 2016, except in 2020, when it was suspended due to the COVID-19 pandemic. This study uses six waves: 2016, 2017, 2018, 2019, 2022, and 2023. The 2021 wave was excluded because a reduced version of the questionnaire omitted key variables of interest. Between waves 1 and 6, panel attrition reached 40%, resulting in a final two-level sample comprising N = 5.755 observations nested within N = 1.027 individuals. Longitudinal weights are applied to adjust for both the sampling design and potential biases from systematic non-response. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
+
+```{r}
+#| label: data
+#| echo: true
+#| include: false
+
+load(file = here("input/data/proc/df_study1_long_t7_balanced.RData"))
+
+glimpse(df_study1_long_t7_b)
+
+# Generate analytical sample
+
+df_study1 <- df_study1_long_t7_b %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+
+```
+
 
 ## Variables
 
+```{r}
+#| label: tbl-summary2
+#| tbl-cap: "Estadísticos descriptivos variables"
+#| tbl-cap-location: top
+#| inlcude: false
+#| echo: false
+t2 <- df_study1 %>% 
+  filter(ola == last(ola)) %>% 
+  select(just_pension, egp, merit_effort, merit_talent) 
 
+print(summarytools::dfSummary(t2, plain.ascii = FALSE, headings = FALSE), 
+      method = "render", 
+      report.nas = FALSE,
+      footnote = NA)
+```
 
+### Dependent Variable
 
-## Methods
+The dependent variable of distributive justice in pensions is measured by the question ‘Is it fair that high-income individuals have better pensions than lower-income individuals?’, where the response options range from 1 (Strongly disagree) to 5 (Strongly agree). Therefore, higher values indicate a greater perception of fairness in pension distribution, i.e., greater support for inequality in pensions.
+
+### Independent Variables
+
+As for the independent variables, a class scheme was constructed based on that of Erikson, Goldthorpe and Portocarero (EGP), collapsed into three categories: (1) Working class (V+VI+VII), which serves as the reference category, (2) Intermediate class (III+IV), (3) Service class (I+II). Additionally, a residual category is included that considers people outside the labour force according to their statements in the survey.
+
+The meritocratic beliefs variable is divided into the degree of agreement with two categories: (1) ‘In Chile, people are rewarded for their efforts’ (Merit: Effort), and (2) ‘In Chile, people are rewarded for their intelligence and abilities’ (Merit: Talent). Both items use a 5-point Likert scale from 1 (Strongly disagree) to 5 (Strongly agree), where higher scores indicate stronger beliefs that society operates meritocratically.
+
+### Control Variables
+
+The models include standard sociodemographic controls: educational attainment (dichotomized as university vs. less than university), political identification (left, center, right, or does not identify), sex (female vs. male), and age (in years).
+
+## Analytical Strategy
+
+To examine longitudinal changes in pension inequality justification and its relationship with social class and meritocratic beliefs, we employ Cumulative Link Mixed Models (CLMM) for ordinal responses. This approach is particularly well-suited for our analytical goals for several reasons. First, it preserves the ordinal nature of our dependent variable without imposing assumptions about equal spacing between response categories. Second, it accounts for the hierarchical structure of our panel data, with repeated observations (Level 1) nested within individuals (Level 2). Third, it enables the decomposition of variance into within-person (WE) and between-person (BE) components, allowing us to distinguish temporal changes within individuals from stable differences between individuals.
+
+### Within-Person and Between-Person Effects
+
+Following the recommendations of Bell and Jones (2015) and Curran and Bauer (2011), we decompose time-varying predictors into their within-person and between-person components using person-mean centering:
+
+$$
+X_{WE_{it}} = X_{it} - \bar{X}_i
+$$
+
+$$
+X_{BE_i} = \bar{X}_i
+$$
+
+where $X_{it}$ represents the observed value for individual $i$ at time $t$, $\bar{X}_i$ is the person-specific mean across all observations, $X_{WE_{it}}$ captures within-person deviations from the individual mean (representing temporal fluctuations), and $X_{BE_i}$ represents stable between-person differences (time-invariant characteristics).
+
+This decomposition allows us to distinguish two theoretically distinct processes: (1) Within-person effects capture how changes in an individual's meritocratic beliefs over time relate to changes in their pension inequality justification, controlling for stable individual characteristics. (2) Between-person effects capture how individuals with different average levels of meritocratic beliefs differ in their pension inequality justification, net of temporal fluctuations.
+
+### Model Specification
+
+The general form of our cumulative link mixed model is:
+
+$$
+\begin{split}
+\eta_{it} = \beta_0 + \beta_1 \text{time}_{it} + \beta_2 X_{WE_{it}} + \beta_3 X_{BE_i} + \beta_4 \text{EGP}_i + \\
+\beta_5 (\text{EGP}_i \times X_{WE_{it}}) + \beta_6 (\text{EGP}_i \times X_{BE_i}) + u_{0i} + u_{1i} \text{time}_{it}
+\end{split}
+$$
+
+where $\eta_{it}$ is the linear predictor for individual $i$ at time $t$, linked to the cumulative probabilities through a logit link function; $\beta_0$ is the fixed intercept (threshold); $\beta_1$ captures the linear time trend; $\beta_2$ and $\beta_3$ represent within-person and between-person effects of meritocratic beliefs, respectively; $\beta_4$ captures social class main effects; $\beta_5$ and $\beta_6$ represent interactions between social class and within/between-person meritocratic beliefs; $u_{0i}$ is the random intercept (capturing unobserved individual heterogeneity); and $u_{1i}$ is the random slope for time (allowing individual-specific temporal trajectories).
+
+The random effects are assumed to follow a bivariate normal distribution:
+
+$$
+\begin{pmatrix} u_{0i} \\ u_{1i} \end{pmatrix} \sim N \begin{pmatrix} \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \begin{pmatrix} \sigma^2_{u_0} & \sigma_{u_{01}} \\ \sigma_{u_{01}} & \sigma^2_{u_1} \end{pmatrix} \end{pmatrix}
+$$
+
+### Model Building Strategy
+
+We estimate a series of nested models to test our hypotheses:
+
+1. **Model 1 (Time Effects)**: Baseline model examining temporal trends with linear and quadratic time terms
+2. **Model 2 (Class Effects)**: Adds social class as a predictor
+3. **Model 3 (Within-Person Effects)**: Includes within-person meritocratic beliefs
+4. **Model 4 (Between-Person Effects)**: Adds between-person meritocratic beliefs
+5. **Model 5 (Full Model with Controls)**: Incorporates sociodemographic controls (education, political identification, sex, age)
+6. **Model 6 (Interactions)**: Tests interactions between social class and meritocratic beliefs (both WE and BE)
+
+All models are estimated using maximum likelihood with the Hessian matrix computed explicitly to obtain standard errors. Longitudinal survey weights are applied to account for the complex sampling design and panel attrition. Models are implemented using the `clmm()` function from the `ordinal` package in R (Christensen, 2019).
+
 
 
