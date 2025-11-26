@@ -3,7 +3,9 @@
 # Data, Variables and Methods
 
 ## Data
+This study draws on data from the Chilean Longitudinal Social Survey (ELSOC), a nationally representative panel study of the urban adult population in Chile, conducted annually between 2016 and 2023. Designed to examine individuals' attitudes, emotions, and behaviors regarding social conflict and cohesion, ELSOC employs a probabilistic, stratified, clustered, and multistage sampling design covering both major urban centers and smaller cities. The sampling frame was proportionally stratified into six categories of urban population size (e.g., large and small cities), followed by the random selection of households within 1,067 city blocks. The target population includes men and women aged 18 to 75 who are habitual residents of private dwellings.
 
+The survey has been conducted every year since 2016, except in 2020, when it was suspended due to the COVID-19 pandemic. This study uses six waves: 2016, 2017, 2018, 2019, 2022, and 2023. The 2021 wave was excluded because a reduced version of the questionnaire omitted key variables of interest. Between waves 1 and 6, panel attrition reached 40%, resulting in a final two-level sample comprising N = 8,643 observations nested within N = 1,687 individuals. Longitudinal weights are applied to adjust for both the sampling design and potential biases from systematic non-response. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
 
 ## Variables
 

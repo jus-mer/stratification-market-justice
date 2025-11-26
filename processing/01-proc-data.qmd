@@ -88,11 +88,9 @@ rm(list = ls())
 load(url("https://dataverse.harvard.edu/api/access/datafile/10797987"))
 
 glimpse(elsoc_long_2016_2023)
-
 ```
 
 # Processing
-
 
 ```{r}
 
@@ -296,7 +294,6 @@ sjt.xtab(elsoc_long_2016_2023$egp3,elsoc_long_2016_2023$ola,
 # Exploración de NA en EGP
 
 # 1. Distribución general de NA en EGP por ola
-cat("\n=== Distribución de NA en EGP por ola ===\n")
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
   mutate(egp_na = is.na(egp))
 
@@ -307,7 +304,6 @@ sjt.xtab(elsoc_long_2016_2023$egp_na, elsoc_long_2016_2023$ola,
          title = NULL)
 
 # 2. Análisis de componentes ocupacionales en casos NA
-cat("\n=== Componentes ocupacionales en casos NA de EGP ===\n")
 elsoc_long_2016_2023 %>% 
   filter(is.na(egp)) %>% 
   summarise(
@@ -320,7 +316,6 @@ elsoc_long_2016_2023 %>%
   print()
 
 # 3. Situación laboral (m02) en casos NA de EGP
-cat("\n=== Distribución de m02 en casos NA de EGP ===\n")
 na_summary <- elsoc_long_2016_2023 %>% 
   filter(is.na(egp)) %>% 
   count(m02) %>% 
@@ -343,7 +338,6 @@ na_summary <- elsoc_long_2016_2023 %>%
 print(na_summary)
 
 # 4. Verificación: cobertura de m02 en casos NA de EGP
-cat("\n=== Cobertura de m02 en casos NA de EGP ===\n")
 total_na_egp <- sum(is.na(elsoc_long_2016_2023$egp))
 na_con_m02 <- elsoc_long_2016_2023 %>% 
   filter(is.na(egp) & !is.na(m02)) %>% 
@@ -366,14 +360,13 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
       is.na(egp) & m02 == 7 ~ "Realiza tareas no remuneradas",
       is.na(egp) & m02 == 8 ~ "Enfermo o con discapacidad",
       is.na(egp) & m02 == 9 ~ "No estudia, no trabaja, no busca trabajo",
-      is.na(egp) & m02 %in% c(1, 2, 3) ~ "Otra situación laboral con EGP NA",
-      is.na(egp) & is.na(m02) ~ "Sin respuesta en m02",
+      is.na(egp) & m02 %in% c(1, 2, 3) ~ "Otra situación laboral",
+      is.na(egp) & is.na(m02) ~ "Sin respuesta",
       TRUE ~ "Otro"
     )
   )
 
 # 6. Tabla cruzada por ola
-cat("\n=== Situación laboral de casos NA en EGP por ola ===\n")
 sjt.xtab(elsoc_long_2016_2023$situacion_na_egp, elsoc_long_2016_2023$ola,
          show.col.prc = TRUE,
          var.labels = c("Situación laboral (casos NA EGP)", "Ola"),
@@ -383,7 +376,45 @@ sjt.xtab(elsoc_long_2016_2023$situacion_na_egp, elsoc_long_2016_2023$ola,
 ```
 
 
+```{r}
+# Esquema de clase ampliado: EGP + Outside the workforce
 
+# Crear variable egp4 que incluye categoría residual
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    egp4 = case_when(
+      # Mantener categorías EGP existentes
+      !is.na(egp3) ~ as.character(egp3),
+      # Categoría residual para quienes están fuera de la fuerza de trabajo
+      is.na(egp3) & m02 %in% c(1, 2, 3, 4, 5, 6, 7, 8, 9) ~ "Out of labor force",
+      # NA para casos sin información
+      TRUE ~ NA_character_
+    ),
+    egp4 = factor(egp4, 
+                  levels = c("Service class (I+II)",
+                            "Intermediate class (III+IV)",
+                            "Working class (V+VI+VII)", 
+                            "Out of labor force"))
+  )
+
+# Verificar distribución
+frq(elsoc_long_2016_2023$egp4)
+
+# Tabla cruzada por ola
+sjt.xtab(elsoc_long_2016_2023$egp4, elsoc_long_2016_2023$ola,
+         show.col.prc = TRUE,
+         var.labels = c("EGP Extended (with Out of labor force people)", "Wave"),
+         show.summary = FALSE,
+         title = NULL)
+
+# Comparación entre egp3 y egp4
+comparison_table <- elsoc_long_2016_2023 %>% 
+  count(egp3, egp4) %>% 
+  arrange(desc(n))
+
+print(comparison_table)
+
+```
 
 
 ```{r}
@@ -508,7 +539,7 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          segmento, 
          estrato,
          just_pension,
-         egp = egp3,
+         egp = egp4,
          merit_effort,
          merit_talent,
          educ,
@@ -518,72 +549,96 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          aget,
          ideo)
 
-df_study1_wide <- df_study1_long %>% 
+# Unbalanced
+df_study1_wide_unbalanced <- df_study1_long %>% 
   tidyr::pivot_wider(id_cols = c("idencuesta","muestra"),
                      names_from = "ola",
                      values_from = names(select(df_study1_long,ponderador_long_total,segmento, estrato, just_pension:ideo)))
 
+# Balanced
+df_study1_wide_balanced <- df_study1_long %>% 
+  tidyr::pivot_wider(id_cols = c("idencuesta","muestra"),
+                     names_from = "ola",
+                     values_from = names(select(df_study1_long,ponderador_long_total,segmento, estrato, just_pension:ideo)))
+
+## Balanced Panel Code
+
 # fix data to w01 values
-df_study1_wide$egp_2 <-df_study1_wide$egp_1 #class
-df_study1_wide$egp_3 <-df_study1_wide$egp_1
-df_study1_wide$egp_4 <-df_study1_wide$egp_1
-df_study1_wide$egp_5 <-df_study1_wide$egp_1
-df_study1_wide$egp_6 <-df_study1_wide$egp_1
-df_study1_wide$egp_7 <-df_study1_wide$egp_1
+df_study1_wide_balanced$egp_2 <-df_study1_wide_balanced$egp_1 #class
+df_study1_wide_balanced$egp_3 <-df_study1_wide_balanced$egp_1
+df_study1_wide_balanced$egp_4 <-df_study1_wide_balanced$egp_1
+df_study1_wide_balanced$egp_5 <-df_study1_wide_balanced$egp_1
+df_study1_wide_balanced$egp_6 <-df_study1_wide_balanced$egp_1
+df_study1_wide_balanced$egp_7 <-df_study1_wide_balanced$egp_1
 
-df_study1_wide$age_2 <-df_study1_wide$age_1 #age
-df_study1_wide$age_3 <-df_study1_wide$age_1
-df_study1_wide$age_4 <-df_study1_wide$age_1
-df_study1_wide$age_5 <-df_study1_wide$age_1
-df_study1_wide$age_6 <-df_study1_wide$age_1
-df_study1_wide$age_7 <-df_study1_wide$age_1
+df_study1_wide_balanced$age_2 <-df_study1_wide_balanced$age_1 #age
+df_study1_wide_balanced$age_3 <-df_study1_wide_balanced$age_1
+df_study1_wide_balanced$age_4 <-df_study1_wide_balanced$age_1
+df_study1_wide_balanced$age_5 <-df_study1_wide_balanced$age_1
+df_study1_wide_balanced$age_6 <-df_study1_wide_balanced$age_1
+df_study1_wide_balanced$age_7 <-df_study1_wide_balanced$age_1
 
-df_study1_wide$aget_2 <-df_study1_wide$aget_1 #age
-df_study1_wide$aget_3 <-df_study1_wide$aget_1
-df_study1_wide$aget_4 <-df_study1_wide$aget_1
-df_study1_wide$aget_5 <-df_study1_wide$aget_1
-df_study1_wide$aget_6 <-df_study1_wide$aget_1
-df_study1_wide$aget_7 <-df_study1_wide$aget_1
+df_study1_wide_balanced$aget_2 <-df_study1_wide_balanced$aget_1 #age
+df_study1_wide_balanced$aget_3 <-df_study1_wide_balanced$aget_1
+df_study1_wide_balanced$aget_4 <-df_study1_wide_balanced$aget_1
+df_study1_wide_balanced$aget_5 <-df_study1_wide_balanced$aget_1
+df_study1_wide_balanced$aget_6 <-df_study1_wide_balanced$aget_1
+df_study1_wide_balanced$aget_7 <-df_study1_wide_balanced$aget_1
 
-df_study1_wide$sex_2 <-df_study1_wide$sex_1 #sex
-df_study1_wide$sex_3 <-df_study1_wide$sex_1
-df_study1_wide$sex_4 <-df_study1_wide$sex_1
-df_study1_wide$sex_5 <-df_study1_wide$sex_1
-df_study1_wide$sex_6 <-df_study1_wide$sex_1
-df_study1_wide$sex_7 <-df_study1_wide$sex_1
+df_study1_wide_balanced$sex_2 <-df_study1_wide_balanced$sex_1 #sex
+df_study1_wide_balanced$sex_3 <-df_study1_wide_balanced$sex_1
+df_study1_wide_balanced$sex_4 <-df_study1_wide_balanced$sex_1
+df_study1_wide_balanced$sex_5 <-df_study1_wide_balanced$sex_1
+df_study1_wide_balanced$sex_6 <-df_study1_wide_balanced$sex_1
+df_study1_wide_balanced$sex_7 <-df_study1_wide_balanced$sex_1
 
-df_study1_wide$educ_2 <-df_study1_wide$educ_1 #education
-df_study1_wide$educ_3 <-df_study1_wide$educ_1
-df_study1_wide$educ_4 <-df_study1_wide$educ_1
-df_study1_wide$educ_5 <-df_study1_wide$educ_1
-df_study1_wide$educ_6 <-df_study1_wide$educ_1
-df_study1_wide$educ_7 <-df_study1_wide$educ_1
+df_study1_wide_balanced$educ_2 <-df_study1_wide_balanced$educ_1 #education
+df_study1_wide_balanced$educ_3 <-df_study1_wide_balanced$educ_1
+df_study1_wide_balanced$educ_4 <-df_study1_wide_balanced$educ_1
+df_study1_wide_balanced$educ_5 <-df_study1_wide_balanced$educ_1
+df_study1_wide_balanced$educ_6 <-df_study1_wide_balanced$educ_1
+df_study1_wide_balanced$educ_7 <-df_study1_wide_balanced$educ_1
 
-df_study1_wide$educyear_2 <-df_study1_wide$educyear_1 #education years
-df_study1_wide$educyear_3 <-df_study1_wide$educyear_1
-df_study1_wide$educyear_4 <-df_study1_wide$educyear_1
-df_study1_wide$educyear_5 <-df_study1_wide$educyear_1
-df_study1_wide$educyear_6 <-df_study1_wide$educyear_1
-df_study1_wide$educyear_7 <-df_study1_wide$educyear_1
+df_study1_wide_balanced$educyear_2 <-df_study1_wide_balanced$educyear_1 #education years
+df_study1_wide_balanced$educyear_3 <-df_study1_wide_balanced$educyear_1
+df_study1_wide_balanced$educyear_4 <-df_study1_wide_balanced$educyear_1
+df_study1_wide_balanced$educyear_5 <-df_study1_wide_balanced$educyear_1
+df_study1_wide_balanced$educyear_6 <-df_study1_wide_balanced$educyear_1
+df_study1_wide_balanced$educyear_7 <-df_study1_wide_balanced$educyear_1
 
-df_study1_wide$ideo_2 <-df_study1_wide$ideo_1 # political position
-df_study1_wide$ideo_3 <-df_study1_wide$ideo_1
-df_study1_wide$ideo_4 <-df_study1_wide$ideo_1
-df_study1_wide$ideo_5 <-df_study1_wide$ideo_1
-df_study1_wide$ideo_6 <-df_study1_wide$ideo_1
-df_study1_wide$ideo_7 <-df_study1_wide$ideo_1
+df_study1_wide_balanced$ideo_2 <-df_study1_wide_balanced$ideo_1 # political position
+df_study1_wide_balanced$ideo_3 <-df_study1_wide_balanced$ideo_1
+df_study1_wide_balanced$ideo_4 <-df_study1_wide_balanced$ideo_1
+df_study1_wide_balanced$ideo_5 <-df_study1_wide_balanced$ideo_1
+df_study1_wide_balanced$ideo_6 <-df_study1_wide_balanced$ideo_1
+df_study1_wide_balanced$ideo_7 <-df_study1_wide_balanced$ideo_1
 
 
-dim(df_study1_wide)
+dim(df_study1_wide_balanced)
 
-sjPlot::view_df(df_study1_wide,
+sjPlot::view_df(df_study1_wide_unbalanced,
                 show.frq = T,show.values = T,show.na = T,show.prc = T, show.type = T)
 ```
 
 ```{r}
+# Unbalanced
+
 # reshape from long to wide
 pacman::p_load(datasets,data.table)
-df_study1_long <- data.table::melt.data.table(data.table::setDT(df_study1_wide),
+df_study1_long_1 <- data.table::melt.data.table(data.table::setDT(df_study1_wide_unbalanced),
+              id.vars = c("idencuesta","muestra"),
+              variable.name = c("ola"),
+              measure = 
+patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^aget_", "^ideo_"),
+              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "aget","ideo"),
+              na.rm = F,value.factor = TRUE
+              )
+
+# Balanced
+
+# reshape from long to wide
+pacman::p_load(datasets,data.table)
+df_study1_long_2 <- data.table::melt.data.table(data.table::setDT(df_study1_wide_balanced),
               id.vars = c("idencuesta","muestra"),
               variable.name = c("ola"),
               measure = 
@@ -595,17 +650,33 @@ patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_",
 
 
 ```{r}
-names(df_study1_long) #check names of long dataset
-dim(df_study1_long) #check dimensions of the dataframe
+# 1 = Unbalanced
+# 2 = Balanced
+
+names(df_study1_long_1) #check names of long dataset
+dim(df_study1_long_1) #check dimensions of the dataframe
+
+names(df_study1_long_2) #check names of long dataset
+dim(df_study1_long_2) #check dimensions of the dataframe
+
 # Original dataset with 7 waves
-df_study2_long <- df_study1_long
+df_study2_long_1 <- df_study1_long_1
+df_study2_long_2 <- df_study1_long_2
 
 # filter the dataset for the waves 1 to 4 and 6 to 7
-df_study1_long <-
-df_study1_long %>% 
+df_study1_long_1 <-
+df_study1_long_1 %>% 
   filter(ola %in% c(1,2,3,4,6,7)) %>% 
   mutate(ola=factor(ola,levels = 1:7,labels = 1:7))
-dim(df_study1_long) #check, now is OK
+dim(df_study1_long_1) #check, now is OK
+
+# filter the dataset for the waves 1 to 4 and 6 to 7
+df_study1_long_2 <-
+df_study1_long_2 %>% 
+  filter(ola %in% c(1,2,3,4,6,7)) %>% 
+  mutate(ola=factor(ola,levels = 1:7,labels = 1:7))
+dim(df_study1_long_2) #check, now is OK
+
 
 # df_study1_long <- 
 # set_label(x = df_study1_long,
@@ -622,26 +693,46 @@ ids <-
 
 
 # filter data by the idencuesta of t7
-df_study1_long_t7 <- 
-  df_study1_long %>%
+# a = Unbalanced
+# b = Balanced
+
+df_study1_long_t7_a <- 
+  df_study1_long_1 %>%
   filter(idencuesta %in% ids$val)
 
-names(df_study1_long_t7)
-dim(df_study1_long_t7)
-sjmisc::frq(df_study1_long_t7$ola)
+df_study1_long_t7_b <- 
+  df_study1_long_2 %>%
+  filter(idencuesta %in% ids$val)
 
-df_study1_long_t7 <- df_study1_long_t7 %>%
+names(df_study1_long_t7_a)
+dim(df_study1_long_t7_a)
+sjmisc::frq(df_study1_long_t7_a$ola)
+
+names(df_study1_long_t7_b)
+dim(df_study1_long_t7_b)
+sjmisc::frq(df_study1_long_t7_b$ola)
+
+df_study1_long_t7_a <- df_study1_long_t7_a %>%
   group_by(idencuesta) %>%             # Agrupar por el identificador del participante
   mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
   ungroup()
 
-df_study1_long_t7 <- df_study1_long_t7 %>% filter(n_participaciones>1)
+df_study1_long_t7_b <- df_study1_long_t7_b %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1_long_t7_a <- df_study1_long_t7_a %>% filter(n_participaciones>1)
+df_study1_long_t7_b <- df_study1_long_t7_b %>% filter(n_participaciones>1)
 ```
 
 
 ```{r}
-save(df_study1_long,file = here::here("input/data/proc/df_study1_long.RData"))
-save(df_study1_long_t7,file = here::here("input/data/proc/df_study1_long_t7.RData"))
-save(df_study2_long,file = here::here("input/data/proc/df_study2_long.RData"))
+save(df_study1_long_1,file = here::here("input/data/proc/df_study1_long_unbalaced.RData")) # Filter dataset for the waves 1 to 4 and 6 to 7
+save(df_study1_long_2,file = here::here("input/data/proc/df_study1_long_balanced.RData"))
+save(df_study1_long_t7_a,file = here::here("input/data/proc/df_study1_long_t7_unbalanced.RData")) # Filter data by the idencuesta of t7
+save(df_study1_long_t7_b,file = here::here("input/data/proc/df_study1_long_t7_balanced.RData")) 
+save(df_study2_long_1,file = here::here("input/data/proc/df_study2_long_balanced.RData")) # Original dataset with 7 waves
+save(df_study2_long_2,file = here::here("input/data/proc/df_study2_long_unbalanced.RData"))
 ```
 
