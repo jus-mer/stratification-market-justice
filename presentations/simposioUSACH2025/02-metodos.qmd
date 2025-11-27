@@ -50,7 +50,7 @@ $$\beta_5\,(\mathrm{EGP}_i\!\times\! X^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\ti
 ```{r}
 #| label: fig-desc
 #| fig-cap-location: top
-#| fig-cap: "Distribución de respuestas para las preferencias por comodificación de pensiones Chile (2016-2023)"
+#| fig-cap: "Distribución de respuestas para las preferencias por justicia de mercado en pensiones Chile (2016-2023)"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.6
