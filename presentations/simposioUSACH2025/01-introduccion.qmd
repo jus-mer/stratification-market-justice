@@ -80,27 +80,25 @@ Preferencias por justicia de mercado [@busemeyer_skills_2014; @castillo_percepti
 :::
 
 
-## Preferencias por la comodificación de servicios
+## Factores asociados a la justicia de mercado
 
 
 ::::: columns
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
-
-### Contextual
-
-- Gasto social [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
-- Desigualdad económica [@koos_moral_2019]
-- Nivel de privatización de servicios y regulación del mercado [@lindh_public_2015; @koos_moral_2019]
-
-:::
-
-::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
-
 ### Individual
 
 - Estatus socioeconómico -ingresos, educación y ocupación- [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
 - Percepciones sobre la desigualdad y meritocracia [@castillo_perceptions_2025]
 - Conservadurismo/liberalismo económico [@lee_fairness_2023]
+
+:::
+
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+### Contextual
+
+- Gasto social [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
+- Desigualdad económica [@koos_moral_2019]
+- Nivel de privatización de servicios y regulación del mercado [@lindh_public_2015; @koos_moral_2019]
 
 :::
 :::::
@@ -112,7 +110,7 @@ Preferencias por justicia de mercado [@busemeyer_skills_2014; @castillo_percepti
 
 ::: {.pull-left .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
 
-Analizar la relación entre clase social y preferencias por la comodificación de pensiones en Chile y sus cambios en el tiempo
+Analizar la relación entre clase social y preferencias por la justicia de mercado en pensiones en Chile y sus cambios en el tiempo
 
 
 :::
@@ -121,7 +119,7 @@ Analizar la relación entre clase social y preferencias por la comodificación d
 
 ::: {.pull-right .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
 
-Examinar el rol de la meritocracia en la relación entre clase y apoyo a la comodificación de pensiones
+Examinar el rol de la meritocracia en la relación entre clase y preferencias por justicia de mercado en pensiones.
 
 :::
 
@@ -130,15 +128,15 @@ Examinar el rol de la meritocracia en la relación entre clase y apoyo a la como
 
 ::: {.incremental .highlight-last style="font-size: 110%;"}
 
-- $H1_ \; (\text{Between-person}):$ quienes pertenecen a clases altas exhiben, en promedio, mayor apoyo a la comodificación de pensiones que quienes pertenecen a clases bajas
+- $H1_ \; (\text{Between-person}):$ quienes pertenecen a clases altas exhiben, en promedio, una mayor preferencia por justicia de mercado en pensiones que quienes pertenecen a clases bajas
 
-- $H2_{a} \; (\text{Between-person}):$ las personas que perciben más meritocracia suelen mostrar mayor apoyo a la comodificación de las pensiones que quienes sostienen esas percepciones con menos fuerza
+- $H2_{a} \; (\text{Between-person}):$ las personas que perciben más meritocracia manifiestan una mayor preferencia por justicia de mercado en pensiones que quienes sostienen esas percepciones con menos fuerza
 
-- $H2_{b} \; (\text{Within-person}):$ cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su apoyo a la comodificación de las pensiones aumenta
+- $H2_{b} \; (\text{Within-person}):$ cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su preferencia por justicia de mercado en pensiones aumenta
 
-- $H3_{a} \; (\text{Between-person}):$ la asociación positiva entre meritocracia (BE) y apoyo a la comodificación es más fuerte en clases altas
+- $H3_{a} \; (\text{Between-person}):$ la asociación positiva entre meritocracia (BE) y preferencia por justicia de mercado en pensiones es más fuerte en clases altas
 
-- $H3_{b} \; (\text{Within-person}):$ cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su apoyo a la comodificación sube más que en clases bajas
+- $H3_{b} \; (\text{Within-person}):$ cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su preferencia por justicia de mercado en pensiones aumenta más que en clases bajas
 
 :::
 

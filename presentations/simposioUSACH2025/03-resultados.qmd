@@ -5,7 +5,7 @@
 ```{r}
 #| label: fig-model_time
 #| fig-cap-location: top
-#| fig-cap: "Efectos por ola en las preferencias de comodificación de pensiones"
+#| fig-cap: "Efectos por ola en las preferencias por justicia de mercado en pensiones"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.5
@@ -44,7 +44,7 @@ sjPlot::plot_model(
 ```{r}
 #| label: fig-model_be_we
 #| fig-cap-location: top
-#| fig-cap: "Efectos principales WE and BE en las preferencias de comodificación de pensiones"
+#| fig-cap: "Efectos principales WE and BE en las preferencias por justicia de mercado en pensiones"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.6
@@ -89,7 +89,7 @@ sjPlot::plot_model(
 ```{r}
 #| label: fig-model_be_we_controls
 #| fig-cap-location: top
-#| fig-cap: "Efectos WE and BE en las preferencias de comodificación de pensiones con controles"
+#| fig-cap: "Efectos WE and BE en las preferencias por justicia de mercado en pensiones con controles"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.6
@@ -131,7 +131,7 @@ sjPlot::plot_model(
 ```{r}
 #| label: fig-model_interactions
 #| fig-cap-location: top
-#| fig-cap: "Interacciones por clase, meritocracia y preferencias por comodificación de pensiones"
+#| fig-cap: "Interacciones por clase, meritocracia y preferencias por justicia de mercado en pensiones"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.6
