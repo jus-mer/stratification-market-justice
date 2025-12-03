@@ -95,13 +95,13 @@ rm(list = ls())
 #| label: data
 #| echo: true
 
-load(file = here("input/data/proc/df_study1_long_t7.RData"))
+load(file = here("input/data/proc/df_study1_long_t7_balanced.RData"))
 
-glimpse(df_study1_long_t7)
+glimpse(df_study1_long_t7_b)
 
 # Generate analytical sample
 
-df_study1 <- df_study1_long_t7 %>%
+df_study1 <- df_study1_long_t7_b %>%
   select(-muestra) %>% 
   na.omit() %>% 
   mutate(ola = case_when(ola == 1 ~ 1,
@@ -123,7 +123,6 @@ df_study1 <- df_study1 %>% filter(n_participaciones>1)
 
 # Corregir etiquetas
 
-
 df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
                         label = "Pension distributive justice")
 
@@ -142,7 +141,6 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 # Analysis
 
 ## Descriptives
-
 
 ```{r}
 #| label: fig-alluvial
@@ -251,9 +249,6 @@ print(summarytools::dfSummary(t2), method="render")
 #| echo: false
 #| results: asis
 
-
-library(srvyr)
-
 df_pond <- df_study1 %>% 
   mutate(ola = case_when(ola == 1 ~ "2016",
                          ola == 2 ~ "2017",
@@ -324,7 +319,6 @@ df_pond %>%
   theme_ggdist() +
   theme(legend.position = "top",
         text = element_text(size = 12)) 
-
  
 ```
 
@@ -374,7 +368,8 @@ df_study1$just_pension <- as_factor(df_study1$just_pension)
 
 df_study1$egp <- factor(df_study1$egp, levels = c("Working class (V+VI+VII)",
                                                   "Intermediate class (III+IV)",
-                                                  "Service class (I+II)"))
+                                                  "Service class (I+II)",
+                                                  "Out of labor force"))
 ```
 
 ## ICC 
@@ -478,6 +473,8 @@ m6 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + merit_effort_cwc + merit_
 
 save(m3,m4,m5,m6, file = here("output/main_effects.RData"))
 
+screenreg(list(m3,m4,m5,m6))
+
 load(file = here("output/main_effects.RData"))
 
 ccoef <- list(
@@ -489,6 +486,7 @@ ccoef <- list(
   ola_2 = "Wave^2",
   "egpIntermediate class (III+IV)" = "Intermediate class (III+IV)",
   "egpService class (I+II)" = "Service class (I+II)",
+  "egpOut of labor force" = "Out of labor force",
   merit_effort_cwc = "Merit: Effort (WE)",
   merit_talent_cwc = "Merit: Talent (WE)",
   merit_effort_mean = "Merit: Effort (BE)",
@@ -527,28 +525,30 @@ texreg::screenreg(list(m3,m4,m5,m6),
 #| results: asis
 # ## WE and BE Interactions without controls
 
-#m7 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc #+ merit_effort_mean + merit_talent_mean + egp*merit_effort_cwc + (1 + ola_num + #merit_effort_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m8 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc #+ merit_effort_mean + merit_talent_mean + egp*merit_talent_cwc + (1 + ola_num + #merit_talent_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m9 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc #+ merit_effort_mean + merit_talent_mean + egp*merit_effort_mean + (1 + ola_num + #merit_effort_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m10 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + egp*merit_talent_mean #+ (1 + ola_num + merit_talent_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m7,m8,m9,m10, file = here("output/interactions_total.RData"))
+m7 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + egp*merit_effort_cwc + (1 + ola_num + merit_effort_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m8 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + egp*merit_talent_cwc + (1 + ola_num + merit_talent_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m9 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + egp*merit_effort_mean + (1 + ola_num + merit_effort_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m10 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + egp*merit_talent_mean + (1 + ola_num + merit_talent_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m7,m8,m9,m10, file = here("output/interactions_total.RData"))
+
+screenreg(list(m7, m8, m9, m10))
 
 load(file = here("output/interactions_total.RData"))
 
@@ -559,18 +559,23 @@ ccoef <- list(
   "Agree|Strongly agree" = "Agree|Strongly agree", 
   "egpIntermediate class (III+IV)" = "Intermediate class (III+IV)",
   "egpService class (I+II)" = "Service class (I+II)",
+  "egpOut of labor force" = "Out of labor force",
   merit_effort_cwc = "Merit: Effort (WE)",
   merit_talent_cwc = "Merit: Talent (WE)",
   merit_effort_mean = "Merit: Effort (BE)",
   merit_talent_mean = "Merit: Talent (BE)",
   "egpIntermediate class (III+IV):merit_effort_cwc" =  "Intermediate class (III+IV) x Merit: Effort (WE)",
   "egpService class (I+II):merit_effort_cwc" = "Service class (I+II) x Merit: Effort (WE)",
+  "egpOut of labor force:merit_effort_cwc" = "Out of labor force x Merit: Effort (WE)",
   "egpIntermediate class (III+IV):merit_talent_cwc" = "Intermediate class (III+IV) x Merit: Talent (WE)",
   "egpService class (I+II):merit_talent_cwc" = "Service class (I+II) x Merit: Talent (WE)",
+  "egpOut of labor force:merit_talent_cwc" = "Out of labor force x Merit: Talent (WE)",
   "egpIntermediate class (III+IV):merit_effort_mean" =  "Intermediate class (III+IV) x Merit: Effort (BE)",
-"egpService class (I+II):merit_effort_mean" = "Service class (I+II) x Merit: Effort (BE)",
-"egpIntermediate class (III+IV):merit_talent_mean" = "Intermediate class (III+IV) x Merit: Talent (BE)",
-"egpService class (I+II):merit_talent_mean" = "Service class (I+II) x Merit: Talent (BE)")
+  "egpService class (I+II):merit_effort_mean" = "Service class (I+II) x Merit: Effort (BE)",
+  "egpOut of labor force:merit_effort_mean" = "Out of labor force x Merit: Effort (BE)",
+  "egpIntermediate class (III+IV):merit_talent_mean" = "Intermediate class (III+IV) x Merit: Talent (BE)",
+  "egpService class (I+II):merit_talent_mean" = "Service class (I+II) x Merit: Talent (BE)",
+  "egpOut of labor force:merit_talent_mean" = "Out of labor force x Merit: Talent (BE)")
 
 texreg::htmlreg(list(m7,m8,m9,m10),
                caption.above = T,
@@ -591,6 +596,8 @@ texreg::htmlreg(list(m7,m8,m9,m10),
                center = T,
                custom.gof.rows = list("Controls"=c(rep("No",4))))
 
+
+
 ```
 
 ## Interactions with controls (direct effect)
@@ -599,28 +606,30 @@ texreg::htmlreg(list(m7,m8,m9,m10),
 #| results: asis
 # ## WE and BE Interactions with controls
 
-#m11 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + #egp*merit_effort_cwc + (1 + ola_num + merit_effort_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m12 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + #egp*merit_talent_cwc + (1 + ola_num + merit_talent_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m13 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + #egp*merit_effort_mean + (1 + ola_num + merit_effort_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m14 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + #merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + #egp*merit_talent_mean + (1 + ola_num + merit_talent_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m11,m12,m13,m14, file = here("output/interactions_direct.RData"))
+m11 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + egp*merit_effort_cwc + (1 + ola_num + merit_effort_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m12 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + egp*merit_talent_cwc + (1 + ola_num + merit_talent_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m13 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + egp*merit_effort_mean + (1 + ola_num + merit_effort_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m14 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + ideo + sex + age + egp*merit_talent_mean + (1 + ola_num + merit_talent_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m11,m12,m13,m14, file = here("output/interactions_direct.RData"))
+
+screenreg(list(m11,m12,m13,m14))
 
 load(file = here("output/interactions_direct.RData"))
 
@@ -672,28 +681,28 @@ texreg::htmlreg(list(m11,m12,m13,m14),
 #| results: asis
 ## WE and BE Interactions merit dummy
 
-#m15 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + #egp*merit_effort_dic_cwc + (1 + ola_num + merit_effort_dic_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m16 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + #egp*merit_talent_dic_cwc + (1 + ola_num + merit_talent_dic_cwc| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m17 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + #egp*merit_effort_dic_mean + (1 + ola_num + merit_effort_dic_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m18 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + #egp*merit_talent_dic_mean + (1 + ola_num + merit_talent_dic_mean| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m15,m16,m17,m18, file = here("output/interactions_total_dico.RData"))
+m15 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + egp*merit_effort_dic_cwc + (1 + ola_num + merit_effort_dic_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m16 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + egp*merit_talent_dic_cwc + (1 + ola_num + merit_talent_dic_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m17 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + egp*merit_effort_dic_mean + (1 + ola_num + merit_effort_dic_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m18 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + egp*merit_talent_dic_mean + (1 + ola_num + merit_talent_dic_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m15,m16,m17,m18, file = here("output/interactions_total_dico.RData"))
 
 load(file = here("output/interactions_total_dico.RData"))
      
@@ -744,28 +753,28 @@ texreg::htmlreg(list(m15,m16,m17,m18),
 #| results: asis
 ## WE and BE Interactions merit dummy
 
-#m19 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex #+ age + egp*merit_effort_dic_cwc + (1 + ola_num + merit_effort_dic_cwc| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m20 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex #+ age + egp*merit_talent_dic_cwc + (1 + ola_num + merit_talent_dic_cwc| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m21 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex #+ age + egp*merit_effort_dic_mean + (1 + ola_num + merit_effort_dic_mean| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m22 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + #merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex #+ age + egp*merit_talent_dic_mean + (1 + ola_num + merit_talent_dic_mean| #idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m19,m20,m21,m22, file = here("output/interactions_direct_dic.RData"))
+m19 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex + age + egp*merit_effort_dic_cwc + (1 + ola_num + merit_effort_dic_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m20 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex + age + egp*merit_talent_dic_cwc + (1 + ola_num + merit_talent_dic_cwc| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m21 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex + age + egp*merit_effort_dic_mean + (1 + ola_num + merit_effort_dic_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m22 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_dic_cwc + merit_talent_dic_cwc + merit_effort_dic_mean + merit_talent_dic_mean + ideo + sex + age + egp*merit_talent_dic_mean + (1 + ola_num + merit_talent_dic_mean| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m19,m20,m21,m22, file = here("output/interactions_direct_dic.RData"))
 
 load(file = here("output/interactions_direct_dic.RData"))
      
@@ -818,28 +827,28 @@ texreg::htmlreg(list(m19,m20,m21,m22),
 #| results: asis
 ## Interactions merit x time
 
-#m23 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + merit_effort_cwc*ola_num + (1 + ola_num| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m24 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + merit_talent_cwc*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m25 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + merit_effort_mean*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m26 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean  + merit_talent_mean*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m23,m24,m25,m26, file = here("output/interactions_merit_time_total.RData"))
+m23 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + merit_effort_cwc*ola_num + (1 + ola_num| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m24 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + merit_talent_cwc*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m25 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + merit_effort_mean*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m26 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean  + merit_talent_mean*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m23,m24,m25,m26, file = here("output/interactions_merit_time_total.RData"))
 
 load(file = here("output/interactions_merit_time_total.RData"))
 
@@ -882,28 +891,28 @@ texreg::htmlreg(list(m23,m24,m25,m26),
 #| results: asis
 ## Interactions merit x time
 
-#m27 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + educ + ideo + sex + age + merit_effort_cwc*ola_num + (1 + ola_num| idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m28 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + educ + ideo + sex + age + merit_talent_cwc*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#
-#m29 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + educ + ideo + sex + age + merit_effort_mean*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#m30 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + #merit_talent_mean + educ + ideo + sex + age + merit_talent_mean*ola_num + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-#save(m27,m28,m29,m30, file = here("output/interactions_merit_time_direct.RData"))
+m27 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + merit_effort_cwc*ola_num + (1 + ola_num| idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m28 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + merit_talent_cwc*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+
+m29 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + merit_effort_mean*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+m30 <- clmm(just_pension ~ 1 + ola_num + egp + merit_effort_cwc + merit_talent_cwc + merit_effort_mean + merit_talent_mean + educ + ideo + sex + age + merit_talent_mean*ola_num + (1 + ola_num | idencuesta), 
+            link = "logit",
+  Hess = TRUE,
+           data = df_study1)
+
+save(m27,m28,m29,m30, file = here("output/interactions_merit_time_direct.RData"))
 
 load(file = here("output/interactions_merit_time_direct.RData"))
 

@@ -293,7 +293,7 @@ sjt.xtab(elsoc_long_2016_2023$egp3,elsoc_long_2016_2023$ola,
 ```{r}
 # Exploración de NA en EGP
 
-# 1. Distribución general de NA en EGP por ola
+# Distribución general de NA en EGP por ola
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
   mutate(egp_na = is.na(egp))
 
@@ -303,7 +303,7 @@ sjt.xtab(elsoc_long_2016_2023$egp_na, elsoc_long_2016_2023$ola,
          show.summary = FALSE,
          title = NULL)
 
-# 2. Análisis de componentes ocupacionales en casos NA
+# Análisis de componentes ocupacionales en casos NA
 elsoc_long_2016_2023 %>% 
   filter(is.na(egp)) %>% 
   summarise(
@@ -315,7 +315,7 @@ elsoc_long_2016_2023 %>%
   ) %>% 
   print()
 
-# 3. Situación laboral (m02) en casos NA de EGP
+# Situación laboral (m02) en casos NA de EGP
 na_summary <- elsoc_long_2016_2023 %>% 
   filter(is.na(egp)) %>% 
   count(m02) %>% 
@@ -337,7 +337,7 @@ na_summary <- elsoc_long_2016_2023 %>%
 
 print(na_summary)
 
-# 4. Verificación: cobertura de m02 en casos NA de EGP
+# Verificación: cobertura de m02 en casos NA de EGP
 total_na_egp <- sum(is.na(elsoc_long_2016_2023$egp))
 na_con_m02 <- elsoc_long_2016_2023 %>% 
   filter(is.na(egp) & !is.na(m02)) %>% 
@@ -366,7 +366,7 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
     )
   )
 
-# 6. Tabla cruzada por ola
+# Tabla cruzada por ola
 sjt.xtab(elsoc_long_2016_2023$situacion_na_egp, elsoc_long_2016_2023$ola,
          show.col.prc = TRUE,
          var.labels = c("Situación laboral (casos NA EGP)", "Ola"),
@@ -441,7 +441,6 @@ elsoc_long_2016_2023$merit_effort <- sjlabelled::set_label(elsoc_long_2016_2023$
 
 elsoc_long_2016_2023$merit_talent <- sjlabelled::set_label(elsoc_long_2016_2023$merit_talent, 
                         label = "People are rewarded for their intelligence")
-
 
 ```
 
