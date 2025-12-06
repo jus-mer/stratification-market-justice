@@ -1,4 +1,8 @@
-
+---
+bibliography: "input/bib/jusmer.bib"
+csl: "input/bib/apa6.csl"
+---
 
 # Discussion
 
+Survey evidence from 2016 to 2023 points to marked ambivalence among Chileans in their evaluation of market-based pension justice. In each wave, clear majorities reject the notion that it is fair for higher-income individuals to receive better pensions than lower-income individuals. At the same time, a small but expanding segment of respondents endorses this income-based principle, with the steepest growth occurring between 2018 and 2023. Market allocation of pension benefits thus remains a minority preference, yet one that has become more prevalent over time, in line with longitudinal evidence of rising support for income-based access to welfare services in Chile [@castillo_perceptions_2025]. These attitudes are formed within an institutional architecture of mandatory, privately managed, defined-contribution accounts that closely tie old-age income to labor earnings, contribution stability, and market performance [@solimano_rise_2021; @madero-cabib_private_2019], and that symbolically recast pensions from solidarity-based social rights into individual financial assets. In this respect, Chile mirrors broader findings that income-based access to welfare is more strongly endorsed in liberal, marketised regimes [@lindh_public_2015]. Taken together, these patterns suggest that support for pension commodification, although contested and far from hegemonic, constitutes a salient orientation that raises the question of which social trajectories and belief structures sustain it.
