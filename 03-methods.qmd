@@ -1,3 +1,10 @@
+---
+output: html_document
+bibliography: "input/bib/jusmer.bib"
+csl: "input/bib/apa6.csl"
+editor_options: 
+  chunk_output_type: console
+---
 
 ```{r}
 #| label: set
@@ -59,9 +66,10 @@ rm(list = ls())
 # Data, Variables and Methods
 
 ## Data
-For this study, we used the Chilean Longitudinal Social Survey (ELSOC), a panel study conducted annually between 2016 and 2023, designed to examine the attitudes, emotions, and behaviours of people aged 18 to 75 with regard to issues of social cohesion and conflict. In terms of methodology, the survey uses a probabilistic, stratified, clustered, multistage sampling design covering urban centres and small towns. The sampling frame is stratified proportionally into six categories of urban population size, followed by random selection of households within 1,067 blocks.
 
-The survey has been conducted annually since 2016, with the exception of 2020, when it was suspended due to the COVID-19 pandemic. For the purposes of this study, the 2016, 2017, 2018, 2019, 2022, and 2023 waves were used. The 2021 wave was excluded because the version of the questionnaire omitted variables of interest. Between waves 1 and 6, panel attrition reached 40%, so a balanced panel was used, resulting in a final two-level sample comprising N = 5755 observations nested in N = 1027 individuals. Longitudinal weights are applied to adjust for both the sample design and potential biases arising from systematic non-response. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
+For this study, we used the Chilean Longitudinal Social Survey (ELSOC). This is a panel study conducted annually between 2016 and 2023, designed to examine the attitudes, emotions, and behaviours of people aged 18 to 75 with regard to issues of social cohesion and conflict. In terms of methodology, the survey uses a probabilistic, stratified, clustered, multistage sampling design covering urban centres and small towns. The sampling frame is stratified proportionally into six categories of urban population size, followed by random selection of households within 1,067 blocks.
+
+The survey has been conducted annually since 2016, with the exception of 2020, when it was suspended due to the COVID-19 pandemic. For the purposes of this study, the 2016, 2017, 2018, 2019, 2022, and 2023 waves were used. The 2021 wave was excluded because the version of the questionnaire omitted variables of interest. Between waves 1 and 6, panel attrition reached 40%, so a balanced panel was used, resulting in a final two-level sample comprising *N* = 5,755 observations nested in *N* = 1,027 individuals. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
 
 ```{r}
 #| label: data
@@ -131,31 +139,33 @@ print(summarytools::dfSummary(t2, plain.ascii = FALSE, headings = FALSE),
       footnote = NA)
 ```
 
-### Dependent Variable
+### Market justice preferences for pensions
 
-The dependent variable of distributive justice in pensions is measured by the question ‘Is it fair that high-income individuals have better pensions than lower-income individuals?’, where the response options range from 1 (Strongly disagree) to 5 (Strongly agree). Therefore, higher values indicate a greater perception of fairness in pension distribution, i.e., greater support for inequality in pensions.
+The dependent variable in this study is distributive justice in pensions. This construct is measured by a single item that captures how strongly individuals endorse conditioning access to better pensions on income. Specifically, the question is: "Is it fair that high-income individuals have better pensions than lower-income individuals?" The response options range from 1 ("Strongly disagree") to 5 ("Strongly agree"). Therefore, higher values indicate a greater perception of fairness in pension distribution, i.e., greater support for inequality in pensions.
 
-### Independent Variables
+### Social class
 
-As for the independent variables, a class scheme was constructed based on that of Erikson, Goldthorpe and Portocarero (EGP), collapsed into three categories: (1) Working class (V+VI+VII), which serves as the reference category, (2) Intermediate class (III+IV), (3) Service class (I+II). Additionally, a residual category is included that considers people outside the labour force according to their statements in the survey.
+As for the independent variables, a class scheme was constructed based on that of Erikson, Goldthorpe and Portocarero (EGP) [@erikson_casmin_1992], collapsed into three categories: (1) Working class (V+VI+VII), which serves as the reference category, (2) Intermediate class (III+IV), (3) Service class (I+II). Additionally, a residual category is included that considers people outside the labour force according to their statements in the survey.
 
-We employ the EGP scheme because it captures theoretically relevant dimensions of labor market position for understanding distributive justice attitudes. Unlike occupational prestige scales or purely income-based measures, EGP distinguishes positions based on employment relations and market situations—specifically, the degree of autonomy, job security, and contractual conditions that structure both contributions to the pension system and expected returns. This is crucial for our analysis since different class positions imply distinct relationships with pension schemes: service class workers typically benefit from stable employment and higher contribution rates, while working class positions face greater employment instability and lower coverage. The collapsed three-category version balances theoretical meaningfulness with statistical power, maintaining the core distinction between labor contract types (labor contracts for the working class, service relationships for the service class, and mixed positions for the intermediate class) while ensuring adequate sample sizes for longitudinal analysis.
+We employ the EGP scheme because it captures theoretically relevant dimensions of labor market position for understanding distributive justice attitudes. Unlike occupational prestige scales or purely income-based measures, EGP distinguishes positions based on employment relations and market situations—specifically, the degree of autonomy, job security, and contractual conditions [@barozet_measurement_2021; @barone_rise_2022] that structure both contributions to the pension system and expected returns. This is crucial for our analysis since different class positions imply distinct relationships with pension schemes: service class workers typically benefit from stable employment and higher contribution rates, while working class positions face greater employment instability and lower coverage. The collapsed three-category version balances theoretical meaningfulness with statistical power, maintaining the core distinction between labor contract types (labor contracts for the working class, service relationships for the service class, and mixed positions for the intermediate class) while ensuring adequate sample sizes for longitudinal analysis.
 
-The conversion from ISCO-08 occupational codes to EGP categories was performed using the occupar R package, which incorporates information on employment status (self-employed versus employee) and number of employees for self-employed workers. This approach follows the theoretical logic that class position depends not only on occupational title but also on employment relations, allowing us to differentiate, for example, between small-scale self-employed workers (petty bourgeoisie, class IVc) and employers with larger workforces (class I-II). A recognized limitation in contexts like Chile is EGP's difficulty in adequately capturing labor informality, as it was designed for formalized labor markets. However, this limitation is shared by most available occupational classification schemes and does not invalidate its analytical utility for the formal sector, which constitutes the base of the contributory pension system under normative evaluation in our dependent variable.
+The conversion from ISCO-08 occupational codes to EGP categories was performed using the *occupar* R package, which incorporates information on employment status (self-employed versus employee) and number of employees for self-employed workers. This approach follows the theoretical logic that class position depends not only on occupational title but also on employment relations, allowing us to differentiate, for example, between small-scale self-employed workers (petty bourgeoisie, class IVc) and employers with larger workforces (class I-II). A recognized limitation in contexts like Chile is EGP's difficulty in adequately capturing labor informality, as it was designed for formalized labor markets. However, this limitation is shared by most available occupational classification schemes and does not invalidate its analytical utility for the formal sector, which constitutes the base of the contributory pension system under normative evaluation in our dependent variable.
 
-The meritocratic beliefs variable is divided into the degree of agreement with two categories: (1) 'In Chile, people are rewarded for their efforts' (Merit: Effort), and (2) 'In Chile, people are rewarded for their intelligence and abilities' (Merit: Talent). Both items use a 5-point Likert scale from 1 (Strongly disagree) to 5 (Strongly agree), where higher scores indicate stronger beliefs that society operates meritocratically.
+### Meritocracy 
 
-### Control Variables
+Following Young’s [-@young_rise_1975] distinction, this construct is operationalised into two dimensions: effort and talent. Both dimensions are measured by the degree of agreement with statements indicating that effort and talent are rewarded in society. Specifically, meritocratic perceptions of effort are captured by the item “In Chile, people are rewarded for their efforts” (Merit: Effort), and meritocratic perceptions of talent by the item “In Chile, people are rewarded for their intelligence and abilities” (Merit: Talent). Both items are answered on a 5-point Likert scale ranging from 1 (“Strongly disagree”) to 5 (“Strongly agree”), with higher values indicating stronger perceptions that Chilean society operates according to meritocratic principles.
 
-The models include standard sociodemographic controls: educational attainment (dichotomized as university vs. less than university), political identification (left, center, right, or does not identify), sex (female vs. male), and age (in years).
+### Controls
+
+Based on previous research [@castillo_perceptions_2025; @lindh_public_2015; @jaime-castillo_public_2013], the statistical models include sociodemographic and attitudinal controls to account for potential compositional effects in the population. We adjust for sex (1 = male, 2 = female), age (in years), educational attainment (1 = less than university, 2 = university), and political identification (1 = left, 2 = centre, 3 = right, 4 = no identification). Following @langsaether_explaining_2022, we do not control for income, as it can be conceived as a consequence of social class—that is, a post-treatment variable—and thus risks introducing collider bias into the estimates. Descriptive statistics for the control variables can be found in the Supplementary material.
 
 ## Analytical Strategy
 
-To examine longitudinal changes in pension inequality justification and its relationship with social class and meritocratic beliefs, we employ Cumulative Link Mixed Models (CLMM) for ordinal responses. This approach is particularly well-suited for our analytical goals for several reasons. First, it preserves the ordinal nature of our dependent variable without imposing assumptions about equal spacing between response categories. Second, it accounts for the hierarchical structure of our panel data, with repeated observations (Level 1) nested within individuals (Level 2). Third, it enables the decomposition of variance into within-person (WE) and between-person (BE) components, allowing us to distinguish temporal changes within individuals from stable differences between individuals.
+To examine longitudinal changes in pension inequality justification and its relationship with social class and meritocratic beliefs, we employ Cumulative Link Mixed Models (CLMM) for ordinal responses. This approach is particularly well-suited for our analytical goals for several reasons. First, it preserves the ordinal nature of our dependent variable without imposing assumptions about equal spacing between response categories. Second, it accounts for the hierarchical structure of our panel data, with repeated observations (Level 1) nested within individuals (Level 2). Third, it enables the decomposition of variance into within-person (WE) and between-person (BE) components, allowing us to distinguish temporal changes within individuals from stable differences between individuals [@singer_applied_2003; @bell_fixed_2019].
 
-### Within-Person and Between-Person Effects
+### Within-Person and Between-Person Random Effects Models
 
-Following the recommendations of Bell and Jones (2015) and Curran and Bauer (2011), we decompose time-varying predictors into their within-person and between-person components using person-mean centering:
+Following the recommendations of @bell_explaining_2015, we decompose time-varying predictors into their within-person and between-person components using person-mean centering:
 
 $$
 X_{WE_{it}} = X_{it} - \bar{X}_i
@@ -180,7 +190,7 @@ $$
 \end{split}
 $$
 
-where $\eta_{it}$ is the linear predictor for individual $i$ at time $t$, linked to the cumulative probabilities through a logit link function; $\beta_0$ is the fixed intercept (threshold); $\beta_1$ captures the linear time trend; $\beta_2$ and $\beta_3$ represent within-person and between-person effects of meritocratic beliefs, respectively; $\beta_4$ captures social class main effects; $\beta_5$ and $\beta_6$ represent interactions between social class and within/between-person meritocratic beliefs; $u_{0i}$ is the random intercept (capturing unobserved individual heterogeneity); and $u_{1i}$ is the random slope for time (allowing individual-specific temporal trajectories).
+where $\eta_{it}$ is the linear predictor for individual $i$ at time $t$, linked to the cumulative probabilities through a logit link function; $\beta_0$ is the fixed intercept (threshold); $\beta_1$ captures the linear time trend; $\beta_2$ and $\beta_3$ represent within-person and between-person effects of meritocratic perceptions, respectively; $\beta_4$ captures social class between effects; $\beta_5$ and $\beta_6$ represent interactions between social class and within/between-person meritocratic perceptions; $u_{0i}$ is the random intercept (capturing unobserved individual heterogeneity); and $u_{1i}$ is a random slope for time (allowing individual-specific temporal trajectories).
 
 The random effects are assumed to follow a bivariate normal distribution:
 
