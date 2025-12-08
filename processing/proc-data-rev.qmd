@@ -1,7 +1,7 @@
 ---
-title: "Data preparation"
+title: "Data preparation 2"
 subtitle: "Changes in the Justification of Pension Inequality in Chile (2016–2023) and its Relationship to Social Class and Beliefs in Meritocracy"
-author: "Andreas Laffert, Research Assistant"
+author: "René Canales & Andreas Laffert"
 date: today
 lang: en
 fontsize: 12pt
@@ -71,7 +71,8 @@ pacman::p_load(tidyverse,
                SciViews,
                naniar,
                readxl,
-               sjPlot)
+               sjPlot,
+               DIGCLASS)
 
 
 options(scipen=999)
@@ -129,7 +130,7 @@ elsoc_long_2016_2023$just_pension <- sjlabelled::set_label(elsoc_long_2016_2023$
 ```{r}
 # Social class scheme EGP
 
-# isco 
+# ISCO 08 
 
 frq(elsoc_long_2016_2023$ciuo88_m03)
 
@@ -148,10 +149,15 @@ elsoc_long_2016_2023 %>%
   ) # only wave 2018, 2021 and 2023
 
 elsoc_long_2016_2023$isco88 <- NA
+elsoc_long_2016_2023$ciuo88_m03 <- as.character(elsoc_long_2016_2023$ciuo88_m03)
+elsoc_long_2016_2023$ciuo08_m03 <- as.character(elsoc_long_2016_2023$ciuo08_m03)
+
+
 elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(1)] <- elsoc_long_2016_2023$ciuo88_m03[elsoc_long_2016_2023$ola %in% c(1)]
 
-elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(3,5,7)] <- occupar::isco08to88(elsoc_long_2016_2023$ciuo08_m03[elsoc_long_2016_2023$ola %in% c(3,5,7)]
+elsoc_long_2016_2023$isco88[elsoc_long_2016_2023$ola %in% c(3,5,7)] <- DIGCLASS::isco08_to_isco88(elsoc_long_2016_2023$ciuo08_m03[elsoc_long_2016_2023$ola %in% c(3,5,7)]
 )
+
 
 elsoc_long_2016_2023 %>%
   group_by(ola) %>%
@@ -177,7 +183,8 @@ elsoc_long_2016_2023 %>%
     solo_NA = all(is.na(isco88))
   )
 
-# rel empleo
+# SELF EMPLOYMENT -- EMPLOYMENT RELATION
+
 frq(elsoc_long_2016_2023$m07)
 
 labs_sj <- c(
@@ -211,101 +218,156 @@ sjt.xtab(elsoc_long_2016_2023$rel_empleo,elsoc_long_2016_2023$ola,
 
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
   rowwise() %>% 
-  mutate(selfemp_egp = case_when(rel_empleo %in% c(4:5) ~ 1,
+  mutate(self_employed = case_when(rel_empleo %in% c(4:5) ~ 1,
                                  rel_empleo %in% c(1,2,7) ~ 0,
                                  TRUE ~ NA)) %>% 
   ungroup()
 
-frq(elsoc_long_2016_2023$selfemp_egp)
+frq(elsoc_long_2016_2023$self_employed)
 
-# n_employed
+# SUPERVISION
 
-frq(elsoc_long_2016_2023$m05)
+frq(elsoc_long_2016_2023$m06)
 
-elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(m05_rec = case_when(m05 == 1 ~ 1,
-                           m05 == 2 ~ 4,
-                           m05 == 3 ~ 9,
-                           m05 == 4 ~ 49,
-                           m05 == 5 ~ 199,
-                           m05 == 6 ~ 201,
-                           TRUE ~ NA_real_))
+elsoc_long_2016_2023$is_supervisor <- if_else(elsoc_long_2016_2023$m06 >= 1, 1, 0)
 
-elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(nemploy_egp = if_else(selfemp_egp == 1 & m05_rec > 1, m05_rec, 0))
-
-frq(elsoc_long_2016_2023$nemploy_egp)
+frq(elsoc_long_2016_2023$is_supervisor)
 
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  group_by(idencuesta) %>%        # Agrupa por id para trabajar en cada individuo
-  mutate(nemploy_egp_lagged=lag(nemploy_egp,n=1)) %>%  # Desplaza isco08 a la siguiente ola
+  group_by(idencuesta) %>%        
+  mutate(is_supervisor_lagged=lag(is_supervisor,n=1)) %>%  
   ungroup()
 
-# Rellenar los valores NA en la variable original
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
-  mutate(nemploy_egp=ifelse(!is.na(nemploy_egp),nemploy_egp,nemploy_egp_lagged)) %>%  # Si isco08 es NA, sustituir con el valor de la ola anterior 
-  select(-nemploy_egp_lagged)                 # Elimina la columna temporal
+  mutate(is_supervisor=ifelse(!is.na(is_supervisor),is_supervisor,is_supervisor_lagged)) %>% 
+  select(-is_supervisor_lagged)                
+
+sjt.xtab(elsoc_long_2016_2023$is_supervisor,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         var.labels=c("Supervisor","Ola"),
+         show.summary=FALSE,         title=NULL)
 
 
-sjt.xtab(elsoc_long_2016_2023$nemploy_egp,elsoc_long_2016_2023$ola,
+# N EMPLOYEES
+
+frq(elsoc_long_2016_2023$m06)
+
+elsoc_long_2016_2023$n_employees <- if_else(elsoc_long_2016_2023$is_supervisor == 0, 0, elsoc_long_2016_2023$m06) 
+ 
+frq(elsoc_long_2016_2023$n_employees)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  group_by(idencuesta) %>%        
+  mutate(n_employees_lagged=lag(n_employees,n=1)) %>% 
+  ungroup()
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(n_employees=ifelse(!is.na(n_employees),n_employees,n_employees_lagged)) %>%  
+  select(-n_employees_lagged)                
+
+sjt.xtab(elsoc_long_2016_2023$n_employees,elsoc_long_2016_2023$ola,
          show.col.prc=TRUE,
          var.labels=c("N employees","Ola"),
          show.summary=FALSE,         title=NULL)
 
+## EGP SCHEME
+
+elsoc_long_2016_2023 %>% 
+  select(isco88, self_employed, n_employees, is_supervisor) %>% 
+  na.omit()
+
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(egp = occupar::isco88toEGP(isco88 = isco88, 
-                                    n.employees = nemploy_egp, 
-                                    self.employed = selfemp_egp,
-                                    n.classes = 7))
+    mutate(
+    isco88 = repair_isco(isco88))
 
-frq(elsoc_long_2016_2023$egp, show.na=TRUE)
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    egp11 = isco88_to_egp(isco88, self_employed, n_employees, n_classes = 11, label = T),
+    egp11_mp =  isco88_to_egp_mp(isco88, is_supervisor, self_employed, n_employees, label = TRUE),
+    oesch5 = isco88_to_oesch(isco88, self_employed, n_employees, n_classes = 5, label = T))
 
-sjt.xtab(elsoc_long_2016_2023$egp,elsoc_long_2016_2023$ola,
+frq(elsoc_long_2016_2023$egp11)
+frq(elsoc_long_2016_2023$egp11_mp)
+frq(elsoc_long_2016_2023$oesch5)
+
+
+sjt.xtab(elsoc_long_2016_2023$egp11_mp,elsoc_long_2016_2023$ola,
          show.col.prc=TRUE,
          show.na=TRUE,
          var.labels=c("EGP","Ola"),
          show.summary=FALSE,         title=NULL)
 
+
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(egp = factor(str_squish(as.character(egp))),
-         egp3 = case_when(egp %in% c("I Service class I", 
-                                    "II Service class II") ~ "Service class (I+II)",
-                         egp %in% c("III Routine non-manual",
-                                    "IV Self-employed") ~ "Intermediate class (III+IV)",
-                         egp %in% c("V Manual supervisors/Lower grade technicians",
-                                    "VI Skilled workers",
-                                    "VII Unskilled workers/Farm labours") ~ "Working class (V+VI+VII)"),
+  mutate(egp3_mp = case_when(egp11_mp %in% c("Ia Higher Managers", 
+                                    "Ib Lower Managers",
+                                    "IIa Higher Professionals",
+                                    "IIb Lower Professionals") ~ "Service class (I+II)",
+                         egp11_mp %in% c("IIIa Routine Nonmanual",
+                                    "IIIb Lower Sales-Service",
+                                    "IVa Self-employed with employees",
+                                    "IVb Self-employed with no employees",
+                                    "IVc Self-employed Farmer") ~ "Intermediate class (III+IV)",
+                         egp11_mp %in% c("V Manual Supervisors",
+                                    "VI Skilled Worker",
+                                    "VIIa Unskilled Worker",
+                                    "VIIb Farm Labor") ~ "Working class (V+VI+VII)"),
+         egp3_mp = factor(egp3_mp, levels = c("Service class (I+II)",
+                                      "Intermediate class (III+IV)",
+                                      "Working class (V+VI+VII)")),
+
+         egp3 = case_when(egp11 %in% c("'I: Higher Controllers'", 
+                                    "'II: Lower Controllers'") ~ "Service class (I+II)",
+                         egp11 %in% c("'IIIa: Routine Nonmanual'",
+                                    "'IIIb: Lower Sales-Service'",
+                                    "'IVa: Self-employed with employees'",
+                                    "'IVb: Self-employed with no employees'",
+                                    "'IVc: Self-employed Farmer'") ~ "Intermediate class (III+IV)",
+                         egp11 %in% c("'V: Manual Supervisors'",
+                                    "'VI: Skilled Worker'",
+                                    "'VIIa: Unskilled Worker'",
+                                    "'VIIb: Farm Labor'") ~ "Working class (V+VI+VII)"),
          egp3 = factor(egp3, levels = c("Service class (I+II)",
                                       "Intermediate class (III+IV)",
-                                      "Working class (V+VI+VII)")))
+                                      "Working class (V+VI+VII)")),
+         
+         )
 
 
 frq(elsoc_long_2016_2023$egp3)
+frq(elsoc_long_2016_2023$egp3_mp)
+frq(elsoc_long_2016_2023$oesch5)
 
-sjt.xtab(elsoc_long_2016_2023$egp3,elsoc_long_2016_2023$ola,
+sjt.xtab(elsoc_long_2016_2023$egp3_mp,elsoc_long_2016_2023$ola,
          show.col.prc=TRUE,
          var.labels=c("EGP","Ola"),
          show.summary=FALSE,         title=NULL)
+
+sjt.xtab(elsoc_long_2016_2023$oesch5,elsoc_long_2016_2023$ola,
+         show.col.prc=TRUE,
+         var.labels=c("Oesch","Ola"),
+         show.summary=FALSE,         title=NULL)
+
 
 ```
 
 
 ```{r}
-# Exploración de NA en EGP
+# Exploración de NA en EGP y OESCH
 
 # Distribución general de NA en EGP por ola
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
-  mutate(egp_na = is.na(egp))
+  mutate(egp_na = is.na(egp3_mp))
 
 sjt.xtab(elsoc_long_2016_2023$egp_na, elsoc_long_2016_2023$ola,
          show.col.prc = TRUE,
          var.labels = c("EGP es NA", "Ola"),
          show.summary = FALSE,
-         title = NULL)
+         title = NULL) # ok
 
 # Análisis de componentes ocupacionales en casos NA
 elsoc_long_2016_2023 %>% 
-  filter(is.na(egp)) %>% 
+  filter(is.na(egp3_mp)) %>% 
   summarise(
     total_na = n(),
     con_isco88 = sum(!is.na(isco88)),
@@ -316,8 +378,10 @@ elsoc_long_2016_2023 %>%
   print()
 
 # Situación laboral (m02) en casos NA de EGP
+frq(elsoc_long_2016_2023$m02)
+
 na_summary <- elsoc_long_2016_2023 %>% 
-  filter(is.na(egp)) %>% 
+  filter(is.na(egp3_mp)) %>% 
   count(m02) %>% 
   mutate(
     situacion = case_when( 
@@ -338,9 +402,9 @@ na_summary <- elsoc_long_2016_2023 %>%
 print(na_summary)
 
 # Verificación: cobertura de m02 en casos NA de EGP
-total_na_egp <- sum(is.na(elsoc_long_2016_2023$egp))
+total_na_egp <- sum(is.na(elsoc_long_2016_2023$egp3_mp))
 na_con_m02 <- elsoc_long_2016_2023 %>% 
-  filter(is.na(egp) & !is.na(m02)) %>% 
+  filter(is.na(egp3_mp) & !is.na(m02)) %>% 
   nrow()
 
 cat(sprintf("Total NA en EGP: %d\n", total_na_egp))
@@ -353,15 +417,15 @@ cat(sprintf("NA en EGP sin respuesta en m02: %d (%.2f%%)\n",
 elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
   mutate(
     situacion_na_egp = case_when(
-      !is.na(egp) ~ "Tiene EGP",
-      is.na(egp) & m02 == 4 ~ "Solo estudia",
-      is.na(egp) & m02 == 5 ~ "Jubilado o pensionado",
-      is.na(egp) & m02 == 6 ~ "Desempleado, buscando trabajo",
-      is.na(egp) & m02 == 7 ~ "Realiza tareas no remuneradas",
-      is.na(egp) & m02 == 8 ~ "Enfermo o con discapacidad",
-      is.na(egp) & m02 == 9 ~ "No estudia, no trabaja, no busca trabajo",
-      is.na(egp) & m02 %in% c(1, 2, 3) ~ "Otra situación laboral",
-      is.na(egp) & is.na(m02) ~ "Sin respuesta",
+      !is.na(egp3_mp) ~ "Tiene EGP",
+      is.na(egp3_mp) & m02 == 4 ~ "Solo estudia",
+      is.na(egp3_mp) & m02 == 5 ~ "Jubilado o pensionado",
+      is.na(egp3_mp) & m02 == 6 ~ "Desempleado, buscando trabajo",
+      is.na(egp3_mp) & m02 == 7 ~ "Realiza tareas no remuneradas",
+      is.na(egp3_mp) & m02 == 8 ~ "Enfermo o con discapacidad",
+      is.na(egp3_mp) & m02 == 9 ~ "No estudia, no trabaja, no busca trabajo",
+      is.na(egp3_mp) & m02 %in% c(1, 2, 3) ~ "Otra situación laboral",
+      is.na(egp3_mp) & is.na(m02) ~ "Sin respuesta",
       TRUE ~ "Otro"
     )
   )
@@ -384,9 +448,11 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
   mutate(
     egp4 = case_when(
       # Mantener categorías EGP existentes
-      !is.na(egp3) ~ as.character(egp3),
+      !is.na(egp3_mp) ~ as.character(egp3_mp),
       # Categoría residual para quienes están fuera de la fuerza de trabajo
-      is.na(egp3) & m02 %in% c(1, 2, 3, 4, 5, 6, 7, 8, 9) ~ "Out of labor force",
+      is.na(egp3_mp) & m02 == 5 ~ "Retired or pensioner",
+      is.na(egp3_mp) & m02 == 6 ~ "Unemployed",
+      is.na(egp3_mp) & m02 == 7 ~ "Performs unpaid tasks",
       # NA para casos sin información
       TRUE ~ NA_character_
     ),
@@ -394,7 +460,9 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
                   levels = c("Service class (I+II)",
                             "Intermediate class (III+IV)",
                             "Working class (V+VI+VII)", 
-                            "Out of labor force"))
+                            "Retired or pensioner",
+                            "Unemployed",
+                            "Performs unpaid tasks"))
   )
 
 # Verificar distribución
@@ -409,10 +477,39 @@ sjt.xtab(elsoc_long_2016_2023$egp4, elsoc_long_2016_2023$ola,
 
 # Comparación entre egp3 y egp4
 comparison_table <- elsoc_long_2016_2023 %>% 
-  count(egp3, egp4) %>% 
+  count(egp3_mp, egp4) %>% 
   arrange(desc(n))
 
 print(comparison_table)
+
+# Esquema de clase ampliado: OESCH + Outside the workforce
+
+# Crear variable egp4 que incluye categoría residual
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    oesch5 = case_when(
+      # Mantener categorías OESCH existentes
+      !is.na(oesch5) ~ as.character(oesch5),
+      # Categoría residual para quienes están fuera de la fuerza de trabajo
+      is.na(oesch5) & m02 == 5 ~ "'Retired or pensioner'",
+      is.na(oesch5) & m02 == 6 ~ "'Unemployed'",
+      is.na(oesch5) & m02 == 7 ~ "'Performs unpaid tasks'",
+      # NA para casos sin información
+      TRUE ~ NA_character_
+    ),
+    oesch5 = factor(oesch5, 
+                  levels = c("'Higher-grade service class'",
+                            "'Lower-grade service class'",
+                            "'Skilled workers'", 
+                            "'Small business owners'",
+                            "'Unskilled workers'",
+                            "'Retired or pensioner'",
+                            "'Unemployed'",
+                            "'Performs unpaid tasks'"))
+  )
+
+# Verificar distribución
+frq(elsoc_long_2016_2023$oesch5)
 
 ```
 
@@ -539,6 +636,7 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          estrato,
          just_pension,
          egp = egp4,
+         oesch = oesch5,
          merit_effort,
          merit_talent,
          educ,
@@ -548,189 +646,78 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          aget,
          ideo)
 
-# Unbalanced
-df_study1_wide_unbalanced <- df_study1_long %>% 
-  tidyr::pivot_wider(id_cols = c("idencuesta","muestra"),
-                     names_from = "ola",
-                     values_from = names(select(df_study1_long,ponderador_long_total,segmento, estrato, just_pension:ideo)))
+vars_invariantes <- c("egp", "oesch",
+                      "age", "aget",
+                      "sex",
+                      "educ", "educyear",
+                      "ideo")
 
-# Balanced
-df_study1_wide_balanced <- df_study1_long %>% 
-  tidyr::pivot_wider(id_cols = c("idencuesta","muestra"),
-                     names_from = "ola",
-                     values_from = names(select(df_study1_long,ponderador_long_total,segmento, estrato, just_pension:ideo)))
-
-## Balanced Panel Code
-
-# fix data to w01 values
-df_study1_wide_balanced$egp_2 <-df_study1_wide_balanced$egp_1 #class
-df_study1_wide_balanced$egp_3 <-df_study1_wide_balanced$egp_1
-df_study1_wide_balanced$egp_4 <-df_study1_wide_balanced$egp_1
-df_study1_wide_balanced$egp_5 <-df_study1_wide_balanced$egp_1
-df_study1_wide_balanced$egp_6 <-df_study1_wide_balanced$egp_1
-df_study1_wide_balanced$egp_7 <-df_study1_wide_balanced$egp_1
-
-df_study1_wide_balanced$age_2 <-df_study1_wide_balanced$age_1 #age
-df_study1_wide_balanced$age_3 <-df_study1_wide_balanced$age_1
-df_study1_wide_balanced$age_4 <-df_study1_wide_balanced$age_1
-df_study1_wide_balanced$age_5 <-df_study1_wide_balanced$age_1
-df_study1_wide_balanced$age_6 <-df_study1_wide_balanced$age_1
-df_study1_wide_balanced$age_7 <-df_study1_wide_balanced$age_1
-
-df_study1_wide_balanced$aget_2 <-df_study1_wide_balanced$aget_1 #age
-df_study1_wide_balanced$aget_3 <-df_study1_wide_balanced$aget_1
-df_study1_wide_balanced$aget_4 <-df_study1_wide_balanced$aget_1
-df_study1_wide_balanced$aget_5 <-df_study1_wide_balanced$aget_1
-df_study1_wide_balanced$aget_6 <-df_study1_wide_balanced$aget_1
-df_study1_wide_balanced$aget_7 <-df_study1_wide_balanced$aget_1
-
-df_study1_wide_balanced$sex_2 <-df_study1_wide_balanced$sex_1 #sex
-df_study1_wide_balanced$sex_3 <-df_study1_wide_balanced$sex_1
-df_study1_wide_balanced$sex_4 <-df_study1_wide_balanced$sex_1
-df_study1_wide_balanced$sex_5 <-df_study1_wide_balanced$sex_1
-df_study1_wide_balanced$sex_6 <-df_study1_wide_balanced$sex_1
-df_study1_wide_balanced$sex_7 <-df_study1_wide_balanced$sex_1
-
-df_study1_wide_balanced$educ_2 <-df_study1_wide_balanced$educ_1 #education
-df_study1_wide_balanced$educ_3 <-df_study1_wide_balanced$educ_1
-df_study1_wide_balanced$educ_4 <-df_study1_wide_balanced$educ_1
-df_study1_wide_balanced$educ_5 <-df_study1_wide_balanced$educ_1
-df_study1_wide_balanced$educ_6 <-df_study1_wide_balanced$educ_1
-df_study1_wide_balanced$educ_7 <-df_study1_wide_balanced$educ_1
-
-df_study1_wide_balanced$educyear_2 <-df_study1_wide_balanced$educyear_1 #education years
-df_study1_wide_balanced$educyear_3 <-df_study1_wide_balanced$educyear_1
-df_study1_wide_balanced$educyear_4 <-df_study1_wide_balanced$educyear_1
-df_study1_wide_balanced$educyear_5 <-df_study1_wide_balanced$educyear_1
-df_study1_wide_balanced$educyear_6 <-df_study1_wide_balanced$educyear_1
-df_study1_wide_balanced$educyear_7 <-df_study1_wide_balanced$educyear_1
-
-df_study1_wide_balanced$ideo_2 <-df_study1_wide_balanced$ideo_1 # political position
-df_study1_wide_balanced$ideo_3 <-df_study1_wide_balanced$ideo_1
-df_study1_wide_balanced$ideo_4 <-df_study1_wide_balanced$ideo_1
-df_study1_wide_balanced$ideo_5 <-df_study1_wide_balanced$ideo_1
-df_study1_wide_balanced$ideo_6 <-df_study1_wide_balanced$ideo_1
-df_study1_wide_balanced$ideo_7 <-df_study1_wide_balanced$ideo_1
-
-
-dim(df_study1_wide_balanced)
-
-sjPlot::view_df(df_study1_wide_unbalanced,
-                show.frq = T,show.values = T,show.na = T,show.prc = T, show.type = T)
-```
-
-```{r}
-# Unbalanced
-
-# reshape from long to wide
-pacman::p_load(datasets,data.table)
-df_study1_long_1 <- data.table::melt.data.table(data.table::setDT(df_study1_wide_unbalanced),
-              id.vars = c("idencuesta","muestra"),
-              variable.name = c("ola"),
-              measure = 
-patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^aget_", "^ideo_"),
-              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "aget","ideo"),
-              na.rm = F,value.factor = TRUE
-              )
-
-# Balanced
-
-# reshape from long to wide
-pacman::p_load(datasets,data.table)
-df_study1_long_2 <- data.table::melt.data.table(data.table::setDT(df_study1_wide_balanced),
-              id.vars = c("idencuesta","muestra"),
-              variable.name = c("ola"),
-              measure = 
-patterns("^ponderador_long_total_", "^segmento_", "^estrato_", "^just_pension_","^egp_","^merit_effort_","^merit_talent_", "^educ_","^educyear_","^sex_", "^age_", "^aget_", "^ideo_"),
-              value.name = c("ponderador_long_total","segmento","estrato", "just_pension","egp","merit_effort","merit_talent",  "educ","educyear","sex", "age", "aget","ideo"),
-              na.rm = F,value.factor = TRUE
-              )
-```
-
-
-```{r}
-# 1 = Unbalanced
-# 2 = Balanced
-
-names(df_study1_long_1) #check names of long dataset
-dim(df_study1_long_1) #check dimensions of the dataframe
-
-names(df_study1_long_2) #check names of long dataset
-dim(df_study1_long_2) #check dimensions of the dataframe
-
-# Original dataset with 7 waves
-df_study2_long_1 <- df_study1_long_1
-df_study2_long_2 <- df_study1_long_2
-
-# filter the dataset for the waves 1 to 4 and 6 to 7
-df_study1_long_1 <-
-df_study1_long_1 %>% 
-  filter(ola %in% c(1,2,3,4,6,7)) %>% 
-  mutate(ola=factor(ola,levels = 1:7,labels = 1:7))
-dim(df_study1_long_1) #check, now is OK
-
-# filter the dataset for the waves 1 to 4 and 6 to 7
-df_study1_long_2 <-
-df_study1_long_2 %>% 
-  filter(ola %in% c(1,2,3,4,6,7)) %>% 
-  mutate(ola=factor(ola,levels = 1:7,labels = 1:7))
-dim(df_study1_long_2) #check, now is OK
-
-
-# df_study1_long <- 
-# set_label(x = df_study1_long,
-#           label = get_label(select(df_study1,names(df_study1_long))))
-  
-
-#______________________________________________________________________________
-# obtain the idencuesta for wave 7
-ids <- 
-  elsoc_long_2016_2023 %>% 
-  select(idencuesta,ola) %>% 
-  filter(ola==7) %>% 
-  sjmisc::frq(idencuesta,show.na = F) %>% as.data.frame()
-
-
-# filter data by the idencuesta of t7
-# a = Unbalanced
-# b = Balanced
-
-df_study1_long_t7_a <- 
-  df_study1_long_1 %>%
-  filter(idencuesta %in% ids$val)
-
-df_study1_long_t7_b <- 
-  df_study1_long_2 %>%
-  filter(idencuesta %in% ids$val)
-
-names(df_study1_long_t7_a)
-dim(df_study1_long_t7_a)
-sjmisc::frq(df_study1_long_t7_a$ola)
-
-names(df_study1_long_t7_b)
-dim(df_study1_long_t7_b)
-sjmisc::frq(df_study1_long_t7_b$ola)
-
-df_study1_long_t7_a <- df_study1_long_t7_a %>%
-  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
-  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+df_study1_long_fix <- df_study1_long %>% 
+  arrange(idencuesta, muestra, ola) %>%         
+  group_by(idencuesta, muestra) %>%
+  mutate(
+    across(
+      all_of(vars_invariantes),
+      ~ {
+        v1 <- .x[ola == 1 & !is.na(.x)]
+        if (length(v1) > 0) v1[1] else .x
+      }
+    )
+  ) %>%
   ungroup()
 
-df_study1_long_t7_b <- df_study1_long_t7_b %>%
-  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
-  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
-  ungroup()
+frq(df_study1_long_fix$ola) # ok
 
-df_study1_long_t7_a <- df_study1_long_t7_a %>% filter(n_participaciones>1)
-df_study1_long_t7_b <- df_study1_long_t7_b %>% filter(n_participaciones>1)
+waves_use <- c(1,2,3,4,6,7)
+
+df_study1_long_fix <- df_study1_long_fix %>% 
+  filter(ola %in% waves_use)
+
 ```
 
 
 ```{r}
-save(df_study1_long_1,file = here::here("input/data/proc/df_study1_long_unbalaced.RData")) # Filter dataset for the waves 1 to 4 and 6 to 7
-save(df_study1_long_2,file = here::here("input/data/proc/df_study1_long_balanced.RData"))
-save(df_study1_long_t7_a,file = here::here("input/data/proc/df_study1_long_t7_unbalanced.RData")) # Filter data by the idencuesta of t7
-save(df_study1_long_t7_b,file = here::here("input/data/proc/df_study1_long_t7_balanced.RData")) 
-save(df_study2_long_1,file = here::here("input/data/proc/df_study2_long_balanced.RData")) # Original dataset with 7 waves
-save(df_study2_long_2,file = here::here("input/data/proc/df_study2_long_unbalanced.RData"))
+
+df_unbalanced <- df_study1_long_fix
+
+ids_t7 <- df_study1_long_fix %>%
+  filter(ola == 7) %>%
+  distinct(idencuesta) %>%
+  pull(idencuesta)
+
+df_t7 <- df_study1_long_fix %>%
+  filter(idencuesta %in% ids_t7)
+
+df_ids_balanced <- df_t7 %>%
+  group_by(idencuesta) %>%
+  summarise(
+    n_olas_distintas = n_distinct(ola),
+    .groups = "drop"
+  ) %>%
+  filter(n_olas_distintas == length(waves_use)) %>%   # tiene las 6 olas
+  pull(idencuesta)
+
+df_balanced <- df_t7 %>%
+  filter(idencuesta %in% df_ids_balanced)
+
+# Número de individuos
+n_distinct(df_unbalanced$idencuesta)
+n_distinct(df_balanced$idencuesta)
+
+# Distribución por ola
+df_unbalanced %>% count(ola)
+df_balanced   %>% count(ola)
+
 ```
+
+# Save and export
+
+```{r}
+save(df_study1_long,file = here::here("input/data/proc/df_study1_long_vf.RData")) # original
+
+save(df_study1_long_fix,file = here::here("input/data/proc/df_study1_long_fix_vf.RData")) # fix orginal
+
+save(df_unbalanced,file = here::here("input/data/proc/df_unbalanced.RData")) # Filter data by the idencuesta of t7
+save(df_balanced,file = here::here("input/data/proc/df_balanced.RData")) 
+```
+
