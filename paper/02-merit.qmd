@@ -1,9 +1,9 @@
 ---
-bibliography: "input/bib/jusmer.bib"
-csl: "input/bib/apa6.csl"
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
 ---
 
-# Meritocracy
+## Meritocracy
 
 Meritocracy is a normative principle that justifies the distribution of goods and services based on individual effort and talent, emphasizing that rewards should correspond to personal achievements rather than social status or inherited privileges [@young_rise_1958; @sandel_tyranny_2020]. This concept has gained prominence in contemporary societies, where meritocratic ideals are often invoked to legitimize socioeconomic inequalities, suggesting that individuals' success or failure is primarily determined by their own merits [@littler_meritocracy_2018]. 
 

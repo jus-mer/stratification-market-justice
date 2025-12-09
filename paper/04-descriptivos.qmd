@@ -1,11 +1,10 @@
 ```{r}
-#| label: set
 #| echo: false
 #| message: false
 #| warning: false
 
 library(knitr)
-knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE)
 
 table_format <- if(is_html_output()) {
   "html"
@@ -23,7 +22,6 @@ options(knitr.kable.NA = "")
 ```
 
 ```{r}
-#| label: packages
 #| include: false
 
 if (! require("pacman")) install.packages("pacman")
@@ -31,15 +29,9 @@ if (! require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse, 
                sjmisc, 
                sjPlot, 
-               lme4, 
                here, 
-               performance,
-               influence.ME, 
                srvyr,
-               ordinal,
-               texreg, 
                ggdist,
-               misty,
                kableExtra,
                ggalluvial, 
                MetBrewer,
@@ -52,7 +44,6 @@ rm(list = ls())
 ```
 
 ```{r}
-#| label: data
 #| echo: false
 
 load(file = here("input/data/proc/df_balanced.RData"))
@@ -95,14 +86,14 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ```
 
-## Descriptives
+## Descriptive analysis
 
 ```{r}
 #| label: fig-alluvial
 #| out-width: '100%'
 #| fig-asp: 1
 #| fig-cap: "Changes in the justification of inequality in pensions over time (2016-2023)"
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| echo: false
 
 
@@ -187,14 +178,14 @@ datos.pension %>%
 
 The intermediate category (orange) emerges as the largest and functions as a 'transit zone,' receiving and losing people to both ends of the spectrum. The extremes—strong rejection (dark red) and strong agreement (dark blue)—maintain relative stability, representing hard cores of opinion that persist over time. Notably, the 2020-2021 period shows greater turbulence in transitions, coinciding with the Chilean social unrest and the pandemic, which would suggest that these attitudes are sensitive to socio-political and economic events in the national context. Overall, the data show that opinions on the fairness of pension inequalities are more malleable than expected, responding both to individual experiences (such as the cohort's approach to retirement age) and to changes in the public debate on the Chilean pension system.
 
-## Bivariate Relationships
+## Bivariate relationships
 
 ```{r}
 #| label: fig-scatter-merit
 #| fig-width: 10
 #| fig-height: 5
 #| fig-cap: "Bivariate relationship between meritocratic beliefs and market justice in pensions"
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| echo: false
 
 
@@ -228,7 +219,7 @@ df_scatter %>%
 #| fig-width: 8
 #| fig-height: 6
 #| fig-cap: "Bivariate relationship between merit (talent) and market justice in pensions"
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| echo: false
 
 
@@ -256,7 +247,7 @@ df_scatter %>%
 #| fig-width: 8
 #| fig-height: 6
 #| fig-cap: "Correlation matrix between meritocratic beliefs and market justice"
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| echo: false
 
 
@@ -308,7 +299,7 @@ ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
         plot.caption = element_text(size = 10, face = "italic", hjust = 0))
 ```
 
-The strength of these bivariate associations is further quantified in @fig-scatter-corr, which presents the correlation matrix between the three key variables. The correlation between Merit: Effort and Market Justice in Pensions is r = 0.10*** (p < 0.001), while the correlation between Merit: Talent and Market Justice in Pensions is slightly weaker at r = 0.08*** (p < 0.001). Although both correlations are modest in magnitude, they are highly statistically significant given the large sample size (N obs = 5,755; N individuals = 1,027). Notably, the two meritocratic belief dimensions—effort and talent—show a strong positive correlation with each other (r = 0.68***, p < 0.001), suggesting they tap into a common underlying meritocratic worldview, while maintaining sufficient independence to be examined as distinct constructs.
+The strength of these bivariate associations is further quantified in @fig-scatter-corr, which presents the correlation matrix between the three key variables. The correlation between Merit: Effort and Market Justice in Pensions is $r$ = 0.10 (p < 0.001), while the correlation between Merit: Talent and Market Justice in Pensions is slightly weaker at $r$ = 0.08 (p < 0.001). Although both correlations are modest in magnitude, they are highly statistically significant given the large sample size (N obs = 5,755; N individuals = 1,027). Notably, the two meritocratic belief dimensions—effort and talent—show a strong positive correlation with each other ($r$ = 0.68, p < 0.001), suggesting they tap into a common underlying meritocratic worldview, while maintaining sufficient independence to be examined as distinct constructs.
 
 These bivariate patterns provide initial empirical support for the theoretical expectation that meritocratic beliefs are associated with greater acceptance of market-based pension inequalities. However, the relatively modest effect sizes indicate that the relationship is not deterministic and that other factors—such as social class position, political ideology, and individual experiences with the pension system—likely play important moderating or confounding roles. The subsequent multivariate analyses will test whether these bivariate associations hold when controlling for relevant covariates and will explore potential interaction effects between meritocratic beliefs and social class, as hypothesized in our theoretical framework.
 

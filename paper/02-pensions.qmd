@@ -1,9 +1,9 @@
 ---
-bibliography: "input/bib/jusmer.bib"
-csl: "input/bib/apa6.csl"
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
 ---
 
-# Pensions
+## The Chilean context
 
 Pension systems occupy a central place in the welfare state, as they shape the distribution of income and risks in old age [@esping-andersen_three_1990; @breznau_institutional_2023; @arenas_sistemas_2019]. While they share the fundamental premise that older adults require financial support after retirement and that pension income can be understood as deferred wages reflecting past contributions, the principles of justice underpinning their design vary considerably across societies [@verbic_political_2019]. In contexts where ideals of social solidarity are prominent, redistributive mechanisms permit a more equal sharing of resources and risks across social groups. By contrast, where meritocratic beliefs are stronger, inequalities in pensions are more readily justified in terms of employment histories, individual contributions, and personal effort [@mijs_paradox_2019a; @castillo_socialization_2024; @busemeyer_welfare_2020; @lindh_public_2015a]. Analysing these justice principles—and their influence on support for different pension arrangements—is therefore crucial for understanding the legitimacy of welfare institutions [@mau_inequality_2015].
 

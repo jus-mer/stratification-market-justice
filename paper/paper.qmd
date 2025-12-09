@@ -20,9 +20,10 @@ format:
         \renewcommand*{\Authands}{, }
         \renewcommand\Affilfont{\small}
     number-sections: true
+    tbl-longtable: false
 editor: source
-bibliography: "input/bib/jusmer.bib"
-csl: "input/bib/apa6.csl"
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
 author:
   - name: Juan Carlos Castillo
     corresponding: true
@@ -30,21 +31,16 @@ author:
     email: juancastillov@uchile.cl
     affiliations:
       - ref: 1
-  - name: Andreas Laffert
-    orcid: 0000-0002-9008-2454
-    email: alaffertt@estudiante.uc.cl 
-    affiliations:
-      - ref: 2
   - name: René Canales
     orcid: 0009-0002-4299-2725
     email: renecanales@uc.cl
     affiliations:
       - ref: 2    
-  - name: Kevin Carrasco
-    orcid: 0000-0002-9348-8361
-    email: kevin.carrasco@ug.uchile.cl
+  - name: Andreas Laffert
+    orcid: 0000-0002-9008-2454
+    email: alaffertt@estudiante.uc.cl 
     affiliations:
-      - ref: 1
+      - ref: 2
   - name: Tomás Urzúa
     orcid: 0009-0008-3167-6819
     email: tomas.urzua@ug.uchile.cl

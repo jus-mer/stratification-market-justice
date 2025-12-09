@@ -1,3 +1,5 @@
+# Theoretical and empirical background
+
 {{< include 02-market.qmd >}}
 {{< include 02-merit.qmd >}}
 {{< include 02-class.qmd >}}
@@ -13,7 +15,7 @@ Additionally, this research examines the interaction between class and meritocra
 
 Based on the arguments outlined above, we propose the following hypotheses:
 
-$H1_ \; (\text{Between-person}):$ Those belonging to the upper classes show, on average, greater support for the commodification of pensions than those belonging to the lower classes.
+$H1 \; (\text{Between-person}):$ Those belonging to the upper classes show, on average, greater support for the commodification of pensions than those belonging to the lower classes.
 
 $H2_{a} \; (\text{Between-person}):$ People who perceive more meritocracy tend to show greater support for the commodification of pensions than those who hold these perceptions less strongly.
 

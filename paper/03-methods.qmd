@@ -1,7 +1,6 @@
 ---
-output: html_document
-bibliography: "input/bib/jusmer.bib"
-csl: "input/bib/apa6.csl"
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
 editor_options: 
   chunk_output_type: console
 ---
@@ -31,8 +30,6 @@ options(knitr.kable.NA = "")
 ```
 
 
-# Libraries
-
 ```{r}
 #| label: packages
 #| include: false
@@ -41,22 +38,8 @@ if (! require("pacman")) install.packages("pacman")
 
 pacman::p_load(tidyverse, 
                sjmisc, 
-               sjPlot, 
-               lme4, 
                here, 
-               performance,
-               influence.ME, 
-               srvyr,
-               ordinal,
-               texreg, 
-               ggdist,
-               misty,
-               kableExtra,
-               ggalluvial, 
-               shadowtext,
-               MetBrewer,
-               patchwork,
-               sjlabelled)
+               summarytools)
 
 
 options(scipen=999)
@@ -123,22 +106,6 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ## Variables
 
-```{r}
-#| label: tbl-summary2
-#| tbl-cap: "Estadísticos descriptivos variables"
-#| tbl-cap-location: top
-#| inlcude: false
-#| echo: false
-t2 <- df_study1 %>% 
-  filter(ola == last(ola)) %>% 
-  select(just_pension, egp, merit_effort, merit_talent) 
-
-print(summarytools::dfSummary(t2, plain.ascii = FALSE, headings = FALSE), 
-      method = "render", 
-      report.nas = FALSE,
-      footnote = NA)
-```
-
 ### Market justice preferences for pensions
 
 The dependent variable in this study is distributive justice in pensions. This construct is measured by a single item that captures how strongly individuals endorse conditioning access to better pensions on income. Specifically, the question is: "Is it fair that high-income individuals have better pensions than lower-income individuals?" The response options range from 1 ("Strongly disagree") to 5 ("Strongly agree"). Therefore, higher values indicate a greater perception of fairness in pension distribution, i.e., greater support for inequality in pensions.
@@ -154,6 +121,41 @@ The conversion from ISCO-08 occupational codes to EGP categories was performed u
 ### Meritocracy 
 
 Following Young’s [-@young_rise_1975] distinction, this construct is operationalised into two dimensions: effort and talent. Both dimensions are measured by the degree of agreement with statements indicating that effort and talent are rewarded in society. Specifically, meritocratic perceptions of effort are captured by the item “In Chile, people are rewarded for their efforts” (Merit: Effort), and meritocratic perceptions of talent by the item “In Chile, people are rewarded for their intelligence and abilities” (Merit: Talent). Both items are answered on a 5-point Likert scale ranging from 1 (“Strongly disagree”) to 5 (“Strongly agree”), with higher values indicating stronger perceptions that Chilean society operates according to meritocratic principles.
+
+@tbl-summary2 shows the main variables of the study, their response categories and their frequencies.
+
+
+```{r}
+#| label: tbl-summary2
+#| tbl-cap: "Variable descriptive statistics for the last wave (2023)"
+#| tbl-cap-location: top
+#| inlcude: false
+#| echo: false
+#| results: asis
+ 
+
+t2 <- df_study1 %>% 
+  filter(ola == last(ola)) %>% 
+  select(just_pension, egp, merit_effort, merit_talent) 
+
+df<-dfSummary(t2,
+               plain.ascii = FALSE,
+               style = "multiline",
+               tmp.img.dir = "/tmp",
+               graph.magnif = 0.75,
+               headings = F,  # encabezado
+               varnumbers = F, # num variable
+               labels.col = T, # etiquetas
+               na.col = F,    # missing
+               graph.col = F, # plot
+               valid.col = T, # n valido
+               col.widths = c(30,10,10,10))
+
+df$Variable <- NULL # delete variable column
+
+print(df)
+
+```
 
 ### Controls
 
@@ -185,8 +187,8 @@ The general form of our cumulative link mixed model is:
 
 $$
 \begin{split}
-\eta_{it} = \beta_0 + \beta_1 \text{time}_{it} + \beta_2 X_{WE_{it}} + \beta_3 X_{BE_i} + \beta_4 \text{EGP}_i + \\
-\beta_5 (\text{EGP}_i \times X_{WE_{it}}) + \beta_6 (\text{EGP}_i \times X_{BE_i}) + u_{0i} + u_{1i} \text{time}_{it}
+\eta_{it} = \beta_0 + \beta_1 \text{time}_{it} + \beta_2 X_{WE_{it}} + \beta_3 X_{BE_i} + \beta_4 \text{Class}_i + \\
+\beta_5 (\text{Class}_i \times X_{WE_{it}}) + \beta_6 (\text{Class}_i \times X_{BE_i}) + u_{0i} + u_{1i} \text{time}_{it}
 \end{split}
 $$
 

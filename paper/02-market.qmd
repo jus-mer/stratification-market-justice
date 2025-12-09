@@ -3,7 +3,7 @@ bibliography: "input/bib/jusmer.bib"
 csl: "input/bib/apa6.csl"
 ---
 
-# Market justice
+## Market justice preferences
 
 In recent years, welfare states have undergone several institutional transformations, with market expansion strongly penetrating the field of social services and rights, while private alternatives emerge in parallel to public provision [@busemeyer_welfare_2020]. Such processes have led to changes in the architecture of the institutions responsible for social welfare, where private companies operate as service administrators that limit access based on the user's ability to pay, while public providers have reorganized to compete as quasi-markets [@lindh_it_2017]. Despite the commodification of services, this does not only imply changes at the formal level, but also shapes the beliefs of individuals. In this way, market-oriented policies can modify people's normative criteria, promoting or weakening support for different goods or services. This phenomenon is known as *policy feedback effect*.[@beland_varieties_2019; @jaime-castillo_public_2013]. 
 

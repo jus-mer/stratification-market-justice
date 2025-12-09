@@ -1,9 +1,9 @@
 ---
-bibliography: "input/bib/jusmer.bib"
-csl: "input/bib/apa6.csl"
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
 ---
 
-# Class
+## Social class
 
 Despite criticism of class analysis as a category for studying social order [@pakulski_death_1997], various contemporary studies have shown that class inequalities remain relevant as a subject of research for explaining attitudes towards social justice [@dodson_economic_2017; @lindh_public_2015a; @lindh_class_2020a]. Different approaches, from neo-Marxist [@wright_class_2000] to neo-Weberian [@breen_foundations_2005], agree that people's different socioeconomic positions act as determinants of how material interests and shared life experiences structure individuals' subjective perceptions of social reality and the justification of certain inequalities present in the system [@bottero_class_2004a].
 
