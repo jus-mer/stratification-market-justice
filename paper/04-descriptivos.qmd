@@ -1,0 +1,314 @@
+```{r}
+#| label: set
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+```{r}
+#| label: packages
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               srvyr,
+               ordinal,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+```{r}
+#| label: data
+#| echo: false
+
+load(file = here("input/data/proc/df_balanced.RData"))
+
+# Generate analytical sample
+
+df_study1 <- df_balanced %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+```
+
+## Descriptives
+
+```{r}
+#| label: fig-alluvial
+#| out-width: '100%'
+#| fig-asp: 1
+#| fig-cap: "Changes in the justification of inequality in pensions over time (2016-2023)"
+#| fig-cap-location: top
+#| echo: false
+
+
+datos.pension <- df_study1 %>% 
+   mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor disagree",
+                                         "Disagree",
+                                         "Strongly disagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_pension) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.pension <- df_study1 %>%
+  mutate(just_pension = factor(just_pension, 
+                              levels = c("Strongly agree",
+                                         "Agree",
+                                         "Neither agree nor disagree",
+                                         "Disagree",
+                                         "Strongly disagree"))) %>% 
+  group_by(ola, just_pension) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+datos.pension %>% 
+  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_text(data = etiquetas.pension,
+            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+            position = position_stack(vjust = .5),
+            show.legend = FALSE,
+            size = 3,
+            color = 'white')+
+  labs(y = "%",
+       x = NULL,
+       fill = NULL,
+       title = NULL) +
+  theme_ggdist() +
+  theme(legend.position = "bottom") +
+  labs(caption = "Source: Elaborated based on ELSOC (2016–2023)")
+
+```
+
+@fig-alluvial shows the evolution over time of perceptions regarding the justification of inequalities in pensions between 2016 and 2023. The results reveal a remarkable fluidity in attitudes: the extensive cross-flows between categories show that a considerable proportion of individuals change their position over time, rather than maintaining fixed opinions. Transitions occur predominantly between adjacent categories, suggesting gradual changes rather than radical conversions, although some flows cross multiple categories. 
+
+The intermediate category (orange) emerges as the largest and functions as a 'transit zone,' receiving and losing people to both ends of the spectrum. The extremes—strong rejection (dark red) and strong agreement (dark blue)—maintain relative stability, representing hard cores of opinion that persist over time. Notably, the 2020-2021 period shows greater turbulence in transitions, coinciding with the Chilean social unrest and the pandemic, which would suggest that these attitudes are sensitive to socio-political and economic events in the national context. Overall, the data show that opinions on the fairness of pension inequalities are more malleable than expected, responding both to individual experiences (such as the cohort's approach to retirement age) and to changes in the public debate on the Chilean pension system.
+
+## Bivariate Relationships
+
+```{r}
+#| label: fig-scatter-merit
+#| fig-width: 10
+#| fig-height: 5
+#| fig-cap: "Bivariate relationship between meritocratic beliefs and market justice in pensions"
+#| fig-cap-location: top
+#| echo: false
+
+
+# Convertir variables a numéricas para el scatterplot
+df_scatter <- df_study1 %>%
+  mutate(
+    just_pension_num = as.numeric(just_pension),
+    merit_effort_num = as.numeric(merit_effort),
+    merit_talent_num = as.numeric(merit_talent)
+  )
+
+df_scatter %>%
+  ggplot(aes(x = merit_effort_num, y = just_pension_num)) +
+  geom_smooth(method = "lm", se = TRUE, color = "#CA0020", linewidth = 1.5) +
+  scale_x_continuous(breaks = 1:5, 
+                     labels = c("Strongly\ndisagree", "Disagree", "Neither", "Agree", "Strongly\nagree")) +
+  scale_y_continuous(breaks = 1:5,
+                     labels = c("Strongly\ndisagree", "Disagree", "Neither", "Agree", "Strongly\nagree")) +
+  labs(x = "Merit: Effort (People are rewarded for their efforts)",
+       y = "Market Justice in Pensions",
+       caption = "Source: Elaborated based on ELSOC (2016–2023). N obs = 5,755; N individuals = 1,027") +
+  theme_ggdist() +
+  theme(text = element_text(size = 12),
+        axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 9),
+        plot.caption = element_text(size = 10, face = "italic", hjust = 0))
+```
+
+```{r}
+#| label: fig-scatter-talent
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Bivariate relationship between merit (talent) and market justice in pensions"
+#| fig-cap-location: top
+#| echo: false
+
+
+df_scatter %>%
+  ggplot(aes(x = merit_talent_num, y = just_pension_num)) +
+  geom_smooth(method = "lm", se = TRUE, color = "#CA0020", linewidth = 1.5) +
+  scale_x_continuous(breaks = 1:5, 
+                     labels = c("Strongly\ndisagree", "Disagree", "Neither", "Agree", "Strongly\nagree")) +
+  scale_y_continuous(breaks = 1:5,
+                     labels = c("Strongly\ndisagree", "Disagree", "Neither", "Agree", "Strongly\nagree")) +
+  labs(x = "Merit: Talent (People are rewarded for their intelligence)",
+       y = "Market Justice in Pensions",
+       caption = "Source: Elaborated based on ELSOC (2016–2023). N obs = 5,755; N individuals = 1,027") +
+  theme_ggdist() +
+  theme(text = element_text(size = 12),
+        axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 9),
+        plot.caption = element_text(size = 10, face = "italic", hjust = 0))
+```
+
+@fig-scatter-merit and @fig-scatter-talent present the bivariate relationships between meritocratic beliefs and market justice preferences in pensions. Both figures reveal a clear positive linear association: as individuals increasingly agree that society rewards effort (@fig-scatter-merit) or talent (@fig-scatter-talent), they are more likely to justify inequalities in the pension system. The regression lines, accompanied by their 95% confidence intervals (shaded areas), demonstrate statistically significant relationships across the full range of both independent variables, with the confidence bands remaining relatively narrow throughout, indicating robust and precise estimates.
+
+```{r}
+#| label: fig-scatter-corr
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Correlation matrix between meritocratic beliefs and market justice"
+#| fig-cap-location: top
+#| echo: false
+
+
+# Calcular correlaciones
+cor_data <- df_scatter %>%
+  select(just_pension_num, merit_effort_num, merit_talent_num) %>%
+  na.omit()
+
+# Correlaciones de Pearson
+cor_matrix <- cor(cor_data, method = "pearson")
+
+# Crear visualización con ggplot
+cor_df <- as.data.frame(cor_matrix) %>%
+  rownames_to_column("var1") %>%
+  pivot_longer(-var1, names_to = "var2", values_to = "correlation")
+
+# Calcular p-valores
+n <- nrow(cor_data)
+cor_df <- cor_df %>%
+  mutate(
+    t_stat = correlation * sqrt(n - 2) / sqrt(1 - correlation^2),
+    pvalue = 2 * pt(abs(t_stat), df = n - 2, lower.tail = FALSE),
+    sig = case_when(
+      pvalue < 0.001 ~ "***",
+      pvalue < 0.01 ~ "**",
+      pvalue < 0.05 ~ "*",
+      TRUE ~ ""
+    ),
+    label = paste0(sprintf("%.2f", correlation), sig),
+    var1 = factor(var1, levels = c("just_pension_num", "merit_effort_num", "merit_talent_num"),
+                  labels = c("Market Justice\nin Pensions", "Merit:\nEffort", "Merit:\nTalent")),
+    var2 = factor(var2, levels = c("just_pension_num", "merit_effort_num", "merit_talent_num"),
+                  labels = c("Market Justice\nin Pensions", "Merit:\nEffort", "Merit:\nTalent"))
+  )
+
+ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
+  geom_tile(color = "white", linewidth = 1) +
+  geom_text(aes(label = label), size = 6, fontface = "bold") +
+  scale_fill_gradient2(low = "#0571B0", mid = "white", high = "#CA0020",
+                       midpoint = 0, limits = c(-1, 1),
+                       name = "Pearson r") +
+  labs(x = NULL, y = NULL,
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: Elaborated based on ELSOC (2016–2023)") +
+  theme_minimal() +
+  theme(text = element_text(size = 12),
+        axis.text.x = element_text(angle = 0, hjust = 0.5, size = 11),
+        axis.text.y = element_text(size = 11),
+        legend.position = "right",
+        plot.caption = element_text(size = 10, face = "italic", hjust = 0))
+```
+
+The strength of these bivariate associations is further quantified in @fig-scatter-corr, which presents the correlation matrix between the three key variables. The correlation between Merit: Effort and Market Justice in Pensions is r = 0.10*** (p < 0.001), while the correlation between Merit: Talent and Market Justice in Pensions is slightly weaker at r = 0.08*** (p < 0.001). Although both correlations are modest in magnitude, they are highly statistically significant given the large sample size (N obs = 5,755; N individuals = 1,027). Notably, the two meritocratic belief dimensions—effort and talent—show a strong positive correlation with each other (r = 0.68***, p < 0.001), suggesting they tap into a common underlying meritocratic worldview, while maintaining sufficient independence to be examined as distinct constructs.
+
+These bivariate patterns provide initial empirical support for the theoretical expectation that meritocratic beliefs are associated with greater acceptance of market-based pension inequalities. However, the relatively modest effect sizes indicate that the relationship is not deterministic and that other factors—such as social class position, political ideology, and individual experiences with the pension system—likely play important moderating or confounding roles. The subsequent multivariate analyses will test whether these bivariate associations hold when controlling for relevant covariates and will explore potential interaction effects between meritocratic beliefs and social class, as hypothesized in our theoretical framework.
+
