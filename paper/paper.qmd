@@ -1,12 +1,12 @@
 ---
 title: "Justification trajectories for pension inequality in Chile (2016-2023): The role of beliefs in meritocracy and social stratification"
 format:
-  docx:
-    number-sections: true
   html: 
     code-fold: true
     html-math-method: katex
     number-sections: true
+    code-link: true
+    title-block-banner: true
   pdf: 
     geometry: margin=2cm
     template-partials: 
@@ -79,13 +79,12 @@ fig-width: 7.5
  Sys.setlocale("LC_ALL", "ES_ES.UTF-8")
 ```
 
-```{r}
-# This document was last modified at {{< modified >}}
-# 
-# and it was last rendered at {{< now >}}
 
-```
 
+This document was last modified at {{< modified >}}
+and it was last rendered at {{< now >}}.
+
+:::: {.justify}
 
 {{< include 01-introduction.qmd >}}
 
@@ -103,3 +102,5 @@ fig-width: 7.5
 
 ::: {#refs}
 :::
+
+::::

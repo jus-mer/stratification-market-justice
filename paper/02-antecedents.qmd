@@ -1,3 +1,5 @@
+:::: {.justify}
+
 # Theoretical and empirical background
 
 {{< include 02-market.qmd >}}
@@ -24,3 +26,5 @@ $H2_{b} \; (\text{Within-person}):$ When the same person strengthens their merit
 $H3_{a} \; (\text{Between-person}):$ The positive association between meritocracy (BE) and support for commodification is stronger in upper classes.
 
 $H3_{b} \; (\text{Within-person}):$ When upper-class individuals increase their meritocratic perceptions over time (WE), their support for commodification rises more than in lower classes.
+
+::::
