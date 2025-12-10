@@ -303,3 +303,95 @@ The strength of these bivariate associations is further quantified in @fig-scatt
 
 These bivariate patterns provide initial empirical support for the theoretical expectation that meritocratic beliefs are associated with greater acceptance of market-based pension inequalities. However, the relatively modest effect sizes indicate that the relationship is not deterministic and that other factors—such as social class position, political ideology, and individual experiences with the pension system—likely play important moderating or confounding roles. The subsequent multivariate analyses will test whether these bivariate associations hold when controlling for relevant covariates and will explore potential interaction effects between meritocratic beliefs and social class, as hypothesized in our theoretical framework.
 
+```{r}
+#| label: fig-meanchange
+#| out-width: '100%'
+#| fig-asp: 1
+#| fig-cap: "Changes in the standarized mean of market justice preferences in pensions and meritocracy by social class (2016-2023)"
+#| fig-cap-location: top
+#| echo: false
+#| results: asis
+
+df_pond <- df_study1 %>% 
+  mutate(ola = case_when(ola == 1 ~ "2016",
+                         ola == 2 ~ "2017",
+                         ola == 3 ~ "2018",
+                         ola == 4 ~ "2019",
+                         ola == 5 ~ "2022",
+                         ola == 6 ~ "2023"),
+         ola = factor(ola, levels = c("2016",
+                                      "2017",
+                                      "2018",
+                                      "2019",
+                                      "2022",
+                                      "2023"))) %>% 
+  as_survey_design(.data = .,
+                   ids = segmento, 
+                   strata = estrato, 
+                   weights = ponderador_long_total)
+
+df_pond <- df_pond %>% 
+  select(ola, egp, just_pension,  merit_effort, merit_talent) %>% 
+  mutate_at(.vars = 3:5, .funs = ~ as.numeric(.)) %>% 
+  mutate(
+    just_pension_z    = as.numeric(scale(just_pension)),
+    merit_effort_z    = as.numeric(scale(merit_effort)),
+    merit_talent_z    = as.numeric(scale(merit_talent))
+  )
+
+
+df_pond %>% 
+  select(ola, egp, just_pension_z,  merit_effort_z, merit_talent_z) %>% 
+  group_by(ola, egp) %>% 
+  summarise_all(~survey_mean(., vartype = "ci")) %>% 
+  pivot_longer(cols = -c(ola, egp),
+               names_to = "temp",
+               values_to = "valor") %>%
+  mutate(
+    ci = case_when(
+      str_ends(temp, "_low") ~ "ic_low",
+      str_ends(temp, "_upp") ~ "ic_upp",
+      TRUE                   ~ "mean"
+    ),
+    variable = str_remove(temp, "_low|_upp")
+  ) %>%
+  select(ola, egp, variable, ci, valor) %>%
+  pivot_wider(
+    names_from  = ci,
+    values_from = valor
+  ) %>% 
+  mutate(variable = case_when(variable == "just_pension_z" ~ "Pensions Market Justice",
+                              variable == "merit_effort_z"     ~ "Merit: Effort",
+                              variable == "merit_talent_z"     ~ "Merit: Talent"),
+         variable = factor(variable, levels = c("Pensions Market Justice",
+                                                "Merit: Effort",
+                                                "Merit: Talent")
+         )) %>% 
+  ggplot(aes(x = ola, y = mean, group = egp)) +
+  geom_point(aes(shape=egp, color=egp), size = 3.5) +
+  geom_line(aes(color = egp), linewidth = 0.8) +
+  geom_errorbar(aes(ymin = ic_low, ymax = ic_upp, color = egp),
+                width = 0.1) +
+  scale_y_continuous(limits = c(-1, 1), n.breaks = 5) +
+  facet_wrap(~variable, nrow = 3) +
+  labs(y = "Mean (Z-score)",
+       x = "Wave",
+       color = NULL,
+       shape = NULL,
+       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 5,755; N groups = 1,027)") +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        text = element_text(size = 12)) 
+ 
+```
+
+@fig-meanchange presents the longitudinal trajectories of market justice preferences and meritocratic beliefs across social classes from 2016 to 2023. The figure reveals distinct patterns of temporal change and class-based differences across the three dimensions examined.
+
+Regarding pensions market justice (top panel), the most striking finding is the general upward trend observed across all social classes, particularly pronounced after 2019. The unemployed group exhibits the most dramatic shift, moving from strong rejection (approximately -0.6 in 2016) to moderate acceptance (around 0.7 in 2023) of pension inequalities. Similarly, retired or pensioners show a consistent increase in justification over time, rising from near-zero levels in 2016 to approximately 0.5 by 2023. The service class also demonstrates increased acceptance, particularly during the 2019-2022 period, reaching values close to 0.5. Working class individuals follow a similar trajectory, though with slightly lower magnitudes. These convergent trends suggest that the 2019 social unrest and subsequent pandemic period may have influenced attitudes across the class structure, potentially reflecting adaptation to new economic realities or shifts in public discourse around pension reform.
+
+The merit-effort dimension (middle panel) shows considerably more stability across time and less variation between social classes compared to pension inequality justification. Most social classes maintain attitudes clustered around zero throughout the observation period, indicating neither strong agreement nor disagreement with the notion that people are rewarded for their efforts. The unemployed group again stands out for its volatility, beginning at approximately -0.6 in 2016, recovering to near-zero levels by 2018-2019, experiencing another decline in 2022 (approximately -0.2), and returning to near-zero by 2023. The retired/pensioner group shows a modest positive trend over time, while those performing unpaid tasks maintain consistently low (slightly negative) perceptions. The relative stability of this dimension contrasts sharply with the pension inequality justification trends, suggesting that beliefs about effort-based rewards may be more resistant to contextual changes than distributive justice preferences.
+
+For the merit-talent dimension (bottom panel), patterns are similarly stable over time, with most social classes hovering around zero or slightly positive values. The unemployed group maintains the highest average perceptions that people are rewarded for intelligence, though this advantage diminishes over time. The intermediate class exhibits notable volatility, particularly a sharp decline in 2022 (dropping to approximately -0.5) before recovering in 2023. The service class maintains relatively stable, slightly positive beliefs throughout the period. The working class and those performing unpaid tasks show the most consistent trajectories, remaining close to zero across all waves. This stability in talent-based meritocratic beliefs mirrors the effort dimension, reinforcing the interpretation that core meritocratic perceptions are more deeply rooted and less responsive to short-term socio-political events than specific distributive justice judgments about pension systems.
+
+Taken together, these longitudinal patterns suggest that while social classes maintain distinct positions on meritocratic beliefs (with some evidence of divergence), they have experienced remarkable convergence in their justification of pension inequalities, particularly following the social and economic disruptions of 2019-2023. This convergence toward greater acceptance of pension inequality, despite relatively stable meritocratic beliefs, raises important questions about the mechanisms driving distributive justice preferences and whether material conditions, policy debates, or normative shifts in Chilean society account for these temporal changes.
+
