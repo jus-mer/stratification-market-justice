@@ -95,8 +95,8 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #| label: fig-alluvial
 #| out-width: '100%'
 #| fig-asp: 1
-#| fig-cap: "Changes in the justification of inequality in pensions over time (2016-2023)"
-#| fig-cap-location: bottom
+#| fig-cap: "Changes in preferences for pension market justice over time (2016-2023)"
+#| fig-cap-location: top
 #| echo: false
 
 
@@ -173,7 +173,7 @@ datos.pension %>%
        title = NULL) +
   theme_ggdist() +
   theme(legend.position = "bottom") +
-  labs(caption = "Source: Elaborated based on ELSOC (2016–2023)")
+  labs(caption = "Source: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)")
 
 ```
 
@@ -186,7 +186,7 @@ datos.pension %>%
 #| label: fig-scatter-corr
 #| fig-width: 8
 #| fig-height: 6
-#| fig-cap: "Correlation matrix between meritocratic beliefs and market justice"
+#| fig-cap: "Correlation matrix between meritocratic perceptions and market justice preferences in pension"
 #| fig-cap-location: top
 #| echo: false
 
@@ -237,13 +237,12 @@ ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
                        midpoint = 0, limits = c(-1, 1),
                        name = "Pearson r") +
   labs(x = NULL, y = NULL,
-       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: Elaborated based on ELSOC (2016–2023)") +
-  theme_minimal() +
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
+  theme_ggdist() +
   theme(text = element_text(size = 12),
         axis.text.x = element_text(angle = 0, hjust = 0.5, size = 11),
         axis.text.y = element_text(size = 11),
-        legend.position = "right",
-        plot.caption = element_text(size = 10, face = "italic", hjust = 0))
+        legend.position = "right")
 ```
 
 Turning to social class differences, @fig-meanchange plots longitudinal trajectories of pension market justice by class from 2016 to 2023. The figure shows a broadly upward trend across all classes, especially after 2019, alongside increasingly similar levels over time. The unemployed group shows the most significant change, moving from strong rejection (approximately −0.6 in 2016) to moderate acceptance (approximately 0.7 in 2023). Retirees/pensioners also increase steadily, from near zero in 2016 to roughly 0.5 by 2023, and the service class rises notably—particularly between 2019 and 2022—reaching values close to 0.5. The working class follows a similar trajectory, though at slightly lower levels. Overall, the trajectories suggest convergence toward greater acceptance of pension inequality during 2019–2023, a period marked by social unrest, the pandemic, and pension fund withdrawals (*10% retiros*), raising questions about how these disruptions and the surrounding policy debate reshaped views of distributive justice.
@@ -307,7 +306,7 @@ df_pond %>%
   scale_color_manual(values = cols_egp) +
   scale_y_continuous(limits = c(-1, 1), n.breaks = 5) +
   labs(y = "Mean (Z-score)", x = "Wave", color = NULL, shape = NULL,
-       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 5,755; N groups = 1,027)") +
+       caption = "Source: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
   theme_ggdist() +
   theme(legend.position = "top", text = element_text(size = 12))
 
