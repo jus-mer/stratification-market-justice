@@ -652,24 +652,24 @@ htmlreg(list(m7_oesch, m8_oesch, m9_oesch, m10_oesch))
 #           data = df_study1)
 #
 #
-# m13 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + 
-#               merit_effort_cwc + merit_talent_cwc + 
-#               merit_effort_mean + merit_talent_mean + 
-#               ideo + sex + age + 
-#               egp*merit_effort_mean + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
-# m14 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + 
-#               merit_effort_cwc + merit_talent_cwc + 
-#               merit_effort_mean + merit_talent_mean + 
-#               ideo + sex + age + 
-#               egp*merit_talent_mean + (1 + ola_num | idencuesta), 
-#            link = "logit",
-#  Hess = TRUE,
-#           data = df_study1)
-#
+#m13 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + 
+#              merit_effort_cwc + merit_talent_cwc + 
+#              merit_effort_mean + merit_talent_mean + 
+#              ideo + sex + age + 
+#              egp*merit_effort_mean + (1 + ola_num + merit_effort_mean| #idencuesta), 
+#           link = "logit",
+# Hess = TRUE,
+#          data = df_study1)
+
+#m14 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + egp + 
+#              merit_effort_cwc + merit_talent_cwc + 
+#              merit_effort_mean + merit_talent_mean + 
+#              ideo + sex + age + 
+#              egp*merit_talent_mean + (1 + ola_num + merit_talent_mean| #idencuesta), 
+#           link = "logit",
+# Hess = TRUE,
+#          data = df_study1)
+
 #save(m11,m12,m13,m14, file = here("output/interactions_direct.RData"))
 
 load(file = here("output/interactions_direct.RData"))
@@ -726,5 +726,33 @@ load(file = here("output/oesch_interactions_direct.RData"))
 
 htmlreg(list(m11_oesch,m12_oesch,m13_oesch,m14_oesch))
 
+```
+
+### Predicted probabilities
+
+```{r}
+library(ggeffects)
+
+p1 <- ggpredict(
+  m12,
+  terms = c(
+    "merit_talent_cwc [all]",
+    "egp [Working class (V+VI+VII), Unemployed]"
+  ),
+  bias_correction = T,
+  type = "fixed"
+)
+
+p2 <- ggpredict(
+  m14,
+  terms = c(
+    "merit_talent_mean [all]",
+    "egp [Working class (V+VI+VII), Intermediate class (III+IV)]"
+  ),
+  bias_correction = T,
+  type = "fixed"
+)
+
+save(p1, p2, file = here("output/predicted_probabilities.RData"))
 ```
 

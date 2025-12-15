@@ -88,6 +88,9 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ## Descriptive analysis
 
+@fig-alluvial depicts the temporal evolution of market justice preferences in pensions from 2016 to 2023. Each year presents percentage frequencies, and the flows between them reflect changes in opinion among the same people from one year to the next. The results indicate substantial attitudinal fluidity, with extensive cross-flows suggesting that many respondents revise their views over time rather than holding fixed positions. Most changes occur between adjacent categories, consistent with gradual shifts, although some movements span multiple categories. For example, among those who strongly disagreed with income-based pension access in 2019, about 15.2% remained in that position by 2022, while the remaining 12.5% shifted to other categories, primarily to disagreement or agreement. Overall, the majority continue to disagree with the notion that it is fair for higher-income people to receive better pensions than those with lower incomes. Yet, agreement has increased over time: the combined share of agree + strongly agree rises from 16.9% in 2019 to 28.4% in 2023 (an increase of roughly 11.5 percentage points). Transitions appear particularly turbulent during the 2019–2022 period—overlapping with social unrest and the pandemic—suggesting that these attitudes are responsive to major contextual shocks and shifts in pension-related public discourse.
+
+
 ```{r}
 #| label: fig-alluvial
 #| out-width: '100%'
@@ -174,16 +177,17 @@ datos.pension %>%
 
 ```
 
-@fig-alluvial shows the evolution over time of market justice preferences in pensions between 2016 and 2023. The results reveal a remarkable fluidity in attitudes: the extensive cross-flows between categories show that a considerable proportion of individuals change their position over time, rather than maintaining fixed opinions. Transitions occur predominantly between adjacent categories, suggesting gradual changes rather than radical conversions, although some flows cross multiple categories. The intermediate category (orange) emerges as the largest and functions as a 'transit zone,' receiving and losing people to both ends of the spectrum. The extremes—strong rejection (dark red) and strong agreement (dark blue)—maintain relative stability, representing hard cores of opinion that persist over time. Notably, the 2020-2021 period shows greater turbulence in transitions, coinciding with the Chilean social unrest and the pandemic, which would suggest that these attitudes are sensitive to socio-political and economic events in the national context. Overall, the data show that opinions on the fairness of pension inequalities are more malleable than expected, responding both to individual experiences (such as the cohort's approach to retirement age) and to changes in the public debate on the Chilean pension system.
 
 ## Bivariate relationships
+
+@fig-scatter-corr shows the correlation matrix between meritocratic perceptions and preferences for pension market justice. Both effort-based ($r$ = 0.10, $p$ < 0.001) and talent-based ($r$ = 0.08, $p$ < 0.001) meritocratic perceptions are positively associated with greater support for market-based pension welfare. Although these correlations are modest, their statistical significance indicates a consistent bivariate relationship. The two meritocracy indicators are also strongly correlated ($r$ = 0.68, $p$ < 0.001), suggesting they capture a shared meritocratic worldview while remaining sufficiently distinct to justify treating them as separate constructs. Taken together, these patterns provide initial support for the expectation that meritocratic perceptions are associated with greater acceptance of income-linked pension outcomes, while also suggesting that other factors likely account for most of the variation in these preferences.
 
 ```{r}
 #| label: fig-scatter-corr
 #| fig-width: 8
 #| fig-height: 6
 #| fig-cap: "Correlation matrix between meritocratic beliefs and market justice"
-#| fig-cap-location: bottom
+#| fig-cap-location: top
 #| echo: false
 
 # Convertir variables a numéricas
@@ -242,9 +246,7 @@ ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
         plot.caption = element_text(size = 10, face = "italic", hjust = 0))
 ```
 
-@fig-scatter-corr presents the correlation matrix between the three key variables. The correlation between Merit: Effort and Market Justice in Pensions is $r$ = 0.10 (p < 0.001), while the correlation between Merit: Talent and Market Justice in Pensions is slightly weaker at $r$ = 0.08 (p < 0.001). Although both correlations are modest in magnitude, they are highly statistically significant given the large sample size (N obs = 5,755; N individuals = 1,027). Notably, the two meritocratic belief dimensions—effort and talent—show a strong positive correlation with each other ($r$ = 0.68, p < 0.001), suggesting they tap into a common underlying meritocratic worldview, while maintaining sufficient independence to be examined as distinct constructs. 
-
-These bivariate patterns provide initial empirical support for the theoretical expectation that meritocratic beliefs are associated with greater acceptance of market-based pension inequalities. However, the relatively modest effect sizes indicate that the relationship is not deterministic and that other factors—such as social class position, political ideology, and individual experiences with the pension system—likely play important moderating or confounding roles. The subsequent multivariate analyses will test whether these bivariate associations hold when controlling for relevant covariates and will explore potential interaction effects between meritocratic beliefs and social class, as hypothesized in our theoretical framework.
+Turning to social class differences, @fig-meanchange plots longitudinal trajectories of pension market justice by class from 2016 to 2023. The figure shows a broadly upward trend across all classes, especially after 2019, alongside increasingly similar levels over time. The unemployed group shows the most significant change, moving from strong rejection (approximately −0.6 in 2016) to moderate acceptance (approximately 0.7 in 2023). Retirees/pensioners also increase steadily, from near zero in 2016 to roughly 0.5 by 2023, and the service class rises notably—particularly between 2019 and 2022—reaching values close to 0.5. The working class follows a similar trajectory, though at slightly lower levels. Overall, the trajectories suggest convergence toward greater acceptance of pension inequality during 2019–2023, a period marked by social unrest, the pandemic, and pension fund withdrawals (*10% retiros*), raising questions about how these disruptions and the surrounding policy debate reshaped views of distributive justice.
 
 ```{r}
 #| label: fig-meanchange
@@ -279,30 +281,37 @@ df_pond <- df_pond %>%
   mutate(just_pension_z = as.numeric(scale(just_pension)))
 
 
+shapes_egp <- c(
+  "Working class (V+VI+VII)"      = 16,  # circle
+  "Intermediate class (III+IV)" = 17,  # triangle
+  "Service class (I+II)"      = 15,  # square
+  "Retired or pensioner"            = 18,  # diamond
+  "Unemployed"         = 8,   # star
+  "Performs unpaid tasks"        = 3    # plus
+)
+
+
+base_cols <- c("#1F77B4","#6BAED6","#08306B","#BDBDBD","#D7301F","#FC8D59")
+cols_egp <- setNames(base_cols, levels(df_pond$egp))
+
 df_pond %>% 
   select(ola, egp, just_pension_z) %>% 
   group_by(ola, egp) %>% 
   summarise_all(~survey_mean(., vartype = "ci")) %>% 
   ggplot(aes(x = ola, y = just_pension_z, group = egp)) +
-  geom_point(aes(shape=egp, color=egp), size = 3.5) +
+  geom_point(aes(shape = egp, color = egp), size = 3.5) +
   geom_line(aes(color = egp), linewidth = 0.8) +
   geom_errorbar(aes(ymin = just_pension_z_low, ymax = just_pension_z_upp, color = egp),
                 width = 0.1) +
+  scale_shape_manual(values = shapes_egp) +
+  scale_color_manual(values = cols_egp) +
   scale_y_continuous(limits = c(-1, 1), n.breaks = 5) +
-  labs(y = "Mean (Z-score)",
-       x = "Wave",
-       color = NULL,
-       shape = NULL,
+  labs(y = "Mean (Z-score)", x = "Wave", color = NULL, shape = NULL,
        caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 5,755; N groups = 1,027)") +
   theme_ggdist() +
-  theme(legend.position = "top",
-        text = element_text(size = 12)) 
+  theme(legend.position = "top", text = element_text(size = 12))
+
  
 ```
 
-@fig-meanchange presents the longitudinal trajectories of market justice across social classes from 2016 to 2023. The figure reveals distinct patterns of temporal change and class-based.
-
-Regarding this dimension, the most striking finding is the general upward trend observed across all social classes, particularly pronounced after 2019. The unemployed group exhibits the most dramatic shift, moving from strong rejection (approximately -0.6 in 2016) to moderate acceptance (around 0.7 in 2023) of pension inequalities. Similarly, retired or pensioners show a consistent increase in justification over time, rising from near-zero levels in 2016 to approximately 0.5 by 2023. The service class also demonstrates increased acceptance, particularly during the 2019-2022 period, reaching values close to 0.5. Working class individuals follow a similar trajectory, though with slightly lower magnitudes. These convergent trends suggest that the 2019 social unrest and subsequent pandemic period may have influenced attitudes across the class structure, potentially reflecting adaptation to new economic realities or shifts in public discourse around pension reform.
-
-These longitudinal patterns suggest that social classes have experienced remarkable convergence in their justification of pension inequalities, particularly following the social and economic disruptions of 2019-2023. This convergence toward greater acceptance of pension inequality, raises important questions about the mechanisms driving distributive justice preferences and whether material conditions, policy debates, or normative shifts in Chilean society account for these temporal changes.
 
