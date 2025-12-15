@@ -6,3 +6,75 @@ csl: "input/bib/apa6.csl"
 
 # Supplementary material  {#anexo}
 
+```{r echo=FALSE, results='asis'}
+#| label: tbl-interactions1
+#| tbl-cap: "Interactions for social class, meritocracy, and pension market justice preferences"
+#| tbl-cap-location: top
+
+ccoef <- list(
+  #"Strongly disagree|Disagree" = "Strongly disagree|Disagree",
+  #"Disagree|Neither agree nor disagree" = "Disagree|Neither agree nor disagree",
+  #"Neither agree nor disagree|Agree" = "Neither agree nor disagree|Agree",
+  #"Agree|Strongly agree" = "Agree|Strongly agree",
+ # "egpIntermediate class (III+IV)" = "Intermediate class (III+IV)",
+ # "egpService class (I+II)" = "Service class (I+II)",
+ # "egpRetired or pensioner" = "Retired or pensioner",
+ # "egpUnemployed" = "Unemployed",
+ # "egpPerforms unpaid tasks" = "Performs unpaid tasks",
+ # merit_effort_cwc = "Merit: Effort (WE)",
+ # merit_talent_cwc = "Merit: Talent (WE)",
+ # merit_effort_mean = "Merit: Effort (BE)",
+ # merit_talent_mean = "Merit: Talent (BE)",
+  
+  "egpIntermediate class (III+IV):merit_effort_cwc" = "Intermediate class (III+IV) x Merit: Effort (WE)",
+  "egpService class (I+II):merit_effort_cwc" = "Service class (I+II) x Merit: Effort (WE)",
+   "egpRetired or pensioner:merit_effort_cwc" = "Retired or pensioner x Merit: Effort (WE)",
+   "egpUnemployed:merit_effort_cwc" = "Unemployed x Merit: Effort (WE)",
+   "egpPerforms unpaid tasks:merit_effort_cwc" = "Performs unpaid tasks x Merit: Effort (WE)",
+  
+  "egpIntermediate class (III+IV):merit_talent_cwc" = "Intermediate class (III+IV) x Merit: Talent (WE)",
+"egpService class (I+II):merit_talent_cwc" = "Service class (I+II) x Merit: Talent (WE)",
+"egpRetired or pensioner:merit_talent_cwc" = "Retired or pensioner x Merit: Talent (WE)",
+"egpUnemployed:merit_talent_cwc" = "Unemployed x Merit: Talent (WE)",
+"egpPerforms unpaid tasks:merit_talent_cwc" = "Performs unpaid tasks x Merit: Talent (WE)",
+  
+"egpIntermediate class (III+IV):merit_effort_mean" = "Intermediate class (III+IV) x Merit: Effort (BE)",
+"egpService class (I+II):merit_effort_mean" = "Service class (I+II) x Merit: Effort (BE)",
+"egpRetired or pensioner:merit_effort_mean" = "Retired or pensioner x Merit: Effort (BE)",
+"egpUnemployed:merit_effort_mean" = "Unemployed x Merit: Effort (BE)",
+"egpPerforms unpaid tasks:merit_effort_mean" = "Performs unpaid tasks x Merit: Effort (BE)",
+
+"egpIntermediate class (III+IV):merit_talent_mean" = "Intermediate class (III+IV) x Merit: Talent (BE)",
+"egpService class (I+II):merit_talent_mean" = "Service class (I+II) x Merit: Talent (BE)",
+"egpRetired or pensioner:merit_talent_mean" = "Retired or pensioner x Merit: Talent (BE)",
+"egpUnemployed:merit_talent_mean" = "Unemployed x Merit: Talent (BE)",
+"egpPerforms unpaid tasks:merit_talent_mean" = "Performs unpaid tasks x Merit: Talent (BE)"
+  )
+
+texreg::htmlreg(list(m11,m12,m13,m14),
+               custom.model.names = c("Model 7", "Model 8", "Model 9", "Model 10"),
+               caption = NULL,
+               caption.above = T,
+               stars = c(0.05, 0.01, 0.001),
+               custom.coef.map = ccoef,
+               digits = 3,
+               groups = list("Social class (Ref.= Working class (V+VI+VII) x Meritocracy (WE)" = 1:10,
+                              "Social class (Ref.= Working class (V+VI+VII) x Meritocracy (BE)" = 11:20),
+               custom.note = "Note: Cells contain regression coefficients with standard errors in parentheses. %stars. CWC = centered within group.",
+               leading.zero = T,
+               use.packages = F,
+               booktabs = F,
+               scalebox = 0.8,
+               include.loglik = FALSE,
+               include.aic = FALSE,
+               center = T,
+               custom.gof.names = c("BIC", 
+                                    "Numb. obs.", 
+                                    "Num. groups: individuals", 
+                                    "Var: individuals (Intercept)", 
+                                    "Var: individuals, wave",
+                                    "Var: individuals, merit effort cwc", 
+                                    "Var: individuals, merit talent cwc"),
+               custom.gof.rows = list("Controls"=c(rep("Yes",4))))
+
+```
