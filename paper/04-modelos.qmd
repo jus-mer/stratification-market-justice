@@ -111,9 +111,6 @@ load(file = here("output/interactions_direct.RData"))
 
 @tbl-modelos reports estimates from the cumulative multilevel models of support for pension market justice, distinguishing effects operating between individuals and within individuals over time. The intraclass correlation coefficient [@hox_multilevel_2017] from the null model (see [Supplementary Material](#anexo)), which partitions the total variance in the outcome, is 0.24. This implies that about 24% of the variance lies between individuals, while the remaining 76% reflects within-person change across survey waves.
 
-
-
-
 ```{r echo=FALSE, results='asis'}
 #| label: tbl-modelos
 #| tbl-cap: "Cumulative link longitudinal multilevel models for pension market justice preferences"
