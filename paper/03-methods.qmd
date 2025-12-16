@@ -50,9 +50,9 @@ rm(list = ls())
 
 ## Data
 
-For this study, we used the Chilean Longitudinal Social Survey (ELSOC). This is a panel study conducted annually between 2016 and 2023, designed to examine the attitudes, emotions, and behaviours of people aged 18 to 75 with regard to issues of social cohesion and conflict. In terms of methodology, the survey uses a probabilistic, stratified, clustered, multistage sampling design covering urban centres and small towns. The sampling frame is stratified proportionally into six categories of urban population size, followed by random selection of households within 1,067 blocks.
+This research draws on the Chilean Longitudinal Social Survey (ELSOC), a national panel study fielded between 2016 and 2023 to examine attitudes, emotions, and behaviors among adults aged 18 to 75 in relation to social cohesion and conflict. ELSOC uses a probabilistic, stratified, clustered, multistage sampling design covering urban centers and small towns. The sampling frame is proportionally stratified into six categories of urban population size; within these strata, households were selected through multistage procedures based on 1,067 sampled blocks.
 
-The survey has been conducted annually since 2016, with the exception of 2020, when it was suspended due to the COVID-19 pandemic. For the purposes of this study, the 2016, 2017, 2018, 2019, 2022, and 2023 waves were used. The 2021 wave was excluded because the version of the questionnaire omitted variables of interest. Between waves 1 and 6, panel attrition reached 40%, so a balanced panel was used, resulting in a final two-level sample comprising *N* = 5,755 observations nested in *N* = 1,027 individuals. Further details on sampling, attrition, and weighting procedures are available at https://coes.cl/encuesta-panel/, and the dataset is publicly accessible at https://dataverse.harvard.edu/dataverse/elsoc.
+ELSOC has been administered annually since 2016, except in 2020 when fieldwork was suspended due to the COVID-19 pandemic. For this study, we use waves 2016, 2017, 2018, 2019, 2022, and 2023. The 2021 wave is excluded because the questionnaire version omitted key variables for the analysis. By wave 6, cumulative panel attrition was approximately 40%; we therefore restrict the analysis to a balanced panel, yielding a two-level data set of *N* = 5,755 observations nested within *N* = 1,027 individuals. Additional documentation on sampling, attrition, and weighting is available from the ELSOC study team, and the data are publicly accessible through the ELSOC Dataverse.
 
 ```{r}
 #| label: data
@@ -108,7 +108,7 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ### Market justice preferences for pensions
 
-The dependent variable in this study is distributive justice in pensions. This construct is measured by a single item that captures how strongly individuals endorse conditioning access to better pensions on income. Specifically, the question is: "Is it fair that high-income individuals have better pensions than lower-income individuals?" The response options range from 1 ("Strongly disagree") to 5 ("Strongly agree"). Therefore, higher values indicate a greater perception of fairness in pension distribution, i.e., greater support for inequality in pensions.
+The dependent variable in this study is preferences for market justice in pension. This construct is measured by a single item that captures how strongly individuals endorse conditioning access to better pensions on income. Specifically, the question is: "Is it fair that high-income individuals have better pensions than lower-income individuals?" The response options range from 1 ("Strongly disagree") to 5 ("Strongly agree"). Higher values indicate greater acceptance of income-based pension differences—that is, stronger support for market-justified pension inequality.
 
 ### Social class
 

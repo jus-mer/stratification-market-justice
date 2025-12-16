@@ -41,15 +41,13 @@ if (! require("pacman")) install.packages("pacman")
 
 pacman::p_load(tidyverse, 
                sjmisc, 
-               lme4, 
                here, 
                performance,
                ordinal,
                texreg, 
                ggdist,
-               misty,
-               kableExtra,
-               sjlabelled)
+               sjlabelled,
+               cowplot)
 
 
 options(scipen=999)
@@ -109,7 +107,7 @@ load(file = here("output/interactions_direct.RData"))
 
 ## Multilevel models
 
-@tbl-modelos reports estimates from the cumulative multilevel models of support for pension market justice, distinguishing effects operating between individuals and within individuals over time. The intraclass correlation coefficient [@hox_multilevel_2017] from the null model (see [Supplementary Material](#anexo)), which partitions the total variance in the outcome, is 0.24. This implies that about 24% of the variance lies between individuals, while the remaining 76% reflects within-person change across survey waves.
+@tbl-modelos reports estimates from the cumulative longitudinal multilevel models of support for pension market justice, distinguishing effects operating between individuals (BE) and within individuals over time (WE). The intraclass correlation coefficient [@hox_multilevel_2017] from the null model (see [Supplementary Material](#anexo)), which partitions the total variance in the outcome, is 0.24. This implies that about 24% of the variance lies between individuals, while the remaining 76% reflects within-person change across survey waves.
 
 ```{r echo=FALSE, results='asis'}
 #| label: tbl-modelos
@@ -172,84 +170,60 @@ Model 1, which adds survey-wave indicators to capture temporal shifts in the out
 
 Model 3 adds between-group effects (BE) for social class, capturing differences in average support for pension market justice across class locations. Overall, the estimates provide no evidence of systematic class differences in the support for market-based access to old-age pension benefits. Using the working class as the reference group, those in the intermediate class ($\beta$ = 0.10, $p$ > 0.05), the service class ($\beta$ = 0.17, $p$ > 0.05), retirees ($\beta$ = 0.10, $p$ > 0.05), and the unemployed ($\beta$ = 0.10, $p$ > 0.05) exhibit positive coefficients, but none reach conventional levels of statistical significance. Likewise, individuals performing unpaid work (e.g., domestic or care work) show a negative coefficient relative to the working class, which is not statistically significant ($\beta$ = -0.20, $p$ > 0.05). Taken together, these results suggest that neither class position nor being outside the labour force is clearly associated with differences in preferences for pension market justice at the between-individual level.
 
-Models 4 and 5 extend the analysis by incorporating the within-person (WE) and between-person (BE) components of the meritocratic variables. Model 4 examines how changes in individuals’ meritocratic perceptions over time relate to their views on pension market justice. The estimates show that the within-effect of perceiving that effort is rewarded is positive and highly significant ($p$ < 0.001). Holding all other predictors constant, a one-point increase in effort-based meritocratic perceptions for the same respondent between waves is associated with a 0.11-point increase in the support for market-based access to old-age pension benefits. Model 5, which captures between-person differences, points in the same direction. On average, respondents who see their society as more effort-meritocratic display stronger market-oriented views on pensions, with a 0.39-point higher score on the outcome, a statistically significant association. By contrast, the corresponding indicators for the belief that intelligence and ability are rewarded show no statistically significant association with the support for market-based access to old-age pension benefits at either the within ($\beta$ = 0.07, $p$ > 0.05)- or between-person level ($\beta$ = 0.08, $p$ > 0.05).
-
-Model 6 introduces the control variables. The within- and between-effects of the main predictors remain stable in both sign and significance, indicating that the associations are robust (see [Supplementary Material](#anexo) for the effects of the control variables).
+Models 4 and 5 extend the analysis by incorporating the within-person (WE) and between-person (BE) components of the meritocratic variables. Model 4 examines how changes in individuals’ meritocratic perceptions over time relate to their views on pension market justice. The estimates show that the within-effect of perceiving that effort is rewarded is positive and highly significant ($p$ < 0.001). Holding all other predictors constant, a one-point increase in effort-based meritocratic perceptions for the same respondent between waves is associated with a 0.11-point increase in the support for market-based access to old-age pension benefits. Model 5, which captures between-person differences, points in the same direction. On average, respondents who see their society as more effort-meritocratic display stronger market-oriented views on pensions, with a 0.39-point higher score on the outcome, a statistically significant association. By contrast, the corresponding indicators for the perception that intelligence and ability are rewarded show no statistically significant association with the support for pension market justice at either the within ($\beta$ = 0.07, $p$ > 0.05)- or between-person level ($\beta$ = 0.08, $p$ > 0.05).
 
 
 ```{r echo=FALSE, results='asis'}
-#| label: tbl-interactions1
-#| tbl-cap: "Interactions for social class, meritocracy, and pension market justice preferences"
-#| tbl-cap-location: top
+#| label: fig-interaction1
+#| fig-cap-location: top
+#| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
+#| out-width: '80%'
+#| fig-asp: 1
+#| echo: false
 
-ccoef <- list(
-  #"Strongly disagree|Disagree" = "Strongly disagree|Disagree",
-  #"Disagree|Neither agree nor disagree" = "Disagree|Neither agree nor disagree",
-  #"Neither agree nor disagree|Agree" = "Neither agree nor disagree|Agree",
-  #"Agree|Strongly agree" = "Agree|Strongly agree",
- # "egpIntermediate class (III+IV)" = "Intermediate class (III+IV)",
- # "egpService class (I+II)" = "Service class (I+II)",
- # "egpRetired or pensioner" = "Retired or pensioner",
- # "egpUnemployed" = "Unemployed",
- # "egpPerforms unpaid tasks" = "Performs unpaid tasks",
- # merit_effort_cwc = "Merit: Effort (WE)",
- # merit_talent_cwc = "Merit: Talent (WE)",
- # merit_effort_mean = "Merit: Effort (BE)",
- # merit_talent_mean = "Merit: Talent (BE)",
-  
-  "egpIntermediate class (III+IV):merit_effort_cwc" = "Intermediate class (III+IV) x Merit: Effort (WE)",
-  "egpService class (I+II):merit_effort_cwc" = "Service class (I+II) x Merit: Effort (WE)",
-   "egpRetired or pensioner:merit_effort_cwc" = "Retired or pensioner x Merit: Effort (WE)",
-   "egpUnemployed:merit_effort_cwc" = "Unemployed x Merit: Effort (WE)",
-   "egpPerforms unpaid tasks:merit_effort_cwc" = "Performs unpaid tasks x Merit: Effort (WE)",
-  
-  "egpIntermediate class (III+IV):merit_talent_cwc" = "Intermediate class (III+IV) x Merit: Talent (WE)",
-"egpService class (I+II):merit_talent_cwc" = "Service class (I+II) x Merit: Talent (WE)",
-"egpRetired or pensioner:merit_talent_cwc" = "Retired or pensioner x Merit: Talent (WE)",
-"egpUnemployed:merit_talent_cwc" = "Unemployed x Merit: Talent (WE)",
-"egpPerforms unpaid tasks:merit_talent_cwc" = "Performs unpaid tasks x Merit: Talent (WE)",
-  
-"egpIntermediate class (III+IV):merit_effort_mean" = "Intermediate class (III+IV) x Merit: Effort (BE)",
-"egpService class (I+II):merit_effort_mean" = "Service class (I+II) x Merit: Effort (BE)",
-"egpRetired or pensioner:merit_effort_mean" = "Retired or pensioner x Merit: Effort (BE)",
-"egpUnemployed:merit_effort_mean" = "Unemployed x Merit: Effort (BE)",
-"egpPerforms unpaid tasks:merit_effort_mean" = "Performs unpaid tasks x Merit: Effort (BE)",
+load(here("output/predicted_probabilities.RData"))
 
-"egpIntermediate class (III+IV):merit_talent_mean" = "Intermediate class (III+IV) x Merit: Talent (BE)",
-"egpService class (I+II):merit_talent_mean" = "Service class (I+II) x Merit: Talent (BE)",
-"egpRetired or pensioner:merit_talent_mean" = "Retired or pensioner x Merit: Talent (BE)",
-"egpUnemployed:merit_talent_mean" = "Unemployed x Merit: Talent (BE)",
-"egpPerforms unpaid tasks:merit_talent_mean" = "Performs unpaid tasks x Merit: Talent (BE)"
-  )
+p1_agree <- p1 %>% filter(response.level == 4) 
 
-texreg::htmlreg(list(m11,m12,m13,m14),
-               custom.model.names = c("Model 7", "Model 8", "Model 9", "Model 10"),
-               caption = NULL,
-               caption.above = T,
-               stars = c(0.05, 0.01, 0.001),
-               custom.coef.map = ccoef,
-               digits = 3,
-               groups = list("Social class (Ref.= Working class (V+VI+VII) x Meritocracy (WE)" = 1:10,
-                              "Social class (Ref.= Working class (V+VI+VII) x Meritocracy (BE)" = 11:20),
-               custom.note = "Note: Cells contain regression coefficients with standard errors in parentheses. %stars. CWC = centered within group.",
-               leading.zero = T,
-               use.packages = F,
-               booktabs = F,
-               scalebox = 0.8,
-               include.loglik = FALSE,
-               include.aic = FALSE,
-               center = T,
-               custom.gof.names = c("BIC", 
-                                    "Numb. obs.", 
-                                    "Num. groups: individuals", 
-                                    "Var: individuals (Intercept)", 
-                                    "Var: individuals, wave",
-                                    "Var: individuals, merit effort cwc", 
-                                    "Var: individuals, merit talent cwc"),
-               custom.gof.rows = list("Controls"=c(rep("Yes",4))))
+p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("#08306B", "#D7301F")) +
+  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
+  labs(
+    x = "Merit: Talent (within-person)",
+    y = "Pr(Agree)",
+    color = NULL, 
+    fill = NULL,
+  ) +
+  theme_ggdist() +
+  theme(legend.position = "bottom")
+
+p2_agree <- p2 %>% filter(response.level == 4) 
+
+p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("#08306B", "#D7301F")) +
+  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
+  labs(
+    x = "Merit: Talent (between-person)",
+    y = "Pr(Agree)",
+    color = NULL, 
+    fill = NULL,
+    caption = "Estimates (95% CIs) from Models 8 and 10 (Table X, Supplementary Material) using ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317).\nPredicted probabilities for Strongly agree (category 5) are consistently low across the covariate range, resulting in small group differences.\nSource: authors’ calculations."
+  ) +
+  theme_ggdist()+
+  theme(legend.position = "bottom")
+
+cowplot::plot_grid(p1, p2, labels=c("A", "B"), label_size = 11, ncol = 1)
 
 ```
 
-To examine whether meritocratic perceptions condition class differences in market justice preferences in pensions, @tbl-interactions1 reports four interaction models that combine between-person social class with the within- and between-person components of meritocratic perceptions. Model 7 includes interactions between class and within-person effort-based meritocracy; Model 8 does the same for within-person talent-based meritocracy; Model 9 interacts class with between-person effort-based meritocracy; and Model 10 with between-person talent-based meritocracy. Overall, the interaction terms are small and mostly non-significant, and model fit improves only marginally relative to the baseline specifications, suggesting that the link between meritocratic perceptions and market justice preferences in pensions is broadly similar across social classes.
+Model 6 introduces the control variables. The within- and between-effects of the main predictors remain stable in both sign and significance, indicating that the associations are robust (see [Supplementary Material](#anexo) for the effects of the control variables).
 
-Two interaction effects stand out as exceptions to this general pattern. In Model 8, the interaction between unemployment and within-person talent-based meritocracy is positive and statistically significant ($\beta$ = 0.26, $p$ < 0.05), indicating that, among unemployed respondents, increases over time in the perception that intelligence and ability are rewarded are more strongly associated with stronger support for market-based access to old-age pension benefits than among working-class respondents. In Model 10, the interaction between an intermediate-class position and between-person talent-based meritocracy is also positive and significant ($\beta$ = 0.40, $p$ < 0.05), implying that, within the intermediate class, individuals who more strongly believe that talent is rewarded display a steeper increase in market-oriented views on pensions than their working-class counterparts. Taken together, the evidence points to a largely homogeneous association between meritocracy and justice, with only limited moderation, concentrated in the talent dimension and in specific non-core classes.
+To examine whether meritocratic perceptions condition class differences in pension market justice preferences, we estimate four interaction models that combine between-person social class with the within- and between-person components of meritocratic perceptions. Overall, interaction terms are small and generally not statistically distinguishable from zero, and improvements in model fit over the baseline specifications are modest. This pattern indicates that the association between meritocratic perceptions and support for market-based pension allocation is similar mainly across class locations (complete model estimates are reported in the [Supplementary Material](#anexo)).
+
+
+Two interaction effects nevertheless stand out and are illustrated in @fig-interaction1. First, panel A shows that the within-person association between talent-based meritocratic perceptions and pension market justice differs by labour-market status. Within-person deviations in perceived talent rewards are unrelated to pension market justice in the reference group ($\beta$ = −0.024, $p$ = .67), but become significantly more positive among unemployed respondents (interaction $\beta$ = 0.257, $p$ = .049), implying a net within-person effect of $\beta$ = 0.233 (OR ≈ 1.26). Second, panel B indicates that the between-person association between average (person-mean) talent-based meritocratic perceptions and pension market justice varies by social class: it is null in the working class ($\beta$ = −0.089, $p$ = .50) but significantly stronger in the intermediate class (interaction $\beta$ = 0.401, $p$ = .035), yielding a positive between-person slope of $\beta$ = 0.313 (OR ≈ 1.37). Taken together, these models indicate a largely homogeneous association between meritocratic beliefs and pension market justice, with limited evidence of moderation. Where moderation emerges, it is concentrated in the talent dimension and confined to specific middle-class and non-class positions rather than reflecting systematic stratification across the whole class structure.
+

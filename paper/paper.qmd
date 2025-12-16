@@ -102,5 +102,4 @@ and it was last rendered at {{< now >}}.
 
 ::: {#refs}
 :::
-
 ::::
