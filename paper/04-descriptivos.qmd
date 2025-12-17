@@ -243,6 +243,7 @@ ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
         axis.text.x = element_text(angle = 0, hjust = 0.5, size = 11),
         axis.text.y = element_text(size = 11),
         legend.position = "right")
+
 ```
 
 Turning to social class differences, @fig-meanchange plots longitudinal trajectories of pension market justice by class from 2016 to 2023. The figure shows a broadly upward trend across all classes, especially after 2019, alongside increasingly similar levels over time. The unemployed group shows the most significant change, moving from strong rejection (approximately −0.6 in 2016) to moderate acceptance (approximately 0.7 in 2023). Retirees/pensioners also increase steadily, from near zero in 2016 to roughly 0.5 by 2023, and the service class rises notably—particularly between 2019 and 2022—reaching values close to 0.5. The working class follows a similar trajectory, though at slightly lower levels. Overall, the trajectories suggest convergence toward greater acceptance of pension inequality during 2019–2023, a period marked by social unrest, the pandemic, and pension fund withdrawals (*10% retiros*), raising questions about how these disruptions and the surrounding policy debate reshaped views of distributive justice.
@@ -310,7 +311,8 @@ df_pond %>%
   theme_ggdist() +
   theme(legend.position = "top", text = element_text(size = 12))
 
- 
+
+
 ```
 
 

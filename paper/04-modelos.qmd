@@ -218,6 +218,7 @@ p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
 
 cowplot::plot_grid(p1, p2, labels=c("A", "B"), label_size = 11, ncol = 1)
 
+
 ```
 
 Model 6 introduces the control variables. The within- and between-effects of the main predictors remain stable in both sign and significance, indicating that the associations are robust (see [Supplementary Material](#anexo) for the effects of the control variables).
