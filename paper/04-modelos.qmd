@@ -186,7 +186,7 @@ load(here("output/predicted_probabilities.RData"))
 p1_agree <- p1 %>% filter(response.level == 4) 
 
 p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
   geom_line(linewidth = 1) +
   scale_color_manual(values = c("#08306B", "#D7301F")) +
   scale_fill_manual(values  = c("#08306B", "#D7301F")) +
@@ -202,7 +202,7 @@ p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
 p2_agree <- p2 %>% filter(response.level == 4) 
 
 p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
   geom_line(linewidth = 1) +
   scale_color_manual(values = c("#08306B", "#D7301F")) +
   scale_fill_manual(values  = c("#08306B", "#D7301F")) +
@@ -217,7 +217,6 @@ p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
   theme(legend.position = "bottom")
 
 cowplot::plot_grid(p1, p2, labels=c("A", "B"), label_size = 11, ncol = 1)
-
 
 ```
 
