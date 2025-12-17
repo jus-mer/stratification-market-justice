@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ```{r}
 #| echo: false
 #| message: false
@@ -206,6 +211,8 @@ cor_data <- df_scatter %>%
 # Correlaciones de Pearson
 cor_matrix <- cor(cor_data, method = "pearson")
 
+diag(cor_matrix) <- NA
+
 # Crear visualización con ggplot
 cor_df <- as.data.frame(cor_matrix) %>%
   rownames_to_column("var1") %>%
@@ -230,12 +237,15 @@ cor_df <- cor_df %>%
                   labels = c("Market Justice\nin Pensions", "Merit:\nEffort", "Merit:\nTalent"))
   )
 
-ggplot(cor_df, aes(x = var2, y = var1, fill = correlation)) +
+cor_df %>% 
+  distinct(correlation, .keep_all = T) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = var2, y = var1, fill = correlation)) +
   geom_tile(color = "white", linewidth = 1) +
   geom_text(aes(label = label), size = 6, fontface = "bold") +
   scale_fill_gradient2(low = "#0571B0", mid = "white", high = "#CA0020",
                        midpoint = 0, limits = c(-1, 1),
-                       name = "Pearson r") +
+                       name = "Pearson correlation") +
   labs(x = NULL, y = NULL,
        caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
   theme_ggdist() +
@@ -250,7 +260,7 @@ Turning to social class differences, @fig-meanchange plots longitudinal trajecto
 ```{r}
 #| label: fig-meanchange
 #| out-width: '100%'
-#| fig-asp: 0.5
+#| fig-asp: 0.7
 #| fig-cap: "Changes in the standarized mean of market justice preferences in pensions by social class (2016-2023)"
 #| fig-cap-location: top
 #| echo: false
@@ -304,7 +314,7 @@ df_pond %>%
                 width = 0.1) +
   scale_shape_manual(values = shapes_egp) +
   scale_color_manual(values = cols_egp) +
-  scale_y_continuous(limits = c(-1, 1), n.breaks = 5) +
+  #scale_y_continuous(limits = c(-1.5, 1.5), n.breaks = 10) +
   labs(y = "Mean (Z-score)", x = "Wave", color = NULL, shape = NULL,
        caption = "Source: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
   theme_ggdist() +
