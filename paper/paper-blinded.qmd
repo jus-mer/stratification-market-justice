@@ -1,31 +1,58 @@
 ---
-title: "My paper"
+title: "Justification trajectories for pension inequality in Chile (2016-2023): The role of beliefs in meritocracy and social stratification"
 format:
-  html: default
-  hikmah-pdf: 
-    indent: false
-abstract: |
+  html: 
+    code-fold: true
+    html-math-method: katex
+    number-sections: true
+    code-link: true
+    title-block-banner: true
+  pdf: 
+    geometry: margin=2cm
+    template-partials: 
+      - title.tex
+    keep-tex: true
+    include-in-header:
+      text: |
+        \usepackage[noblocks]{authblk}
+        \renewcommand*{\Authsep}{, }
+        \renewcommand*{\Authand}{, }
+        \renewcommand*{\Authands}{, }
+        \renewcommand\Affilfont{\small}
+    number-sections: true
+    tbl-longtable: false
+editor: source
+bibliography: "../input/bib/jusmer.bib"
+csl: "../input/bib/apa6.csl"
+citeproc: true
+abstract: | 
   My abstract
-keywords: 
-  - first 
-  - second
-  - third
-  - fourth
-  - fifth
-bibliography: "input/bib/merit-edjust.bib"
-csl: "input/bib/apa6.csl"
+  \newline
+  **Keywords**: Economic inequality, meritocracy, market justice, Chile, public preferences
 link-citations: true
 linestretch: 1.15       
 mainfont: Times New Roman
 fontsize: 12pt          
-geometry: "left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm"
-papersize: letter
 colorlinks: true
 fig-height: 4
 fig-width: 7.5
-header-includes:
-  - \usepackage{threeparttable}
 ---
+
+```{r setup, include=FALSE}
+ knitr::opts_chunk$set(echo=FALSE, warning = FALSE,message = FALSE, cache = TRUE,out.width = '85%',fig.pos= "H"
+                       # , fig.align = 'center'
+                       )
+ # knitr::opts_knit$set(base.url = "../") #relative path for .html output file
+ # knitr::opts_knit$set(root.dir = "../") #relative path for chunks within .rmd files
+ options(scipen=999)
+ options(kableExtra.auto_format = FALSE)
+ rm(list=ls())
+ options(knitr.kable.NA = '')
+ options(knitr.graphics.error = FALSE)
+ Sys.setlocale("LC_ALL", "ES_ES.UTF-8")
+```
+
+:::: {.justify}
 
 {{< include 01-introduction.qmd >}}
 
@@ -39,6 +66,8 @@ header-includes:
 
 {{< include 06-conclusion.qmd >}}
 
-{{< pagebreak >}}
+# References
 
-{{< include 07-supplementary-material.qmd >}}
+::: {#refs}
+:::
+::::

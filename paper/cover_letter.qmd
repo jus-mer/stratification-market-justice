@@ -1,15 +1,10 @@
 ---
-title: "My paper"
+title: "Justification trajectories for pension inequality in Chile (2016-2023): The role of beliefs in meritocracy and social stratification"
 subtitle: "Cover Letter"
 format:
-  hikmah-pdf: 
+  pdf: 
     indent: false
     keep-tex: true
-  hikmah-manuscript-pdf: 
-    indent: false
-    keep-tex: true
-bibliography: "input/bib/refs.bib"
-csl: "input/bib/apa6.csl"
 link-citations: true
 linestretch: 1.15       
 mainfont: Times New Roman
@@ -22,27 +17,48 @@ fig-width: 7.5
 header-includes:
   - \usepackage{threeparttable}
 ---
-Text
 
 ## Authors Identification
 
+Juan Carlos Castillo[^*], Departament of Sociology, University of Chile, Santiago de Chile.  
+ORCID: 0000-0003-1265-7854
+    
+René Canales, Institute of Sociology, Pontifical Catholic University of Chile, Santiago de Chile.
+ORCID: 0009-0002-4299-2725
+    
+Andreas Laffert, Institute of Sociology, Pontifical Catholic University of Chile, Santiago de Chile.
+ORCID: 0000-0002-9008-2454
 
+Tomás Urzúa, Departament of Sociology, University of Chile, Santiago de Chile.
+ORCID: 0009-0008-3167-6819
 
 ## Exclusive Submission Statement
 
+The authors confirm that this article has been submitted exclusively to this journal. 
 
 ## Acknowledgments
 
-
+The authors recognize the support of the National Research and Development Agency (ANID) through the grant from the National Fund for Scientific and Technological Development (FONDECYT) N°1250518.
 
 ## Authors' Contributions
+
+Author roles were classified using the Contributor Role Taxonomy [CRediT](https://credit.niso.org/) as follows: Juan Carlos Castillo: Conceptualization, Supervision, Methodology, Writing - review and editing; René Canales: Conceptualization, Methodology, Formal analysis, Software, Visualization, Writing - review and editing; Andreas Laffert: Methodology, Formal analysis, Writing - review and editing. Tomás Urzúa: Conceptualization, Writing - review and editing. 
 
 
 ## Conflict of Interest
 
+The authors declare no conflict of interest.
 
 ## Funding
+
+This research received funding from ANID/FONDECYT grant 1210847.
 
 
 ## Data Avaibility Statement
 
+The original data presented in the study are openly available in <https://dataverse.harvard.edu/api/access/datafile/10797987>
+
+Access to the data, code, and analysis presented in the study are openly available in <https://github.com/justicia-distributiva/market-justice-panel-elsoc>.
+
+
+[^*]: Corresponding author (juancastillov@uchile.cl - [jc-castillo.com](https://juancarloscastillo.github.io/jc-castillo/) - Ignacio Carrera Pinto 1045 Ñuñoa, Santiago de Chile). 
