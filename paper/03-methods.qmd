@@ -120,7 +120,7 @@ The conversion from ISCO-08 occupational codes to EGP categories was performed u
 
 ### Meritocracy 
 
-Following Young’s [-@young_rise_1975] distinction, this construct is operationalised into two dimensions: effort and talent. Both dimensions are measured by the agreement with statements indicating that effort and talent are rewarded in society. Specifically, meritocratic perceptions of effort are captured by the item “In Chile, people are rewarded for their efforts” (Merit: Effort), and meritocratic perceptions of talent by the item “In Chile, people are rewarded for their intelligence and abilities” (Merit: Talent). Both items are answered on a Likert scale ranging from 1 (“Strongly disagree”) to 5 (“Strongly agree”), with higher values indicating stronger perceptions that Chilean society operates according to meritocratic principles.
+Following Young’s [-@young_rise_1975] distinction, this construct is operationalized into two dimensions: effort and talent. Both dimensions are measured by the agreement with statements indicating that effort and talent are rewarded in society. Specifically, meritocratic perceptions of effort are captured by the item “In Chile, people are rewarded for their efforts” (Merit: Effort), whereas meritocratic perceptions of talent by the item “In Chile, people are rewarded for their intelligence and abilities” (Merit: Talent). Both items are answered on a Likert scale ranging from 1 (“Strongly disagree”) to 5 (“Strongly agree”), with higher values indicating stronger perceptions that Chilean society operates according to meritocratic principles.
 
 @tbl-summary2 shows the main variables of the study, their response categories and their frequencies.
 
