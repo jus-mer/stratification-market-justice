@@ -139,7 +139,7 @@ ccoef <- list(
   merit_talent_mean = "Merit: Talent (BE)"
   )
 
-texreg::htmlreg(list(m1.1, m1.4, m3, m4, m5, m6),
+texreg(list(m1.1, m1.4, m3, m4, m5, m6),
                custom.model.names = c(paste0("Model ", seq(1:6))),
                caption.above = T,
                caption = NULL,
