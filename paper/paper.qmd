@@ -53,7 +53,7 @@ affiliations:
     name: Institute of Sociology, Pontifical Catholic University of Chile
 citeproc: true
 abstract: | 
-  **Introduction:** The Chilean pension system, characterized by full privatization and individual capitalization, plays a central role in shaping old-age inequality. Despite widespread social unrest and demands for reform, a segment of the population continues to justify income-based pension differences, a phenomenon conceptualized as pension market justice. This study investigates the interplay between social class, meritocratic beliefs (distinguishing between effort and talent), and preferences for market justice in the Chilean pension system between 2016 and 2023.
+  **Introduction:** The Chilean pension system, characterized by full privatization and individual capitalization, plays a central role in shaping old-age inequality. Despite widespread social unrest and demands for reform, a segment of the population continues to justify income-based pension differences, a phenomenon conceptualized as preferences for pension market justice. This study investigates the interplay between social class, meritocratic beliefs (distinguishing between effort and talent), and preferences for market justice in the Chilean pension system between 2016 and 2023.
   
   **Methods:** Using six waves of panel data from the Chilean Longitudinal Social Survey-ELSOC ($N_{observations}$ = 5,755; $N_{individuals}$ = 1,027), the analysis employs Cumulative Link Mixed Models (CLMM) to examine longitudinal changes. This approach allows for the decomposition of variance into between-person and within-person effects, assessing how stable class positions and evolving meritocratic perceptions influence the legitimacy of market-based pension allocation.
   
