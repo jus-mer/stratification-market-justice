@@ -26,14 +26,15 @@ bibliography: "../input/bib/jusmer.bib"
 csl: "../input/bib/apa6.csl"
 citeproc: true
 abstract: | 
-  **Introduction:** The Chilean pension system, characterized by full privatization and individual capitalization, plays a central role in shaping old-age inequality. Despite widespread social unrest and demands for reform, a segment of the population continues to justify income-based pension differences, a phenomenon conceptualized as pension market justice. This study investigates the interplay between social class, meritocratic beliefs (distinguishing between effort and talent), and preferences for market justice in the Chilean pension system between 2016 and 2023.
+  **Introduction:** The Chilean pension system, characterized by full privatization and individual capitalization, plays a central role in shaping old-age inequality. Despite widespread social unrest and demands for reform, a segment of the population continues to justify income-based pension differences, a phenomenon conceptualized as preferences for pension market justice. This study investigates the interplay between social class, meritocratic beliefs (distinguishing between effort and talent), and preferences for market justice in the Chilean pension system between 2016 and 2023.
   
   **Methods:** Using six waves of panel data from the Chilean Longitudinal Social Survey-ELSOC ($N_{observations}$ = 5,755; $N_{individuals}$ = 1,027), the analysis employs Cumulative Link Mixed Models (CLMM) to examine longitudinal changes. This approach allows for the decomposition of variance into between-person and within-person effects, assessing how stable class positions and evolving meritocratic perceptions influence the legitimacy of market-based pension allocation.
   
   **Results:** The findings reveal a "class neutralization" phenomenon where objective social class does not significantly predict support for pension market justice. Instead, support has grown across all groups. Meritocratic perceptions of effort are consistently associated with higher market justice preferences at both between- and within-person levels. Conversely, talent-based perceptions do not show a main effect but interact significantly with specific positions: they predict higher support among the intermediate class (between-person) and among unemployed individuals whose perceptions of talent rewards increase over time (within-person).
   
   **Discussion:** These findings suggest that the institutional architecture of the pension system frames outcomes as results of individual responsibility, dampening class-based redistributive demands. Effort-based meritocracy acts as a key legitimizing ideology for pension inequality. However, talent-based justifications appear to function differently, serving as a compensatory narrative for the intermediate class and the unemployed to rationalize distributive outcomes in a context where the link between effort and reward is structurally constrained.
-keywords: [Economic inequality, meritocracy, market justice, Chile, public preferences]
+
+  **Keywords**: Economic inequality, meritocracy, market justice, Chile, public preferences
 link-citations: true
 linestretch: 1.15       
 mainfont: Times New Roman

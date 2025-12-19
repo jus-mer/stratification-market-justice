@@ -60,7 +60,8 @@ abstract: |
   **Results:** The findings reveal a "class neutralization" phenomenon where objective social class does not significantly predict support for pension market justice. Instead, support has grown across all groups. Meritocratic perceptions of effort are consistently associated with higher market justice preferences at both between- and within-person levels. Conversely, talent-based perceptions do not show a main effect but interact significantly with specific positions: they predict higher support among the intermediate class (between-person) and among unemployed individuals whose perceptions of talent rewards increase over time (within-person).
   
   **Discussion:** These findings suggest that the institutional architecture of the pension system frames outcomes as results of individual responsibility, dampening class-based redistributive demands. Effort-based meritocracy acts as a key legitimizing ideology for pension inequality. However, talent-based justifications appear to function differently, serving as a compensatory narrative for the intermediate class and the unemployed to rationalize distributive outcomes in a context where the link between effort and reward is structurally constrained.
-keywords: [Economic inequality, meritocracy, market justice, Chile, public preferences]
+
+  **Keywords**: Economic inequality, meritocracy, market justice, Chile, public preferences
 link-citations: true
 linestretch: 1.15       
 mainfont: Times New Roman
@@ -84,10 +85,6 @@ fig-width: 7.5
  Sys.setlocale("LC_ALL", "ES_ES.UTF-8")
 ```
 
-
-
-This document was last modified at {{< modified >}}
-and it was last rendered at {{< now >}}.
 
 :::: {.justify}
 

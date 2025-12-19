@@ -167,13 +167,13 @@ datos.pension %>%
             show.legend = FALSE,
             size = 3,
             color = 'white')+
-  labs(y = "%",
+  labs(title = "It is fair that people with higher incomes have better pensions than people\nwith lower incomes?", y = "%",
        x = NULL,
-       fill = NULL,
-       title = NULL) +
+       fill = NULL) +
   theme_ggdist() +
-  theme(legend.position = "bottom") +
-  labs(caption = "Source: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)")
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold")) +
+  labs(caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)")
 
 ```
 
@@ -242,7 +242,7 @@ cor_df %>%
                        midpoint = 0, limits = c(-1, 1),
                        name = "Pearson correlation") +
   labs(x = NULL, y = NULL,
-       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05\nSource: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)") +
   theme_ggdist() +
   theme(text = element_text(size = 12),
         axis.text.x = element_text(angle = 0, hjust = 0.5, size = 11),
@@ -250,7 +250,7 @@ cor_df %>%
         legend.position = "right")
 ```
 
-Turning to social class differences, @fig-meanchange plots longitudinal trajectories of pension market justice by class from 2016 to 2023. The figure shows a broadly upward trend across all classes, especially after 2019, alongside increasingly similar levels over time. The unemployed group shows the most significant change, moving from strong rejection (approximately −0.6 in 2016) to moderate acceptance (approximately 0.7 in 2023). Retirees/pensioners also increase steadily, from near zero in 2016 to roughly 0.5 by 2023, and the service class rises notably—particularly between 2019 and 2022—reaching values close to 0.5. The working class follows a similar trajectory, though at slightly lower levels. Overall, the trajectories suggest convergence toward greater acceptance of pension inequality during 2019–2023, a period marked by social unrest, the pandemic, and pension fund withdrawals (*10% retiros*), raising questions about how these disruptions and the surrounding policy debate reshaped views of distributive justice.
+Turning to social class differences, @fig-meanchange plots longitudinal trajectories of pension market justice by class from 2016 to 2023. Overall, the descriptive trends suggest that there are no differences between social classes in their level of preference for market justice in pensions. The figure shows a broadly upward trend across all classes, especially after 2019, alongside increasingly similar levels over time. The unemployed group shows the most significant change, moving from strong rejection (approximately −0.6 in 2016) to moderate acceptance (approximately 0.7 in 2023). Retirees/pensioners also increase steadily, from near zero in 2016 to roughly 0.5 by 2023, and the service class rises notably—particularly between 2019 and 2022—reaching values close to 0.5. The working class follows a similar trajectory, though at slightly lower levels. Overall, the trajectories suggest convergence toward greater acceptance of pension inequality during 2019–2023, a period marked by social unrest, the pandemic, and pension fund withdrawals (*10% retiros*), raising questions about how these disruptions and the surrounding policy debate reshaped views of distributive justice.
 
 ```{r}
 #| label: fig-meanchange
@@ -311,7 +311,7 @@ df_pond %>%
   scale_color_manual(values = cols_egp) +
   #scale_y_continuous(limits = c(-1, 1), n.breaks = 5) +
   labs(y = "Mean (Z-score)", x = "Wave", color = NULL, shape = NULL,
-       caption = "Source: own elaboration with pooled data from ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317)") +
+       caption = "Source: own elaboration with pooled data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)") +
   theme_ggdist() +
   theme(legend.position = "top", text = element_text(size = 12))
 

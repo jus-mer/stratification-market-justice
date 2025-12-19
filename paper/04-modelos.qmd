@@ -211,7 +211,7 @@ p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
     y = "Pr(Agree)",
     color = NULL, 
     fill = NULL,
-    caption = "Estimates (95% CIs) from Models 8 and 10 (Table X, Supplementary Material) using ELSOC 2016–2023 (N obs = 7,522; N individuals = 1,317).\nPredicted probabilities for Strongly agree (category 5) are consistently low across the covariate range, resulting in small group differences.\nSource: authors’ calculations."
+    caption = "Estimates (95% CIs) from Models 8 and 10 (Table 3, Supplementary Material) using ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317).\nPredicted probabilities for Strongly agree (category 5) are consistently low across the covariate range, resulting in small group differences.\nSource: authors’ calculations."
   ) +
   theme_ggdist()+
   theme(legend.position = "bottom")
