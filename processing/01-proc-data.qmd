@@ -490,7 +490,6 @@ sjlabelled::set_label(x = elsoc_long_2016_2023$ideo,
                       label = "Political identification") 
 
 frq(elsoc_long_2016_2023$ideo)
-
 ```
 
 ```{r}

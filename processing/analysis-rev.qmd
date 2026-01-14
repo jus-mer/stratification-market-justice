@@ -387,10 +387,11 @@ performance::icc(m0, by_group = T) # 0.24 es between, 0.76 within
 #| results: asis
 
 #m1.1 <- clmm(just_pension ~ 1 + ola + (1 | idencuesta),
-#                link = "logit",
+                link = "logit",
 #  Hess = TRUE,
 #  data = df_study1)
-#
+
+
 #m1.2 <- clmm(just_pension ~ 1 + ola_num + (1 | idencuesta),
 #                link = "logit",
 #  Hess = TRUE, data = df_study1)

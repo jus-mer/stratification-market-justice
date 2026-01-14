@@ -106,7 +106,9 @@ elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
          merit_talent = c18_10, 
          age = m0_edad, m01, 
          sex = m0_sexo, 
-         ideo = c15) %>% 
+         ideo = c15,
+         protest = c08_02,
+         retiro_2021 = m63_02) %>% 
   as_tibble() %>% 
   sjlabelled::drop_labels(., drop.na = FALSE)
 ```
@@ -587,7 +589,6 @@ sjlabelled::set_label(x = elsoc_long_2016_2023$ideo,
                       label = "Political identification") 
 
 frq(elsoc_long_2016_2023$ideo)
-
 ```
 
 ```{r}
@@ -644,13 +645,17 @@ df_study1_long <- elsoc_long_2016_2023 %>%
          sex,
          age,
          aget,
-         ideo)
+         ideo,
+         protest_dummy,
+         withdrawal)
 
 vars_invariantes <- c("egp", "oesch",
                       "age", "aget",
                       "sex",
                       "educ", "educyear",
-                      "ideo")
+                      "ideo",
+                      "protest_dummy",
+                      "withdrawal")
 
 df_study1_long_fix <- df_study1_long %>% 
   arrange(idencuesta, muestra, ola) %>%         
