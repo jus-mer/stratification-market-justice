@@ -16,6 +16,7 @@ Repository for paper of Market Justice Preferences and Stratification in Chile
 
 [Presentación - 2do simposio de preferencias sociales y desigualdades](https://jus-mer.github.io/stratification-market-justice/presentations/simposioUSACH2025/USACH2025.html)
 
+[Presentación - Seminario UCentral-DLR](https://jus-mer.github.io/stratification-market-justice/presentations/ucen_dlr/UCEN2026.html)
 
 [Data preparation Review](https://jus-mer.github.io/stratification-market-justice/processing/proc-data-rev.html)
 
