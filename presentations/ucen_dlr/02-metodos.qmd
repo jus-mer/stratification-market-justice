@@ -29,17 +29,17 @@
 
 - Descomposición WE/BE (centrado por persona):
 
-     * Within: $X^{WE}_{it}=X_{it}-\bar X_i$
-     * Between: $X^{BE}_{i}=\bar X_i$
+     * Within: $X^{WE}_{it}= X_{it}-\bar{X}_i$
+     * Between: $X^{BE}_{i}=\bar{X}_i$
 
 - Formalmente: 
 
 ::: {.fragment}
 $$\begin{aligned}
-\eta_{it} = \beta_{0}+ \beta_{1}\,\text{tiempo}_{it} +\beta_2\,X^{WE}_{it} +\beta_3\,X^{BE}_{i} +\beta_4\,\mathrm{EGP}_i +
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{tiempo}_{it} +\beta_2\,\text{meritocracia}^{WE}_{it} +\beta_3\,{meritocracia}^{BE}_{i} +\beta_4\,\mathrm{EGP}_i +
     \end{aligned}$$
     
-$$\beta_5\,(\mathrm{EGP}_i\!\times\! X^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\times\! X^{BE}_{i}) +u_{0i}+u_{1i}\,\text{tiempo}_{it}\\$$
+$$\beta_5\,(\mathrm{EGP}_i\!\times\! \text{meritocracia}^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\times\! \text{meritocracia}^{BE}_{i}) +u_{0i}+u_{1i}\,\text{tiempo}_{it}\\$$
 :::
 
 ::::
