@@ -1,0 +1,113 @@
+---
+bibliography: "bib/tesis-magister.bib"
+csl: "bib/apa6.csl"
+lang: es
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    R.options:
+      
+      knitr.graphics.auto_pdf: true
+format:
+  revealjs:
+    #logo: images/edumer.png
+    slide-number: true
+    theme: "libs/edumer.scss"
+    auto-stretch: false
+    title-slide-attributes:
+      visibility: false
+    transition: fade
+    transition-speed: slow
+# data-background-image: images/cover.jpg
+# data-background-size: cover
+    auto-play-media: true
+    mathjax: "default"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      error = F, 
+                      message = F) 
+```
+
+```{r}
+#| label: packages
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               here,
+               kableExtra)
+
+options(scipen=999)
+rm(list = ls())
+```
+
+
+```{r}
+#| label: data
+#| include: false
+#| echo: false
+#| results: false
+
+source(file = here("processing/prod_analysis.R"))
+
+```
+
+::: columns
+
+
+::: {.column width="20%"}
+
+</br></br> </br></br></br></br> </br></br>
+
+![](images/jusmer-logo-vert.png)
+
+
+:::
+
+::: {.column .column-right width="80%"}
+
+
+# Trayectorias de justificación de la desigualdad previsional en Chile 2016–2023 {style="font-size:20px; text-align:right; line-height:1.1;"}
+
+### **Asociaciones con estratificación social y creencias en la meritocracia**{style="font-size:35px; text-align:right; line-height:1.1; margin-top:10px;"}
+
+------------------------------------------------------------------------
+
+</br>
+**Juan Carlos Castillo^1^, René Canales^1^, Andreas Laffert^1^ & </br> Tomás Urzúa^1^**
+
+::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
+
+**^1^Departamento de Sociología, Universidad de Chile** </br>
+
+:::
+
+</br>
+
+### Seminario "Después de la Revuelta: Revueltas Sociales, incertidumbre y polarización social" - 04 de marzo 2026, UCentral - Santiago {style="color:black"}
+
+:::
+:::
+
+{{< include 01-introduccion.qmd >}}
+
+{{< include 02-metodos.qmd >}}
+
+{{< include 03-resultados.qmd >}}
+
+{{< include 04-conclusiones.qmd >}}
+
+## Referencias
+
+::: {#refs}
+:::

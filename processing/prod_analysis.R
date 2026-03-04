@@ -41,7 +41,6 @@ pacman::p_load(tidyverse,
                misty,
                kableExtra,
                ggalluvial, 
-               shadowtext,
                MetBrewer,
                patchwork,
                sjlabelled)
@@ -159,13 +158,12 @@ g1 <- datos.pension %>%
   ggalluvial::geom_stratum(linetype = 0) +
   scale_y_continuous(labels = scales::percent) + 
   scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
-  geom_shadowtext(data = etiquetas.pension,
-                  aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
-                  position = position_stack(vjust = .5),
-                  show.legend = FALSE,
-                  size = 3,
-                  color = rep('white'),
-                  bg.colour='grey30')+
+  geom_text(data = etiquetas.pension,
+            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+            position = position_stack(vjust = .5),
+            show.legend = FALSE,
+            size = 3,
+            color = 'white') +
   labs(y = NULL,
        x = NULL,
        fill = NULL,
