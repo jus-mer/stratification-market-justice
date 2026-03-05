@@ -97,8 +97,3 @@ g1
 
 ::::
 
-
-::: {.fragment style="font-size: 90%;"}
-- Controles = educación universitaria (dummy), sexo (dummy), edad (continua), identificación política (Izquierda, Centro, Derecha, No se identifica) y tiempo [@singer_applied_2009]
-::::
-

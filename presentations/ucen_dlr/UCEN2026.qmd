@@ -84,11 +84,11 @@ source(file = here("processing/prod_analysis.R"))
 ------------------------------------------------------------------------
 
 </br>
-**Juan Carlos Castillo^1^, René Canales^1^, Andreas Laffert^1^ & </br> Tomás Urzúa^1^**
+**Juan Carlos Castillo, René Canales, Andreas Laffert & </br> Tomás Urzúa**
 
 ::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
 
-**^1^Departamento de Sociología, Universidad de Chile** </br>
+**Departamento de Sociología, Universidad de Chile** </br>
 
 :::
 
