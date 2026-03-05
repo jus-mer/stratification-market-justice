@@ -90,6 +90,8 @@ g1
     * Clase de Servicios (I+II) 
     * Clase Intermedia (III+IV) 
     * Clase Trabajadora (V+VI+VII) 
+
+- Además se incluyen tres categorías adicionales que corresponden a grupos fuera de la fuerza de trabajo: Pensionados, desempleados y trabajos no remunerados
     
 - Fijada al valor de la primera ola (i.e. time-invariant) → captura diferencias promedio (BE = $\bar X_{i}$)
 

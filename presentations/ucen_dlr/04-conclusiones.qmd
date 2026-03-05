@@ -12,8 +12,6 @@
 
 4. **Clase × Meritocracia**: no hay evidencia de amplificación (H3a/H3b) 
 
-5. **Proyecciones**: incorporar desocupados, informales y fuera de la FT y refinar estimación (robustez, especificaciones ordinales)
-
 
 ::::
 
