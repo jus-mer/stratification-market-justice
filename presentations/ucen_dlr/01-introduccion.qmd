@@ -31,6 +31,8 @@
 
 ### Publicaciones
 
+- Este estudio -> forthcoming in Frontiers in Sociology (2026)
+  
 - Castillo, J. C., Iturra, J., & Carrasco, K. (2025). Changes in the Justification of Educational Inequalities: The Role of Perceptions of Inequality and Meritocracy During the COVID Pandemic. *Social Justice Research*. [doi.org/10.1007/s11211-025-00458-0](https://doi.org/10.1007/s11211-025-00458-0)
 
 - Castillo, J. C., Laffert, A., Carrasco, K., & Iturra-Sanhueza, J. (2025). Perceptions of inequality and meritocracy: Their interplay in shaping preferences for market justice in Chile (2016–2023). *Frontiers in Sociology*, 10, 1634219. [doi.org/10.3389/fsoc.2025.1634219](https://doi.org/10.3389/fsoc.2025.1634219)
@@ -39,9 +41,11 @@
 
 ### Investigaciones en Curso
 
-- Laffert, A., Castillo, J. C., Canales, R., Urzúa, T., & Carrasco, K. (2025). Stability and comparability of meritocratic beliefs in school-age students. [github.com/educacion-meritocracia/merit-factorial](https://github.com/educacion-meritocracia/merit-factorial)
+- Laffert, A., Castillo, J. C., Canales, R., Urzúa, T., & Carrasco, K. - Stability and comparability of meritocratic beliefs in school-age students. [github.com/educacion-meritocracia/merit-factorial](https://github.com/educacion-meritocracia/merit-factorial)
 
-- Castillo, J. C., & Laffert, A. (2025). Market justice preferences for education in comparative and time perspective. [github.com/jus-mer/market-justice-education-issp](https://github.com/jus-mer/market-justice-education-issp)
+- Urzúa, T. - Market justice in education: The role of meritocratic beliefs in international comparative perspective (master thesis, expected 2026)
+
+- Laffert, A. & Urzúa, T. -  Pensions' market justice and meritocracy: A latent class approach.
 
 
 # Antecedentes {background-color="#491106ff"}
@@ -177,6 +181,22 @@ knitr::include_graphics(path = "images/hipo-2.png")
 
 ```
 
+## Hipótesis
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+- $H1_ \; (\text{Between-person}):$ quienes pertenecen a clases altas exhiben, en promedio, una mayor preferencia por justicia de mercado en pensiones que quienes pertenecen a clases bajas
+
+- $H2_{a} \; (\text{Between-person}):$ las personas que perciben más meritocracia manifiestan una mayor preferencia por justicia de mercado en pensiones que quienes sostienen esas percepciones con menos fuerza
+
+- $H2_{b} \; (\text{Within-person}):$ cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su preferencia por justicia de mercado en pensiones aumenta
+
+- $H3_{a} \; (\text{Between-person}):$ la asociación positiva entre meritocracia (BE) y preferencia por justicia de mercado en pensiones es más fuerte en clases altas
+
+- $H3_{b} \; (\text{Within-person}):$ cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su preferencia por justicia de mercado en pensiones aumenta más que en clases bajas
+
+:::
+
 
 ## Hipótesis
 
@@ -191,4 +211,6 @@ knitr::include_graphics(path = "images/hipo-2.png")
 knitr::include_graphics(path = "images/hipo-3.png")
 
 ```
+
+
 
