@@ -1,16 +1,18 @@
-# stratification-market-justice
+# Justification trajectories for pension inequality in Chile (2016–2023): the role of social class and beliefs in meritocracy
 
-Repository for paper of Market Justice Preferences and Stratification in Chile
+## Paper files
 
-[Abstract conferencia COES 2025](https://jus-mer.github.io/stratification-market-justice/conferences/coes-2025/abstract.html)
+[Data preparation Review](https://jus-mer.github.io/stratification-market-justice/processing/proc-data-rev.html)
 
-[Data preparation](https://jus-mer.github.io/stratification-market-justice/processing/01-proc-data.html)
-
-[Data analysis](https://jus-mer.github.io/stratification-market-justice/processing/02-analysis.html)
+[Data analysis Review](https://jus-mer.github.io/stratification-market-justice/processing/analysis-rev.html)
 
 [Paper Draft (HTML)](https://jus-mer.github.io/stratification-market-justice/paper/paper.html)
 
 [Paper Draft (PDF)](https://jus-mer.github.io/stratification-market-justice/paper/paper.pdf)
+
+## Presentations
+
+[Abstract conferencia COES 2025](https://jus-mer.github.io/stratification-market-justice/conferences/coes-2025/abstract.html)
 
 [Presentación - XII Conferencia Internacional COES](https://jus-mer.github.io/stratification-market-justice/presentations/COES_2025/COES_2025.html)
 
@@ -18,6 +20,4 @@ Repository for paper of Market Justice Preferences and Stratification in Chile
 
 [Presentación - Seminario UCentral-DLR](https://jus-mer.github.io/stratification-market-justice/presentations/ucen_dlr/UCEN2026.html)
 
-[Data preparation Review](https://jus-mer.github.io/stratification-market-justice/processing/proc-data-rev.html)
-
-[Data analysis Review](https://jus-mer.github.io/stratification-market-justice/processing/analysis-rev.html)
+[Presentation - In_equality Conference 2026 - Universität Konstanz](https://jus-mer.github.io/stratification-market-justice/presentations/In_equality-Conference-2026/In_equality-Conference-2026.html)
