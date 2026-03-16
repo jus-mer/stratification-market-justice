@@ -1,0 +1,64 @@
+
+# Discusión y conclusiones {background-color="#491106ff"}
+
+## Discusión y conclusiones
+:::: {.incremental style="font-size: 120%;"}
+
+1. **Tiempo**: las preferencias por justicia de mercado en pensiones han aumentado en los últimos años 
+
+2. **Clase social**: clases altas muestran mayor por justicia de mercado en pensiones que clases bajas (H1) [@mau_inequality_2015; @otero_power_2024; @lindh_public_2015]
+
+3. **Meritocracia**: creer que el esfuerzo es recompensado se asocia con más usticia de mercado (H2a y H2b) [@castillo_perceptions_2025]
+
+4. **Clase × Meritocracia**: no hay evidencia de amplificación (H3a/H3b) 
+
+
+::::
+
+## Artículo Aceptado en Frontiers in Sociology
+
+**Forthcomming**: Castillo JC, Canales Sellés R, Laffert A and Urzúa T (2026) "Justification trajectories for pension inequality in Chile (2016–2023): The role of social class and beliefs in meritocracy". *Front. Sociol.* 11:1771856.doi
+
+![](images/frontiers_soon.png){width=90% fig-align="center"}
+
+
+
+# Equipo {background-color="#491106ff"}
+
+:::{=html}
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; justify-items: center; align-items: center; margin-top: 20px;">
+
+<div style="text-align: center;">
+  <img src="images/jc.png" style="width:200px; border-radius: 50%;" />
+  <div>JC</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/andreas.jpg" style="width:200px; border-radius: 50%;" />
+  <div>Andreas</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/tomas.png" style="width:200px; border-radius: 50%;" />
+  <div>Tomás</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/rene.png" style="width:200px; border-radius: 50%;" />
+  <div>René</div>
+</div>
+
+</div>
+
+:::
+
+# Gracias por su atención {background-color="#491106ff"}
+
+-   **Github del proyecto:** <https://github.com/jus-mer>
+
+:::{=html}
+<div style="text-align: center; margin-top: 30px;">
+  <img src="images/octowars.jpg" style="width: 300px; height: auto;" />
+</div>
+:::
