@@ -1,7 +1,7 @@
 ---
 bibliography: "bib/pensions.bib"
 csl: "bib/apa6.csl"
-lang: es
+lang: in
 knitr:
   opts_chunk:
     collapse: true

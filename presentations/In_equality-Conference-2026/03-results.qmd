@@ -98,9 +98,9 @@ load(file = here("output/interactions_direct.RData"))
 
 ```
 
-# Resultados {background-color="#491106ff"}
+# Results {background-color="#491106ff"}
 
-## Modelos
+## Models
 
 ```{r}
 #| label: fig-model_time
@@ -140,7 +140,7 @@ sjPlot::plot_model(
 - ICC = 0.23 between, 0.77 within
 ::::
 
-## Modelos
+## Models
 
 ```{r}
 #| label: fig-model_be_we
@@ -188,7 +188,7 @@ sjPlot::plot_model(
 
 ```
 
-## Modelos
+## Models
 
 ```{r}
 #| label: fig-model_be_we_controls
@@ -233,7 +233,7 @@ sjPlot::plot_model(
 ```
 
 
-## Modelos
+## Models
 
 ```{r}
 #| label: fig-model_interactions

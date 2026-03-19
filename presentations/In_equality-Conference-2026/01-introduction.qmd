@@ -81,93 +81,93 @@
 - Pensions' market justice and meritocracy: A latent class approach. Andreas Laffert, Tomás Urzúa, Juan Carlos Castillo & René Canales.
 :::
 
-# Antecedentes {background-color="#491106ff"}
 
-## Problema 
+# Background {background-color="#491106ff"}
+
+## The problem
 
 ::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
 
-1) Privatización y mercantilización de  bienes públicos, políticas de bienestar y servicios sociales [@gingrich_making_2011; @streeck_how_2016]
+1) Privatization and marketization of public goods, welfare policies, and social services [@gingrich_making_2011; @streeck_how_2016]
 
 :::
 
 ::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
 
-2) Cambios en la arquitectura de las instituciones del bienestar social; expansión del mercado [@ferre_welfare_2023; @busemeyer_welfare_2020]
+2) Changes in the institutional architecture of the welfare state; expansion of market logics [@ferre_welfare_2023; @busemeyer_welfare_2020]
 
 :::
 
-
 ::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
 
-3) Este orden económico se refleja en una economía moral específica/policy-feedback effects [@mau_inequality_2015; @campbell_institutional_2020; @fernandez_positive_2013] 
+3) This economic order is reflected in a specific moral economy and policy feedback dynamics [@mau_inequality_2015; @campbell_institutional_2020; @fernandez_positive_2013]
 
 :::
 
 ::: {.box-inv-5 .sp-after-half .fragment style="font-size: 110%;"}
 
-Preferencias por justicia de mercado [@busemeyer_skills_2014; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
+Market justice preferences [@busemeyer_skills_2014; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
 
 :::
 
 
-## El caso de Chile
+## The Chilean case
 
 ::: {.incremental .highlight-last style="font-size: 110%;"}
-- Crecimiento con elevada desigualdad [@llorca-jana_historia_2021; @flores_top_2020]
-- Rigida movilidad relativa y fuerte clausura cúspide [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
-- Profunda privatización y comodificación de áreas de reproducción social con fuerte dependencia Estatal [@madariaga_three_2020; @boccardo_30_2020]
-- Pensiones: sistema de **capitalización individual** administrado por **AFPs**; cubre ~11 millones de cotizantes, pero **27% de la fuerza laboral** queda fuera por **informalidad** [@superintendenciadepensiones_estadisticas_2024]
-- Conflictividad social previsional [@somma_no_2021] y legitimidad del sistema ("con mi plata no") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
+
+- Economic growth alongside high inequality [@llorca-jana_historia_2021; @flores_top_2020]
+- Rigid relative mobility and strong closure at the top [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
+- Deep privatization and commodification of social reproduction domains, combined with strong state dependence [@madariaga_three_2020; @boccardo_30_2020]
+- Pensions: an **individual capitalization** system administered by **private pension funds (AFPs)**; covers ~11 million contributors, but **27% of the labor force** remains excluded due to **informality** [@superintendenciadepensiones_estadisticas_2024]
+- Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
+
 :::
 
 
-
-## Preferencias por justicia de mercado
+## Market justice preferences
 
 ::: {.incremental .highlight-last style="font-size: 120%;"}
 
 - Lane [-@lane_market_1986]: market justice vs. political justice
 
-- Creencias normativas que legitiman la idea de que el acceso a los servicios sociales esenciales —como la salud, la educación o las pensiones— debe determinarse según criterios basados en el mercado [@lindh_public_2015, p.895]
+- Normative beliefs that legitimize the idea that access to essential social services—such as healthcare, education, or pensions—should be determined by market-based criteria [@lindh_public_2015, p.895]
 
-- Medición: evaluar si las personas consideran justo que el acceso a dichos servicios dependa de los ingresos [@lindh_public_2015; @kluegel_legitimation_1999; @castillo_perceptions_2025]
+- Measurement: assessing whether individuals consider it fair that access to these services depends on income [@lindh_public_2015; @kluegel_legitimation_1999; @castillo_perceptions_2025]
 
 :::
 
 
-## Factores asociados a la justicia de mercado
+## Factors associated with market justice
 
 
 ::::: columns
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
 ### Individual
 
-- Estatus socioeconómico -ingresos, educación y ocupación- [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
-- Percepciones sobre la desigualdad y meritocracia [@castillo_perceptions_2025]
-- Conservadurismo/liberalismo económico [@lee_fairness_2023]
+- Socioeconomic status—income, education, and occupation [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
+- Perceptions of inequality and meritocracy [@castillo_perceptions_2025]
+- Economic conservatism/liberalism [@lee_fairness_2023]
 
 :::
 
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
 ### Contextual
 
-- Gasto social [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
-- Desigualdad económica [@koos_moral_2019]
-- Nivel de privatización de servicios y regulación del mercado [@lindh_public_2015; @koos_moral_2019]
+- Social spending [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
+- Economic inequality [@koos_moral_2019]
+- Degree of privatization and market regulation [@lindh_public_2015; @koos_moral_2019]
 
 :::
 :::::
 
 
-## Este estudio
+## This study
 
 </br>
 
 ::: {.pull-left .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
 
-Analizar la relación entre clase social y preferencias por la justicia de mercado en pensiones en Chile y sus cambios en el tiempo
-
+Analyze the relationship between social class and preferences for market justice in pensions in Chile, and how these evolve over time
 
 :::
 
@@ -175,12 +175,12 @@ Analizar la relación entre clase social y preferencias por la justicia de merca
 
 ::: {.pull-right .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
 
-Examinar el rol de la meritocracia en la relación entre clase y preferencias por justicia de mercado en pensiones.
+Examine the role of meritocracy in shaping the relationship between class and preferences for pension market justice
 
 :::
 
 
-## Hipótesis
+## Hypotheses
 
 
 ::: {.fragment}
@@ -200,8 +200,7 @@ knitr::include_graphics(path = "images/hipo-1.png")
 :::
 
 
-## Hipótesis
-
+## Hypotheses
 
 ```{r}
 #| label: fig-esque2
@@ -214,25 +213,8 @@ knitr::include_graphics(path = "images/hipo-2.png")
 
 ```
 
-## Hipótesis
 
-::: {.incremental .highlight-last style="font-size: 110%;"}
-
-- $H1_ \; (\text{Between-person}):$ quienes pertenecen a clases altas exhiben, en promedio, una mayor preferencia por justicia de mercado en pensiones que quienes pertenecen a clases bajas
-
-- $H2_{a} \; (\text{Between-person}):$ las personas que perciben más meritocracia manifiestan una mayor preferencia por justicia de mercado en pensiones que quienes sostienen esas percepciones con menos fuerza
-
-- $H2_{b} \; (\text{Within-person}):$ cuando una misma persona fortalece sus percepciones meritocráticas a lo largo del tiempo, su preferencia por justicia de mercado en pensiones aumenta
-
-- $H3_{a} \; (\text{Between-person}):$ la asociación positiva entre meritocracia (BE) y preferencia por justicia de mercado en pensiones es más fuerte en clases altas
-
-- $H3_{b} \; (\text{Within-person}):$ cuando personas de clase alta incrementan sus percepciones meritocráticas a lo largo del tiempo (WE), su preferencia por justicia de mercado en pensiones aumenta más que en clases bajas
-
-:::
-
-
-## Hipótesis
-
+## Hypotheses
 
 ```{r}
 #| label: fig-esque3
@@ -244,6 +226,7 @@ knitr::include_graphics(path = "images/hipo-2.png")
 knitr::include_graphics(path = "images/hipo-3.png")
 
 ```
+
 
 
 
