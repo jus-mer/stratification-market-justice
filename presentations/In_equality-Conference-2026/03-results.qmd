@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ```{r}
 #| echo: false
 #| message: false
@@ -105,7 +110,7 @@ load(file = here("output/interactions_direct.RData"))
 ```{r}
 #| label: fig-model_time
 #| fig-cap-location: top
-#| fig-cap: "Efectos por ola en las preferencias por justicia de mercado en pensiones"
+#| fig-cap: "Changes across waves in market justice preferences in pensions"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.5
@@ -140,60 +145,14 @@ sjPlot::plot_model(
 - ICC = 0.23 between, 0.77 within
 ::::
 
-## Models
 
-```{r}
-#| label: fig-model_be_we
-#| fig-cap-location: top
-#| fig-cap: "Efectos principales WE and BE en las preferencias por justicia de mercado en pensiones"
-#| fig-align: center
-#| out-width: '100%'
-#| fig-asp: 0.6
-#| echo: false
-
-sjPlot::plot_model(
-  m5,
-  type = "est",
-  terms = c("ola_num","ola_2", "egpIntermediate class (III+IV)","egpService class (I+II)","egpRetired or pensioner","egpUnemployed","egpPerforms unpaid tasks","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
-  
-   axis.labels = c("Merit: Talent (BE)",
-                   "Merit: Effort (BE)",
-                   "Merit: Talent (WE)",
-                   "Merit: Effort (WE)",
-                   "Performs unpaid tasks",
-                   "Unemployed",
-                   "Retired or pensioner",
-                   "Service class (I+II)",
-                   "Intermediate class (III+IV)",
-                   "Wave^2",
-                   "Wave"),
-  transform = NULL,
-  show.ci = TRUE,     # <— muestra intervalos
-  ci.lvl  = 0.95,     # <— nivel de confianza
-  show.values = TRUE,
-  p.style = "stars",
-  vline.color = "grey40",
-  value.size = 4.5
-) +
-  scale_y_continuous(limits = c(-1,1.5))+
-  labs(title = NULL,
-       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
-  theme_ggdist() +
-  theme(legend.position = "top",
-        plot.title = element_text(face = "bold"),
-        text = element_text(size = 16),
-        plot.caption = element_text(size = 10, face = "italic")) 
-
-
-
-```
 
 ## Models
 
 ```{r}
 #| label: fig-model_be_we_controls
 #| fig-cap-location: top
-#| fig-cap: "Efectos WE and BE en las preferencias por justicia de mercado en pensiones con controles"
+#| fig-cap: "Main within- and between-person effects on market justice preferences in pensions"
 #| fig-align: center
 #| out-width: '100%'
 #| fig-asp: 0.6
@@ -235,74 +194,78 @@ sjPlot::plot_model(
 
 ## Models
 
-```{r}
-#| label: fig-model_interactions
+```{r echo=FALSE, results='asis'}
+#| label: fig-interaction1
 #| fig-cap-location: top
-#| fig-cap: "Interacciones por clase, meritocracia y preferencias por justicia de mercado en pensiones"
-#| fig-align: center
+#| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
 #| out-width: '100%'
-#| fig-asp: 0.6
 #| echo: false
+#| fig-asp: 0.55
 
-library(broom.mixed)
-library(broom)
+load(here("output/predicted_probabilities.RData"))
 
-df_pension <- bind_rows(
-  tidy(m7, conf.int = TRUE) %>%
-    filter(term %in% c("egpIntermediate class (III+IV):merit_effort_cwc", "egpService class (I+II):merit_effort_cwc")) %>%
-    mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_effort_cwc" ~ "Intermediate class (III+IV) x Merit: Effort (WE)",
-                            term == "egpService class (I+II):merit_effort_cwc" ~ "Service class (I+II) x Merit: Effort (WE)"))
-  ,
-  tidy(m8, conf.int = TRUE) %>%
-    filter(term %in% c("egpIntermediate class (III+IV):merit_talent_cwc", "egpService class (I+II):merit_talent_cwc")) %>%
-    mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_talent_cwc" ~ "Intermediate class (III+IV) x Merit: Talent (WE)",
-                            term == "egpService class (I+II):merit_talent_cwc" ~ "Service class (I+II) x Merit: Talent (WE)"))
- ,
- tidy(m9, conf.int = TRUE) %>%
-   filter(term %in% c("egpIntermediate class (III+IV):merit_effort_mean", "egpService class (I+II):merit_effort_mean")) %>%
-   mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_effort_mean" ~ "Intermediate class (III+IV) x Merit: Effort (BE)",
-                           term == "egpService class (I+II):merit_effort_mean" ~ "Service class (I+II) x Merit: Effort (BE)"))
- ,
- tidy(m10, conf.int = TRUE) %>%
-   filter(term %in% c("egpIntermediate class (III+IV):merit_talent_mean", "egpService class (I+II):merit_talent_mean")) %>%
-   mutate(term = case_when(term == "egpIntermediate class (III+IV):merit_talent_mean" ~ "Intermediate class (III+IV) x Merit: Talent (BE)",
-                           term == "egpService class (I+II):merit_talent_mean" ~ "Service class (I+II) x Merit: Talent (BE)"))
-  
-)
+p1_agree <- p1 %>% filter(response.level == 4) 
 
-df_pension_lab <- df_pension %>%
-  mutate(
-    sig     = ifelse(conf.low * conf.high > 0, "*", ""),  # IC no cruza 0
-    est_lab = sprintf("%.2f%s", estimate, sig),
-    low_lab = sprintf("%.2f", conf.low),
-    high_lab= sprintf("%.2f", conf.high)
-  )
-
-df_pension_lab <- df_pension_lab %>%
-  mutate(
-    term = factor(
-      term,
-      levels = term
-      )
-  )
-
-ggplot(df_pension_lab, aes(x = estimate, y = term)) +
-  geom_vline(xintercept = 0, linetype = "solid", color = "grey40", size = 0.5, alpha = 1) +
-  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, color = "red") +
-  geom_point(size = 3, color = "red") +
-  scale_x_continuous(limits = c(-1, 1), breaks = seq(-1, 1, 0.5)) +
-  geom_text(aes(label = est_lab), hjust = -0.2, size = 4, vjust = -0.5, color = "red") +
-  labs(x = "Log-Odds", y = NULL,  caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
+p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
+  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("#08306B", "#D7301F")) +
+  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
+  labs(
+    x = "Merit: Talent (within-person)",
+    y = "Pr(Agree)",
+    color = NULL, 
+    fill = NULL,
+  ) +
   theme_ggdist() +
-  theme(legend.position = "top",
-        plot.title = element_text(face = "bold"),
-        text = element_text(size = 16),
-        plot.caption = element_text(size = 10, face = "italic")) 
+    theme(text = element_text(size = 12),
+        legend.position = "top"
+        )
 
 
-# library(ggeffects)
-# ggpredict(m10, terms = c("merit_talent_mean[meansd]", "egp"), type = "fixed") %>% plot()
+p2_agree <- p2 %>% filter(response.level == 4) 
 
+p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
+  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("#08306B", "#D7301F")) +
+  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
+  labs(
+    x = "Merit: Talent (between-person)",
+    y = "Pr(Agree)",
+    color = NULL, 
+    fill = NULL,
+#    caption = "Estimates (95% CIs) from Models 8 and 10 (Table 3, Supplementary Material) using ELSOC #2016-2023 (N obs = 7,522; N individuals = 1,317).\nPredicted probabilities for Strongly agree (category 5) #are consistently low across the covariate range, resulting in small group differences.\nSource: authors’ #calculations."
+  ) +
+  theme_ggdist()+
+  theme(text = element_text(size = 12),
+        legend.position = "top"
+        )
+
+p1
 ```
 
+## Models
 
+```{r echo=FALSE, results='asis'}
+#| label: fig-interaction2
+#| fig-cap-location: top
+#| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
+#| out-width: '100%'
+#| echo: false
+#| fig-asp: 0.55
+
+p2
+```
+
+# Additional analyses (latent class analysis) {background-color="#491106ff"}
+
+## Data
+
+## Measures
+
+## Analytical strategy
+
+## LCA models
+
+## Regression models

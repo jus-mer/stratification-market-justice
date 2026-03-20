@@ -106,7 +106,7 @@
 
 ::: {.box-inv-5 .sp-after-half .fragment style="font-size: 110%;"}
 
-Market justice preferences [@busemeyer_skills_2014; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
+Market justice preferences [@busemeyer_skills_2015; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
 
 :::
 
@@ -118,7 +118,7 @@ Market justice preferences [@busemeyer_skills_2014; @castillo_perceptions_2025; 
 - Economic growth alongside high inequality [@llorca-jana_historia_2021; @flores_top_2020]
 - Rigid relative mobility and strong closure at the top [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
 - Deep privatization and commodification of social reproduction domains, combined with strong state dependence [@madariaga_three_2020; @boccardo_30_2020]
-- Pensions: an **individual capitalization** system administered by **private pension funds (AFPs)**; covers ~11 million contributors, but **27% of the labor force** remains excluded due to **informality** [@superintendenciadepensiones_estadisticas_2024]
+- Pensions: an **individual capitalization** system administered by **private pension funds (AFPs)**; covers ~11 million contributors, but **27% of the labor force** remains excluded due to **informality** [@superintendencia_cuadros_2025]
 - Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
 
 :::
@@ -146,14 +146,14 @@ Market justice preferences [@busemeyer_skills_2014; @castillo_perceptions_2025; 
 
 - Socioeconomic status—income, education, and occupation [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
 - Perceptions of inequality and meritocracy [@castillo_perceptions_2025]
-- Economic conservatism/liberalism [@lee_fairness_2023]
+- Economic conservatism/liberalism [@lee_fairness_2024]
 
 :::
 
 ::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
 ### Contextual
 
-- Social spending [@immergut_it_2020; @busemeyer_skills_2014; @busemeyer_welfare_2020]
+- Social spending [@immergut_it_2020; @busemeyer_skills_2015; @busemeyer_welfare_2020]
 - Economic inequality [@koos_moral_2019]
 - Degree of privatization and market regulation [@lindh_public_2015; @koos_moral_2019]
 
@@ -179,25 +179,44 @@ Examine the role of meritocracy in shaping the relationship between class and pr
 
 :::
 
-
 ## Hypotheses
 
 
 ::: {.fragment}
 
 ```{r}
-#| label: fig-esque1
+#| label: fig-esque0
 #| echo: false
 #| fig-align: center
 #| out-width: '100%'
+#| fig-cap: " "
 library(knitr)
 library(here)
 
-knitr::include_graphics(path = "images/hipo-1.png")
+knitr::include_graphics(path = "images/hipo.png")
 
 ```
 
 :::
+
+## Hypotheses
+
+
+
+```{r}
+#| label: fig-esque1
+#| echo: false
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap: " "
+library(knitr)
+library(here)
+
+knitr::include_graphics(path = "images/hipo1.png")
+
+```
+
+
 
 
 ## Hypotheses
@@ -208,8 +227,9 @@ knitr::include_graphics(path = "images/hipo-1.png")
 #| fig-align: center
 #| fig-width: 8.5
 #| out-width: '100%'
+#| fig-cap: " "
 
-knitr::include_graphics(path = "images/hipo-2.png")
+knitr::include_graphics(path = "images/hipo2.png")
 
 ```
 
@@ -222,8 +242,8 @@ knitr::include_graphics(path = "images/hipo-2.png")
 #| fig-align: center
 #| fig-width: 8.5
 #| out-width: '100%'
-
-knitr::include_graphics(path = "images/hipo-3.png")
+#| fig-cap: " "
+knitr::include_graphics(path = "images/hipo3.png")
 
 ```
 

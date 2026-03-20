@@ -25,7 +25,7 @@
 
 - Panel structure: repeated observations (level 1) nested within individuals (level 2)
 
-- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope)
+- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope) [@bell_fixed_2019; @singer_applied_2003]
 
 - WE/BE decomposition (person-mean centering):
 
@@ -66,14 +66,14 @@ g1
 
 **Meritocracy**:
 
-- Operationalized through two components: effort and talent [@young_rise_1958; @castillo_multidimensional_2023]
+- Operationalized through two components: effort and talent [@young_rise_1975; @castillo_multidimensional_2023]
 
 - Measurement (Likert 1–5):
   
     * “In Chile, people are rewarded for their effort.”
     * “In Chile, people are rewarded for their intelligence and ability.”
 
-- Estimation of WE and BE effects [@singer_applied_2009; @bell_explaining_2015]
+- Estimation of WE and BE effects
 ::::
 
 
@@ -82,7 +82,7 @@ g1
 :::: {.incremental style="font-size: 115%;"}
 **Class position**: 
 
-- Operationalized using the Erikson-Goldthorpe-Portocarrero (EGP) class scheme [-@eriksonCASMINProjectAmerican1992]
+- Operationalized using the Erikson-Goldthorpe-Portocarrero (EGP) class scheme [-@erikson_casmin_1992]
 
 - Measurement → collapsed three-class version:
    

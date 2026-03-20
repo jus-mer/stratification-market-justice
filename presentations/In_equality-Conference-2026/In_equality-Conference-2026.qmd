@@ -1,5 +1,5 @@
 ---
-bibliography: "bib/pensions.bib"
+bibliography: "bib/jusmer.bib"
 csl: "bib/apa6.csl"
 lang: in
 knitr:
