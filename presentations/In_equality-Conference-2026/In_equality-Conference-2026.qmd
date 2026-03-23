@@ -28,7 +28,6 @@ editor_options:
 ---
 
 ```{r}
-#| label: setup
 #| include: false
 library(knitr)
 knitr::opts_chunk$set(echo = F,
@@ -38,7 +37,6 @@ knitr::opts_chunk$set(echo = F,
 ```
 
 ```{r}
-#| label: packages
 #| include: false
 
 if (! require("pacman")) install.packages("pacman")
@@ -52,15 +50,6 @@ rm(list = ls())
 ```
 
 
-```{r}
-#| label: data
-#| include: false
-#| echo: false
-#| results: false
-
-source(file = here("processing/prod_analysis.R"))
-
-```
 
 ::: columns
 
@@ -104,11 +93,13 @@ source(file = here("processing/prod_analysis.R"))
 
 {{< include 02-methods.qmd >}}
 
-{{< include 03-results.qmd >}}
+{{< include 03-mlm.qmd >}}
+
+{{< include 03-sem.qmd >}}
 
 {{< include 04-conclusion.qmd >}}
 
-## Referencias
+## References
 
 ::: {#refs}
 :::

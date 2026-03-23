@@ -216,6 +216,7 @@ p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
     y = "Pr(Agree)",
     color = NULL, 
     fill = NULL,
+    caption = "Estimates (95% CIs) using ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317).\nSource: authors’ calculations."
   ) +
   theme_ggdist() +
     theme(text = element_text(size = 12),
@@ -235,7 +236,7 @@ p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
     y = "Pr(Agree)",
     color = NULL, 
     fill = NULL,
-#    caption = "Estimates (95% CIs) from Models 8 and 10 (Table 3, Supplementary Material) using ELSOC #2016-2023 (N obs = 7,522; N individuals = 1,317).\nPredicted probabilities for Strongly agree (category 5) #are consistently low across the covariate range, resulting in small group differences.\nSource: authors’ #calculations."
+   caption = "Estimates (95% CIs) using ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317).\nSource: authors’ calculations."
   ) +
   theme_ggdist()+
   theme(text = element_text(size = 12),
@@ -258,14 +259,28 @@ p1
 p2
 ```
 
-# Additional analyses (latent class analysis) {background-color="#491106ff"}
+## Preliminary conclusions
 
-## Data
+:::: {.incremental style="font-size: 120%;"}
 
-## Measures
+1. **Time**: Preferences for market justice in pensions have increased in recent years in Chile
 
-## Analytical strategy
+2. **Social class**: Higher social classes don't exhibit greater support for market justice in pensions than lower classes (H1) [@kerner_pension_2020; @busemeyer_welfare_2020; @lindh_public_2015]
 
-## LCA models
+3. **Meritocracy**: The belief that effort is rewarded is associated with higher support for market justice in pensions (H2a and H2b) [@castillo_perceptions_2025]
 
-## Regression models
+4. **Class × Meritocracy**: There is no evidence of an amplification effect (H3a/H3b)
+
+::::
+
+## Caveats
+
+:::: {.incremental style="font-size: 120%;"}
+
+- No evidence of class differences in support for pension market justice, but meritocratic beliefs show a strong and consistent effect  
+
+- Yet, meritocracy is measured here in a highly reduced way, through effort and talent only  
+
+- Next step: model meritocracy as a multidimensional construct  
+  → [@castillo_multidimensional_2023]
+::::

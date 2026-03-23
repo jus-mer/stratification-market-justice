@@ -1,0 +1,124 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Additional analyses (SEM) {background-color="#491106ff"}
+
+```{r}
+#| echo: false
+#| include: false
+library(here)
+source(here("presentations/in_equality-Conference-2026/prod_analysis_sem.R"))
+```
+
+
+## Data
+
+:::: {.incremental style="font-size: 120%;"}
+
+- EDUMERCO: Online survey (CAWI), fielded in 2025, with adult respondents from the Metropolitan Region of Chile  
+
+- Non-probability sample with quota-based design  
+    → approximating population parameters by age, gender, education, and socioeconomic status  
+
+- Total sample: N = 3,470  
+
+- Analytical sample: N = 2,557 
+
+:::: 
+
+
+## Measures
+
+:::: {.incremental style="font-size: 120%;"}
+
+Modelo medicion
+
+:::: 
+
+## Analytical strategy
+
+:::: {.incremental style="font-size: 120%;"}
+
+- First, we estimate a Confirmatory Factor Analysis of the multidimensional meritocracy scale  
+  → good model fit (CFI = 0.995, TLI = 0.991, RMSEA = 0.048)
+
+- Second, we estimate a Structural Equation Model (MIMIC model)  
+  → pension market justice regressed on latent meritocracy factors
+
+::: {.fragment}
+$$
+\text{MJP}_{i} = \alpha + \beta_1 \eta^{PM}_{i} + \beta_2 \eta^{PNM}_{i} + \beta_3 \eta^{PrM}_{i} + \beta_4 \eta^{PrNM}_{i} + \gamma'X_i + \varepsilon_i
+$$
+:::
+
+- Estimation: WLSMV  
+  → appropriate for ordinal (Likert-type) data [@kline_principles_2023]
+
+:::: 
+
+# Results {background-color="#491106ff"}
+
+## Descriptive
+
+```{r}
+#| label: fig-likermerit
+#| fig-cap-location: top
+#| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy"
+#| out-width: '100%'
+#| echo: false
+#| fig-asp: 0.6
+
+likerplot 
+```
+
+
+## Bivariate
+```{r}
+#| label: fig-cor
+#| fig-cap-location: top
+#| fig-cap: "Correlation matrix between market justice and meritocracy scale"
+#| out-width: '100%'
+#| echo: false
+#| fig-asp: 0.6
+
+
+M <- db %>%
+  dplyr::select(just_pension, all_of(vars_m)) %>% 
+  mutate_all(~as.numeric(.)) %>% 
+  psych::polychoric()
+
+diag(M$rho) <- NA
+
+rownames(M$rho) <- c("A. Market Justice",
+                     "B. Perception Effort",
+                     "C. Perception Talent",
+                     "D. Perception Rich parents",
+                     "E. Perception Contacts",
+                     "F. Preference Effort",
+                     "H. Preference Talent",
+                     "H. Preference Rich parents",
+                     "I. Preference Contacts")
+
+#set Column names of the matrix
+colnames(M$rho) <-c("(A)", "(B)","(C)","(D)","(E)","(F)","(G)",
+                    "(H)", "(I)")
+
+testp <- cor.mtest(M$rho, conf.level = 0.95)
+
+#Plot the matrix using corrplot
+corrplot::corrplot(M$rho,
+                   method = "color",
+                   addCoef.col = "black",
+                   type = "upper",
+                   tl.col = "black",
+                   col = colorRampPalette(c("#E16462", "white", "#0D0887"))(12),
+                   bg = "white",
+                   na.label = "-") 
+```
+
+
+## Models
+
+## Preliminary conclusions

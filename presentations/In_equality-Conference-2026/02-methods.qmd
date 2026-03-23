@@ -1,3 +1,88 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: packages
+#| include: false
+#| echo: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               srvyr,
+               ordinal,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+```{r}
+#| label: data
+#| include: false
+#| echo: false
+
+load(file = here("input/data/proc/df_balanced.RData"))
+
+glimpse(df_balanced)
+
+# Generate analytical sample
+
+df_study1 <- df_balanced %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+
+```
+
 # Methodology {background-color="#491106ff"}
 
 ## Data
@@ -12,37 +97,12 @@
 
 - Analytical sample (**balanced 6-wave panel**): 
 
-    * **N = 5,755 observations** (level 1) nested within 
-    * **N = 1,027 individuals** (level 2)
+    * **N = 7,522 observations** (level 1) nested within 
+    * **N = 1,317 individuals** (level 2)
 
 :::
 
-## Estimation strategy
 
-:::: {.incremental style="font-size: 110%;"}
-
-**Cumulative link mixed models (CLMM)**:
-
-- Panel structure: repeated observations (level 1) nested within individuals (level 2)
-
-- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope) [@bell_fixed_2019; @singer_applied_2003]
-
-- WE/BE decomposition (person-mean centering):
-
-     * Within: $X^{WE}_{it}= X_{it}-\bar{X}_i$
-     * Between: $X^{BE}_{i}=\bar{X}_i$
-
-- Formally:  
-
-::: {.fragment}
-$$\begin{aligned}
-\eta_{it} = \beta_{0}+ \beta_{1}\,\text{tiempo}_{it} +\beta_2\,\text{meritocracia}^{WE}_{it} +\beta_3\,{meritocracia}^{BE}_{i} +\beta_4\,\mathrm{EGP}_i +
-    \end{aligned}$$
-    
-$$\beta_5\,(\mathrm{EGP}_i\!\times\! \text{meritocracia}^{WE}_{it}) +\beta_6\,(\mathrm{EGP}_i\!\times\! \text{meritocracia}^{BE}_{i}) +u_{0i}+u_{1i}\,\text{tiempo}_{it}\\$$
-:::
-
-::::
 
 
 ## Dependent variable
@@ -55,44 +115,345 @@ $$\beta_5\,(\mathrm{EGP}_i\!\times\! \text{meritocracia}^{WE}_{it}) +\beta_6\,(\
 #| fig-asp: 0.6
 #| echo: false
 
-g1
+## Alluvial
+datos.pension <- df_study1 %>% 
+  mutate(just_pension = factor(just_pension, 
+                               levels = c("Strongly agree",
+                                          "Agree",
+                                          "Neither agree nor disagree",
+                                          "Disagree",
+                                          "Strongly disagree"))) %>% 
+  group_by(idencuesta, ola) %>% 
+  count(just_pension) %>% 
+  group_by(ola) %>% 
+  mutate(porcentaje=n/sum(n)) %>% 
+  ungroup() %>% 
+  na.omit() %>% 
+  mutate(wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+
+etiquetas.pension <- df_study1 %>%
+  mutate(just_pension = factor(just_pension, 
+                               levels = c("Strongly agree",
+                                          "Agree",
+                                          "Neither agree nor disagree",
+                                          "Disagree",
+                                          "Strongly disagree"))) %>% 
+  group_by(ola, just_pension) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(ola) %>%
+  mutate(porcentaje = count / sum(count)) %>% 
+  na.omit() %>% 
+  mutate(idencuesta = 1,
+         wave = case_when(ola == 1 ~ "2016",
+                          ola == 2 ~ "2017",
+                          ola == 3 ~ "2018",
+                          ola == 4 ~ "2019",
+                          ola == 5 ~ "2022",
+                          ola == 6 ~ "2023"),
+         wave = factor(wave, levels = c("2016",
+                                        "2017",
+                                        "2018",
+                                        "2019",
+                                        "2022",
+                                        "2023")))
+
+
+datos.pension %>% 
+  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+             alluvium = idencuesta, y = porcentaje)) +
+  ggalluvial::geom_flow(alpha = .4) + 
+  ggalluvial::geom_stratum(linetype = 0) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+  geom_text(data = etiquetas.pension,
+            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
+            position = position_stack(vjust = .5),
+            show.legend = FALSE, fontface = "bold",
+            size = 4,
+            color = 'white') +
+  labs(y = NULL,
+       x = NULL,
+       fill = NULL,
+       title = "It is fair that people with higher incomes have better pensions than people\nwith lower incomes?",
+       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)") +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16)) 
 
 ```
 
 
 ## Independent variables: Level 1
 
-:::: {.incremental style="font-size: 120%;"}
+```{r}
+#| label: fig-merit
+#| fig-cap-location: top
+#| fig-cap: "Distribution of responses for meritocracy items"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
 
-**Meritocracy**:
 
-- Operationalized through two components: effort and talent [@young_rise_1975; @castillo_multidimensional_2023]
+library(scales)
+library(forcats)
 
-- Measurement (Likert 1–5):
-  
-    * “In Chile, people are rewarded for their effort.”
-    * “In Chile, people are rewarded for their intelligence and ability.”
+df_plot <- df_study1 %>%
+  select(merit_effort, merit_talent) %>%
+  pivot_longer(everything(), names_to = "item", values_to = "x") %>%
+  mutate(
+    item = factor(
+      item,
+      levels = c("merit_effort", "merit_talent"),
+      labels = c(
+        "People are rewarded for their efforts",
+        "People are rewarded for their \nintelligence and ability"
+      )
+    ),
+    # x ya viene etiquetada; solo la normalizamos como character -> factor
+    cat = as.character(x),
+    cat = factor(
+      cat,
+      levels = c(
+        "Strongly disagree",
+        "Disagree",
+        "Neither agree nor disagree",
+        "Agree",
+        "Strongly agree"
+      )
+    )
+  ) %>%
+  drop_na(cat) %>%
+  count(item, cat) %>%
+  group_by(item) %>%
+  mutate(p = n / sum(n)) %>%
+  ungroup()
 
-- Estimation of WE and BE effects
-::::
+wide <- df_plot %>%
+  select(item, cat, p) %>%
+  pivot_wider(names_from = cat, values_from = p, values_fill = 0)
+
+# neutral separado a la izquierda
+neutral_rect <- wide %>%
+  transmute(
+    item,
+    cat = "Neither agree nor disagree",
+    xmin = -1.08,
+    xmax = -1.08 + `Neither agree nor disagree`,
+    xmid = -1.08 + (`Neither agree nor disagree` / 2),
+    p = `Neither agree nor disagree`
+  )
+
+# bloque principal divergente
+main_rect <- bind_rows(
+  wide %>%
+    transmute(
+      item,
+      cat = "Strongly agree",
+      xmin = -(`Agree` + `Strongly agree`),
+      xmax = -`Agree`,
+      p = `Strongly agree`
+    ),
+  wide %>%
+    transmute(
+      item,
+      cat = "Agree",
+      xmin = -`Agree`,
+      xmax = 0,
+      p = `Agree`
+    ),
+  wide %>%
+    transmute(
+      item,
+      cat = "Disagree",
+      xmin = 0,
+      xmax = `Disagree`,
+      p = `Disagree`
+    ),
+  wide %>%
+    transmute(
+      item,
+      cat = "Strongly disagree",
+      xmin = `Disagree`,
+      xmax = `Disagree` + `Strongly disagree`,
+      p = `Strongly disagree`
+    )
+) %>%
+  mutate(xmid = (xmin + xmax) / 2)
+
+rects <- bind_rows(main_rect, neutral_rect) %>%
+  mutate(
+    cat = factor(
+      cat,
+      levels = c(
+        "Strongly agree",
+        "Agree",
+        "Neither agree nor disagree",
+        "Disagree",
+        "Strongly disagree"
+      )
+    ),
+    label = percent(p, accuracy = 0.1))
+
+
+rects[1,3] <- (-0.29)
+rects[2,3] <- (-0.35)
+
+ggplot(rects) +
+  geom_rect(
+    aes(
+      xmin = xmin, xmax = xmax,
+      ymin = as.numeric(item) - 0.25,
+      ymax = as.numeric(item) + 0.25,
+      fill = cat
+    ),
+    linewidth = 0.5
+  ) +
+  geom_vline(xintercept = 0, color = "gray40", linewidth = 0.4) +
+  geom_text(
+    aes(x = xmid, y = item, label = label),
+    color = "white", fontface = "bold",
+    size = 4
+  ) +
+  scale_fill_manual(values = c(
+    "Strongly disagree" = "#CA0020",
+    "Disagree" = "#F4A582",
+    "Agree" = "#92C5DE",
+    "Strongly agree" =  "#0571B0",
+    "Neither agree nor disagree" = "gray65"
+  )) +
+  scale_x_continuous(
+    limits = c(-1.15, 1),
+    breaks = seq(-1, 1, by = 0.2),
+    labels = function(x) percent(abs(x), accuracy = 1)
+  ) +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16) +
+  theme(
+    legend.position = "top",
+    axis.text.y = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+
 
 
 ## Independent variables: Level 2
 
-:::: {.incremental style="font-size: 115%;"}
-**Class position**: 
 
-- Operationalized using the Erikson-Goldthorpe-Portocarrero (EGP) class scheme [-@erikson_casmin_1992]
+```{r}
+#| label: fig-class
+#| fig-cap-location: top
+#| fig-cap: "Frecuency of class position"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-asp: 0.6
+#| echo: false
 
-- Measurement → collapsed three-class version:
-   
-    * Service class (I+II)
-    * Intermediate class (III+IV)
-    * Working class (V+VI+VII)
+df_study1 %>%
+  count(egp) %>%
+  mutate(prop = (n / sum(n))*100) %>%
+  ungroup() %>% 
+  mutate(egp = fct_rev(egp)) %>% 
+  ggplot(
+    aes(x = egp, y = prop, group = egp, fill = egp)
+  ) +
+  geom_col(position = "stack", width = .9, alpha = 1, show.legend = F) +
+  scale_y_continuous(limits = c(0, 40), 
+                       breaks = seq(0, 40, 10),
+                       labels = function(prop){paste0(prop, "%")},
+                       expand = c(0,1)) +
+  MetBrewer::scale_fill_met_d("VanGogh2") +
+  coord_flip()+
+  geom_text(mapping = aes(label = scales::percent(prop, accuracy = 0.1, scale = 1, decimal.mark = ",")),
+              hjust = -0.2,
+              fontface = "bold",
+              size = 4,
+              position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Class position based on EGP scheme",
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16)+
+  theme(
+    legend.position = "top",
+    plot.title = element_text(face = "bold"))
 
-- Additionally, three categories outside the labor force are included: retirees, unemployed respondents, and unpaid work
+```
+
+
     
 - Fixed at the first wave (i.e., time-invariant) → captures average between-person differences (BE = $\bar X_{i}$)
 
+
+## Controls
+
+
+
+:::: {.incremental style="font-size: 110%;"}
+
+Based on previous research [@castillo_perceptions_2025; @lindh_public_2015], we controlled:
+
+- Sociodemographic:
+  
+    * Sex (1 = male, 2 = female)
+    * Age (in years)
+    * Educational attainment (1 = less than university, 2 = university)
+
+- Attitudinal:
+
+    * Political identification (1 = left, 2 = center, 3 = right, 4 = no identification)
+
 ::::
 
+## Estimation strategy
+
+:::: {.incremental style="font-size: 110%;"}
+
+**Cumulative link mixed models (CLMM)**:
+
+- Panel structure: repeated observations (level 1) nested within individuals (level 2)
+
+- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope) 
+
+- WE/BE decomposition (person-mean centering) [@bell_fixed_2019]: 
+
+     * Within: $X^{WE}_{it}= X_{it}-\bar{X}_i$
+     * Between: $X^{BE}_{i}=\bar{X}_i$
+
+- Formally:  
+
+::: {.fragment}
+$$\begin{aligned}
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{Time}_{it} +\beta_2\,\text{Meritocracy}^{WE}_{it} +\beta_3\,{Meritocracy}^{BE}_{i} +\beta_4\,\mathrm{Class}_i +
+    \end{aligned}$$
+    
+$$\beta_5\,(\mathrm{Class}_i\!\times\! \text{Meritocracy}^{WE}_{it}) +\beta_6\,(\mathrm{Class}_i\!\times\! \text{Meritocracy}^{BE}_{i}) +u_{0i}+u_{1i}\,\text{Time}_{it}\\$$
+:::
+
+::::
