@@ -108,10 +108,10 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 ## Dependent variable
 ```{r}
 #| label: fig-desc
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Distribution of responses for preferences for market justice in pensions in Chile (2016–2023)"
 #| fig-align: center
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-asp: 0.6
 #| echo: false
 
@@ -201,10 +201,10 @@ datos.pension %>%
 
 ```{r}
 #| label: fig-merit
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Distribution of responses for meritocracy items"
 #| fig-align: center
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-asp: 0.6
 #| echo: false
 
@@ -365,10 +365,10 @@ ggplot(rects) +
 
 ```{r}
 #| label: fig-class
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Frecuency of class position"
 #| fig-align: center
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-asp: 0.6
 #| echo: false
 

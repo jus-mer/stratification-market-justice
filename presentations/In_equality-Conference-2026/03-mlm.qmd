@@ -109,10 +109,10 @@ load(file = here("output/interactions_direct.RData"))
 
 ```{r}
 #| label: fig-model_time
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Changes across waves in market justice preferences in pensions"
 #| fig-align: center
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-asp: 0.5
 #| echo: false
 
@@ -151,10 +151,10 @@ sjPlot::plot_model(
 
 ```{r}
 #| label: fig-model_be_we_controls
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Main within- and between-person effects on market justice preferences in pensions"
 #| fig-align: center
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-asp: 0.6
 #| echo: false
 
@@ -196,7 +196,7 @@ sjPlot::plot_model(
 
 ```{r echo=FALSE, results='asis'}
 #| label: fig-interaction1
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
 #| out-width: '100%'
 #| echo: false
@@ -250,7 +250,7 @@ p1
 
 ```{r echo=FALSE, results='asis'}
 #| label: fig-interaction2
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
 #| out-width: '100%'
 #| echo: false

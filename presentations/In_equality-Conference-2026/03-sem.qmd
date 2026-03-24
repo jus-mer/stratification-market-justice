@@ -31,11 +31,82 @@ source(here("presentations/in_equality-Conference-2026/prod_analysis_sem.R"))
 
 ## Measures
 
-:::: {.incremental style="font-size: 120%;"}
+::: {.fragment}
 
-Modelo medicion
+```{r}
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
 
-:::: 
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/diagramas.png"))
+
+```
+
+:::
+
+
+## Measures
+
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/diagramas(1).png"))
+
+```
+
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/diagramas(2).png"))
+```
+
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/diagramas(3).png"))
+```
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/diagramas(4).png"))
+```
+
 
 ## Analytical strategy
 
@@ -64,9 +135,9 @@ $$
 
 ```{r}
 #| label: fig-likermerit
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy"
-#| out-width: '100%'
+#| out-width: '90%'
 #| echo: false
 #| fig-asp: 0.6
 
@@ -77,9 +148,9 @@ likerplot
 ## Bivariate
 ```{r}
 #| label: fig-cor
-#| fig-cap-location: top
+#| fig-cap-location: bottom
 #| fig-cap: "Correlation matrix between market justice and meritocracy scale"
-#| out-width: '100%'
+#| out-width: '90%'
 #| echo: false
 #| fig-asp: 0.6
 
@@ -121,4 +192,34 @@ corrplot::corrplot(M$rho,
 
 ## Models
 
+
+```{r}
+#| label: fig-sem
+#| fig-align: center
+#| out-width: '100%'
+#| echo: false
+#| fig-asp: 0.6
+#| fig-cap-location: bottom
+#| fig-cap: "MIMIC model"
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/sem.png"))
+
+```
+
+
+
+
+
 ## Preliminary conclusions
+
+:::: {.incremental style="font-size: 120%;"}
+
+
+1. **Meritocracy in Chile**: Privilege is perceived to outweigh merit, even though merit—especially effort—remains the dominant normative ideal
+
+2. **Measuring meritocracy**: Respondents distinguish between perceptions and preferences, as well as between meritocratic and non-meritocratic principles
+
+3. **Meritocracy and pension market justice**: Support is strongest among those willing to normalize privilege within a fair distributive order
+
+::::

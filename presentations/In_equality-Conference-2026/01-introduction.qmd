@@ -197,7 +197,8 @@ Examine the role of meritocracy in shaping the relationship between class and pr
 #| echo: false
 #| fig-align: center
 #| out-width: '100%'
-#| fig-cap: " "
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
 library(knitr)
 library(here)
 
@@ -216,9 +217,9 @@ knitr::include_graphics(path = "images/hipo.png")
 #| echo: false
 #| fig-align: center
 #| out-width: '100%'
-#| fig-cap: " "
-library(knitr)
-library(here)
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
+
 
 knitr::include_graphics(path = "images/hipo1.png")
 
@@ -235,7 +236,8 @@ knitr::include_graphics(path = "images/hipo1.png")
 #| fig-align: center
 #| fig-width: 8.5
 #| out-width: '100%'
-#| fig-cap: " "
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
 
 knitr::include_graphics(path = "images/hipo2.png")
 
@@ -250,7 +252,8 @@ knitr::include_graphics(path = "images/hipo2.png")
 #| fig-align: center
 #| fig-width: 8.5
 #| out-width: '100%'
-#| fig-cap: " "
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
 knitr::include_graphics(path = "images/hipo3.png")
 
 ```
