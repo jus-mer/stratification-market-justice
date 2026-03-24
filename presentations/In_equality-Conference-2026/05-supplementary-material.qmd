@@ -1,0 +1,89 @@
+
+# Supplementary Material {background-color="#491106ff"}
+
+```{r}
+#| echo: false
+#| include: false
+library(here)
+source(here("presentations/in_equality-Conference-2026/prod_analysis_sem.R"))
+```
+
+
+## Bivariate
+```{r}
+#| label: fig-cor
+#| fig-cap-location: bottom
+#| fig-cap: "Correlation matrix between market justice and meritocracy scale"
+#| out-width: '90%'
+#| echo: false
+#| fig-asp: 0.6
+
+M <- db %>%
+dplyr::select(just_pension, all_of(vars_m)) %>%
+mutate_all(~as.numeric(.)) %>%
+psych::polychoric()
+
+diag(M$rho) <- NA
+
+rownames(M$rho) <- c("A. Market Justice",
+                     "B. Perception Effort",
+                     "C. Perception Talent",
+                     "D. Perception Rich parents",
+                     "E. Perception Contacts",
+                     "F. Preference Effort",
+                     "H. Preference Talent",
+                     "H. Preference Rich parents",
+                     "I. Preference Contacts")
+
+#set Column names of the matrix
+colnames(M$rho) <-c("(A)", "(B)","(C)","(D)","(E)","(F)","(G)", "(H)", "(I)")
+
+testp <- cor.mtest(M$rho, conf.level = 0.95)
+
+#Plot the matrix using corrplot
+corrplot::corrplot(M$rho,
+method = "color",
+addCoef.col = "black",
+type = "upper",
+tl.col = "black",
+col = colorRampPalette(c("#E16462", "white", "#0D0887"))(12),
+bg = "white",
+na.label = "-")
+```
+
+
+## MIMIC Model: Education
+
+
+
+```{r}
+#| label: fig-educ
+#| fig-cap: "MIMIC Model for market justice preferences in education"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/sem2.png"))
+
+```
+
+
+
+## MIMIC Model: Healthcare
+
+
+
+```{r}
+#| label: fig-health
+#| fig-cap: "MIMIC Model for market justice preferences in healthcare"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/sem3.png"))
+
+```
+

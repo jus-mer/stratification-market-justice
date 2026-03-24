@@ -103,3 +103,5 @@ rm(list = ls())
 
 ::: {#refs}
 :::
+
+{{< include 05-supplementary-material.qmd >}}

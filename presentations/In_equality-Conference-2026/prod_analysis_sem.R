@@ -69,7 +69,12 @@ db$sex <- if_else(db$sex == 1, "Male", "Female")
 db$sex <- factor(db$sex, levels = c("Male", "Female"))
 
 db <- db %>% 
-  dplyr::select(-income) %>% 
+  dplyr::select(-income)
+
+db_or <- db
+
+db <- db %>% 
+  dplyr::select(-c(just_educ, just_healthcare)) %>% 
   na.omit()
 # 3. Analysis -------------------------------------------------------------
 
@@ -232,7 +237,7 @@ summary(fit_cfa, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 
 fitmeasures(fit_cfa, c("chisq", "pvalue", "df", "cfi", "tli", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr"))
 
-# 3.4 SEM ----
+# 3.4 SEM pensions ----
 
 db_sem <- db %>% 
   dplyr::select(just_pension, all_of(vars_m), age, sex, educ, income_4, pol)
@@ -292,5 +297,132 @@ fit_sem <- lavaan::sem(
 summary(fit_sem, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 
 fitmeasures(fit_sem, c("chisq", "pvalue", "df", "cfi", "tli", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr"))
+
+
+# 3.4 SEM educ ----
+
+db_sem2 <- db %>% 
+  dplyr::select(id, all_of(vars_m), age, sex, educ, income_4, pol)
+
+db_sem2 <- left_join(db_sem2, db_or %>% dplyr::select(id, just_educ), by = "id")
+
+db_sem2$just_educ <- as.numeric(db_sem2$just_educ)
+
+db_sem2 <- db_sem2 %>% 
+  mutate(
+    across(
+      .cols = all_of(vars_m),
+      .fns = ~as.numeric(.)
+    ))
+
+# asegurar referencias
+db_sem2$income_4 <- relevel(db_sem2$income_4, ref = "Bajo")
+db_sem2$pol <- relevel(db_sem2$pol, ref = "Left")
+
+# crear dummies
+X_income <- model.matrix(~ income_4, data = db_sem2)[, -1, drop = FALSE]
+X_pol    <- model.matrix(~ pol, data = db_sem2)[, -1, drop = FALSE]
+
+# unir
+db_sem2 <- cbind(db_sem2, as.data.frame(X_income), as.data.frame(X_pol))
+
+# limpiar nombres
+names(db_sem2) <- make.names(names(db_sem2))
+
+db_sem2$sex_female <- ifelse(db_sem2$sex == "Female", 1, 0)
+
+model <- c('
+  perc_merit =~ perc_effort + perc_talent
+  perc_nmerit =~ perc_rich_parents + perc_contact
+  pref_merit =~ pref_effort + pref_talent
+  pref_nmerit =~ pref_rich_parents + pref_contact
+
+  just_educ ~ perc_merit + perc_nmerit + pref_merit + pref_nmerit +
+                 age + educ + sex_female +
+                 income_4Medio.bajo + income_4Medio.alto + income_4Alto +
+                 polCenter + polRight + polDoes.not.identify
+')
+
+ord_vars <- c(
+  "just_educ",
+  "perc_effort", "perc_talent",
+  "perc_rich_parents", "perc_contact",
+  "pref_effort", "pref_talent",
+  "pref_rich_parents", "pref_contact"
+)
+
+fit_sem2 <- lavaan::sem(
+  model,
+  data = db_sem2,
+  estimator = "WLSMV",
+  ordered = ord_vars
+)
+
+summary(fit_sem2, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+
+fitmeasures(fit_sem2, c("chisq", "pvalue", "df", "cfi", "tli", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr"))
+
+# 3.4 SEM healthcare ----
+
+db_sem3 <- db %>% 
+  dplyr::select(id, all_of(vars_m), age, sex, educ, income_4, pol)
+
+db_sem3 <- left_join(db_sem3, db_or %>% dplyr::select(id, just_healthcare), by = "id")
+
+db_sem3$just_healthcare <- as.numeric(db_sem3$just_healthcare)
+
+db_sem3 <- db_sem3 %>% 
+  mutate(
+    across(
+      .cols = all_of(vars_m),
+      .fns = ~as.numeric(.)
+    ))
+
+# asegurar referencias
+db_sem3$income_4 <- relevel(db_sem3$income_4, ref = "Bajo")
+db_sem3$pol <- relevel(db_sem3$pol, ref = "Left")
+
+# crear dummies
+X_income <- model.matrix(~ income_4, data = db_sem3)[, -1, drop = FALSE]
+X_pol    <- model.matrix(~ pol, data = db_sem3)[, -1, drop = FALSE]
+
+# unir
+db_sem3 <- cbind(db_sem3, as.data.frame(X_income), as.data.frame(X_pol))
+
+# limpiar nombres
+names(db_sem3) <- make.names(names(db_sem3))
+
+db_sem3$sex_female <- ifelse(db_sem3$sex == "Female", 1, 0)
+
+model <- c('
+  perc_merit =~ perc_effort + perc_talent
+  perc_nmerit =~ perc_rich_parents + perc_contact
+  pref_merit =~ pref_effort + pref_talent
+  pref_nmerit =~ pref_rich_parents + pref_contact
+
+  just_healthcare ~ perc_merit + perc_nmerit + pref_merit + pref_nmerit +
+                 age + educ + sex_female +
+                 income_4Medio.bajo + income_4Medio.alto + income_4Alto +
+                 polCenter + polRight + polDoes.not.identify
+')
+
+ord_vars <- c(
+  "just_healthcare",
+  "perc_effort", "perc_talent",
+  "perc_rich_parents", "perc_contact",
+  "pref_effort", "pref_talent",
+  "pref_rich_parents", "pref_contact"
+)
+
+fit_sem3 <- lavaan::sem(
+  model,
+  data = db_sem3,
+  estimator = "WLSMV",
+  ordered = ord_vars
+)
+
+summary(fit_sem3, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+
+fitmeasures(fit_sem3, c("chisq", "pvalue", "df", "cfi", "tli", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr"))
 
 

@@ -411,25 +411,6 @@ df_study1 %>%
 - Fixed at the first wave (i.e., time-invariant) → captures average between-person differences (BE = $\bar X_{i}$)
 
 
-## Controls
-
-
-
-:::: {.incremental style="font-size: 110%;"}
-
-Based on previous research [@castillo_perceptions_2025; @lindh_public_2015], we controlled:
-
-- Sociodemographic:
-  
-    * Sex (1 = male, 2 = female)
-    * Age (in years)
-    * Educational attainment (1 = less than university, 2 = university)
-
-- Attitudinal:
-
-    * Political identification (1 = left, 2 = center, 3 = right, 4 = no identification)
-
-::::
 
 ## Estimation strategy
 

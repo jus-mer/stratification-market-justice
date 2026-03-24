@@ -141,7 +141,7 @@ sjPlot::plot_model(
 
 ```
 
-::: {style="font-size: 80%;"}
+::: {style="font-size: 60%;"}
 - ICC = 0.23 between, 0.77 within
 ::::
 
@@ -155,7 +155,7 @@ sjPlot::plot_model(
 #| fig-cap: "Main within- and between-person effects on market justice preferences in pensions"
 #| fig-align: center
 #| out-width: '90%'
-#| fig-asp: 0.6
+#| fig-asp: 0.55
 #| echo: false
 
 sjPlot::plot_model(
@@ -190,7 +190,10 @@ sjPlot::plot_model(
         text = element_text(size = 16),
         plot.caption = element_text(size = 10, face = "italic")) 
 ```
+::: {style="font-size: 60%;"}
+- All models control for: gender, age, educational level, and political identification
 
+::::
 
 ## Models
 
@@ -246,18 +249,6 @@ p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
 p1
 ```
 
-## Models
-
-```{r echo=FALSE, results='asis'}
-#| label: fig-interaction2
-#| fig-cap-location: bottom
-#| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
-#| out-width: '100%'
-#| echo: false
-#| fig-asp: 0.55
-
-p2
-```
 
 ## Preliminary conclusions
 
