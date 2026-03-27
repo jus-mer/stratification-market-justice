@@ -146,7 +146,7 @@ likerplot
 
 
 
-## Models
+## Model
 
 
 ```{r}
