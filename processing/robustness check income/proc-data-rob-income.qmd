@@ -1,0 +1,499 @@
+---
+title: "Data preparation for robustness check Income"
+subtitle: "Changes in the Justification of Pension Inequality in Chile (2016–2023) and its Relationship to Social Class and Beliefs in Meritocracy"
+author: "Andreas Laffert"
+date: today
+lang: en
+fontsize: 12pt
+format:
+  html:
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    toc-expand: 2
+    toc-title: Contents
+    number-sections: true
+    number-depth: 3
+    theme:
+      - cosmo
+      - edumer_html.scss
+    code-link: true
+    title-block-banner: true
+  pdf:
+    number-sections: true
+    number-depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Presentation
+
+This is the data preparation code for the paper "Changes in the Justification of Pension Inequality in Chile (2016–2023) and its Relationship to Social Class and Beliefs in Meritocracy". The prepared dataset is `ELSOC_Long_2016_2023_1.00.RData`.
+
+```{r}
+#| label: set
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+# Libraries
+
+```{r}
+#| label: packages
+#| include: true
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse,
+               car,
+               sjmisc, 
+               here,
+               sjlabelled,
+               SciViews,
+               naniar,
+               readxl,
+               sjPlot,
+               DIGCLASS)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+# Data
+
+```{r}
+#| label: data
+#| echo: true
+#| output: false
+
+load(url("https://dataverse.harvard.edu/api/access/datafile/10797987"))
+
+glimpse(elsoc_long_2016_2023)
+```
+
+# Processing
+
+```{r}
+
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-999] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-888] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-777] <- NA
+elsoc_long_2016_2023[elsoc_long_2016_2023 ==-666] <- NA
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(just_pension = d02_01, 
+         merit_effort = c18_09,
+         merit_talent = c18_10, 
+         age = m0_edad, m01, 
+         sex = m0_sexo, 
+         ideo = c15,
+         protest = c08_02,
+         retiro_2021 = m63_02) %>% 
+  as_tibble() %>% 
+  sjlabelled::drop_labels(., drop.na = FALSE)
+```
+
+
+```{r}
+# Market Justice Preferences
+
+frq(elsoc_long_2016_2023$just_pension)
+
+elsoc_long_2016_2023$just_pension <- car::recode(elsoc_long_2016_2023$just_pension, 
+recodes = c("1='Strongly disagree'; 2='Disagree'; 3='Neither agree nor disagree'; 4='Agree'; 5='Strongly agree'"), 
+levels = c("Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"),
+as.factor = T)
+                                                 
+elsoc_long_2016_2023$just_pension <- sjlabelled::set_label(elsoc_long_2016_2023$just_pension, 
+                        label = "Pension distributive justice")
+```
+
+
+```{r}
+# Meritocracy
+
+frq(elsoc_long_2016_2023$merit_effort)
+frq(elsoc_long_2016_2023$merit_talent)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    across(
+      .cols = c(merit_effort, merit_talent),
+      .fns = ~ car::recode(., recodes = c("1='Strongly disagree'; 2='Disagree';
+                                          3='Neither agree nor disagree'; 4='Agree';
+                                          5='Strongly agree'"), 
+                           levels = c("Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"),
+                           as.factor = T)
+    )
+  )
+
+
+elsoc_long_2016_2023$merit_effort <- sjlabelled::set_label(elsoc_long_2016_2023$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+elsoc_long_2016_2023$merit_talent <- sjlabelled::set_label(elsoc_long_2016_2023$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+```
+
+
+```{r}
+# Controls
+
+# sex
+elsoc_long_2016_2023$sex <- car::recode(elsoc_long_2016_2023$sex, 
+                           recodes = c("1='Male'; 2='Female'"), 
+                           levels = c("Male", "Female"),
+                           as.factor = T)
+
+elsoc_long_2016_2023$sex <- sjlabelled::set_label(elsoc_long_2016_2023$sex, 
+                        label = "Gender")
+
+# age
+frq(elsoc_long_2016_2023$age)
+
+elsoc_long_2016_2023$aget <- 
+  factor(car::recode(elsoc_long_2016_2023$age, 
+                     "18:29=1;30:49=2;50:64=3;65:150=4"),
+         labels = c('18-29', '30-49', '50-64', '65 or more'))
+elsoc_long_2016_2023$aget <-
+  sjlabelled::set_label(elsoc_long_2016_2023$aget, 
+                        label = c("Age groups")) 
+
+
+# political indentification
+
+frq(elsoc_long_2016_2023$ideo)
+
+elsoc_long_2016_2023$ideo<-
+factor(
+  car::recode(
+    elsoc_long_2016_2023$ideo,
+    "c(11,12,-888,-999)='Does not identify';c(0,1,2,3,4)='Left';
+     c(5)='Center';c(6,7,8,9,10)='Right'"
+  ),
+  levels = c('Left', 'Center', 'Right', 'Does not identify')
+)
+
+elsoc_long_2016_2023$ideo<- factor(elsoc_long_2016_2023$ideo,levels = levels(elsoc_long_2016_2023$ideo))
+
+elsoc_long_2016_2023$ideo <- 
+sjlabelled::set_label(x = elsoc_long_2016_2023$ideo, 
+                      label = "Political identification") 
+
+frq(elsoc_long_2016_2023$ideo)
+```
+
+```{r}
+# Socioeconomic_________________________________________________________________
+
+# Education_______________________________________
+elsoc_long_2016_2023$educ <- 
+  car::recode(elsoc_long_2016_2023$m01,
+              "c(1,2,3,4,5,6,7)=1;c(8,9,10)=2; c(-888,-999)=NA")
+elsoc_long_2016_2023$educ <-
+  factor(elsoc_long_2016_2023$educ,
+         labels = c("Less than Universitary","Universitary"))
+
+#reverse education, reference level is the highest level
+#elsoc_long_2016_2023$educ <- forcats::fct_rev(elsoc_long_2016_2023$educ)
+
+elsoc_long_2016_2023$educ <- 
+sjlabelled::set_label(x = elsoc_long_2016_2023$educ,
+                      label = "Education")
+sjmisc::frq(elsoc_long_2016_2023$educ)
+
+#Recoding of education to years based on casen 2017.
+elsoc_long_2016_2023$educyear<- as.numeric(
+  car::recode(elsoc_long_2016_2023$m01, 
+              "1=0;2=4.3;3=7.5;4=9.8;5=12.02;6=13.9;
+               7=14.8;8=14.9;9=16.9;10=19.07;c(-888,-999)=NA", 
+              as.numeric = T))
+
+elsoc_long_2016_2023$educyear <- 
+sjlabelled::set_label(x = elsoc_long_2016_2023$educyear,
+                      label = "Education in years")
+
+class(elsoc_long_2016_2023$educyear)
+sjmisc::frq(elsoc_long_2016_2023$educyear)
+```
+
+
+
+```{r}
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+ mutate(ola = case_when(ola == 1 ~ 2016,
+                        ola == 2 ~ 2017,
+                        ola == 3 ~ 2018,
+                        ola == 4 ~ 2019,
+                        ola == 5 ~ 2021,
+                        ola == 6 ~ 2022,
+                        ola == 7 ~ 2023))
+
+# Impute midpoint of income ranges
+elsoc_long_2016_2023$m30_rec <-
+  as.numeric(car::recode(
+    elsoc_long_2016_2023$m30,
+    "1=110000;2=251000;3=305000;4=355000;5=400000;
+     6=445000;7=490000;8=535000;9=585000;10=640000;11=700000;12=765000;
+     13=845000;14=935000;15=1040000;16=1180000;17=1375000;18=1670000;
+     19=2275000;20=2700000;NA=NA;c(-888,-999)=NA"
+  ))
+
+# Impute midpoint of income ranges (2021)
+elsoc_long_2016_2023$m30b_rec <-
+  as.numeric(car::recode(
+    elsoc_long_2016_2023$m30b,
+    "1=125000;2=300000;3=400000;4=575000;5=700000;NA=NA;c(-888,-999)=NA"
+  ))
+
+sjmisc::frq(elsoc_long_2016_2023$m30_rec)
+sjmisc::frq(elsoc_long_2016_2023$m30b_rec)
+
+# Recode DK/DA of income to NA
+elsoc_long_2016_2023$m29_rec <-
+  as.numeric(car::recode(elsoc_long_2016_2023$m29, "c(-888,-999)=NA"))
+
+# Replace missing continuous income with imputed midpoints
+elsoc_long_2016_2023$m29_imp <- ifelse(!is.na(elsoc_long_2016_2023$m29_rec), elsoc_long_2016_2023$m29_rec, elsoc_long_2016_2023$m30_rec)
+summary(elsoc_long_2016_2023$m29_imp)
+
+elsoc_long_2016_2023$m29_imp <- ifelse(is.na(elsoc_long_2016_2023$m29_imp), elsoc_long_2016_2023$m30b_rec, elsoc_long_2016_2023$m29_imp)
+summary(elsoc_long_2016_2023$m29_imp)
+
+# Deflate to constant prices --------------------------------------------------
+library(rvest)
+url <- "https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_PRECIOS/MN_CAP_PRECIOS/IPC_EMP_2023/638415285164039007?cbFechaInicio=2016&cbFechaTermino=2025&cbFrecuencia=MONTHLY&cbCalculo=NONE&cbFechaBase="
+
+ipc <- url %>%
+  read_html() %>%
+  html_node("table") %>%
+  html_table() %>%
+  rename_with(., ~ tolower(gsub(".", "_", .x, fixed = TRUE))) %>%
+  filter(serie == "Índice IPC General") %>%
+  mutate(
+    across(
+      .cols = c(everything(), -serie),
+      .fns = ~ as.numeric(str_replace(., ",", "."))
+    )
+  ) %>%
+  select(-sel_) %>%
+  pivot_longer(
+    cols = -serie,
+    names_to = "ano_mes",
+    values_to = "ipc"
+  ) %>%
+  tidyr::separate(col = "ano_mes", into = c("mes", "ano"))
+
+ipc <- ipc %>%
+  filter(mes == "dic") %>%
+  select(ano, ipc) %>% 
+  slice_head(n = 8) %>% 
+  filter(ano != "2020")
+
+elsoc_long_2016_2023$ola <- as.factor(elsoc_long_2016_2023$ola)
+
+elsoc_long_2016_2023 <- left_join(elsoc_long_2016_2023, ipc, by = c("ola" = "ano"))
+
+frq(elsoc_long_2016_2023$ipc)
+
+# Build household size -----------------------------------
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(
+    n_hogar = dplyr::case_when(
+      ola == "2016" ~ nhogar1,
+      ola == "2017" ~ m46_nhogar,
+      ola == "2018" ~ m54,
+      ola == "2019" ~ m54,
+      ola == "2021" ~ m54,
+      ola == "2022" ~ m54,
+      ola == "2023" ~ m54,
+      TRUE ~ NA_real_
+    )
+  )
+
+sjmisc::frq(elsoc_long_2016_2023$n_hogar)
+
+# Recode DK/DA of household size to NA
+elsoc_long_2016_2023$n_hogar_r <- car::recode(elsoc_long_2016_2023$n_hogar, "c(-888,-999)=NA")
+sjmisc::frq(elsoc_long_2016_2023$n_hogar_r)
+
+# Equivalised income (square-root scale) --------------------------------------
+
+# Select a reference IPC (e.g., December 2023 as base)
+ipc_ref <- elsoc_long_2016_2023 %>%
+  filter(ola == "2023") %>%
+  summarise(ipc_ref = median(ipc, na.rm = TRUE)) %>%
+  pull(ipc_ref)
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  mutate(
+    # Deflate household income to constant prices (base = 2023 Dec)
+    inc_hh_real = m29_imp * (ipc_ref / ipc),
+    
+    # Equivalence scale: square-root of household size
+    eq_size_sqrt = if_else(!is.na(n_hogar_r) & n_hogar_r > 0,
+                           sqrt(as.numeric(n_hogar_r)),
+                           NA_real_),
+    
+    # Equivalised household income
+    inc_eq_real_sqrt = inc_hh_real / eq_size_sqrt,
+    
+    # Log equivalised income (for modelling)
+    ln_inc_eq_real_sqrt = if_else(!is.na(inc_eq_real_sqrt) & inc_eq_real_sqrt > 0,
+                                  log(inc_eq_real_sqrt),
+                                  NA_real_)
+  )
+
+sjmisc::descr(elsoc_long_2016_2023$m29_imp)
+sjmisc::descr(elsoc_long_2016_2023$inc_eq_real_sqrt)
+sjmisc::descr(elsoc_long_2016_2023$ln_inc_eq_real_sqrt)
+
+# Original per-capita measure for comparison -------------
+elsoc_long_2016_2023$ing_pc <- elsoc_long_2016_2023$m29_imp / elsoc_long_2016_2023$n_hogar_r
+sjmisc::descr(elsoc_long_2016_2023$ing_pc)
+
+# Income deciles (within-wave, based on equivalised income) -------------------
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>%
+  group_by(ola) %>%
+  mutate(decile_eq = ntile(inc_eq_real_sqrt, 10)) %>%
+  ungroup()
+
+frq(elsoc_long_2016_2023$decile_eq)
+
+# Include missing cases for income groups
+elsoc_long_2016_2023$decile_eq1 <- if_else(is.na(elsoc_long_2016_2023$decile_eq), "DNA", as.character(elsoc_long_2016_2023$decile_eq))
+elsoc_long_2016_2023$decile_eq1 <- factor(elsoc_long_2016_2023$decile_eq1, levels = c(as.character(1:10), "DNA"))
+
+sjmisc::frq(elsoc_long_2016_2023$decile_eq1)
+
+frq(elsoc_long_2016_2023$ola)  # ok
+
+elsoc_long_2016_2023 <- elsoc_long_2016_2023 %>% 
+  mutate(
+    across(
+      .cols = c(decile_eq, decile_eq1),
+      .fns = ~ as.factor(.)
+    )
+  )
+
+```
+
+```{r}
+# Reshape long to wide
+
+df_study1_long <- elsoc_long_2016_2023 %>% 
+  select(idencuesta,
+         ola,
+         muestra,
+         ponderador_long_total, 
+         segmento, 
+         estrato,
+         just_pension,
+         merit_effort,
+         merit_talent,
+         educ,
+         educyear,
+         sex,
+         age,
+         aget,
+         ideo,
+         decile_eq,
+         decile_eq1)
+
+vars_invariantes <- c("age", "aget",
+                      "sex",
+                      "ideo")
+
+df_study1_long_fix <- df_study1_long %>% 
+  arrange(idencuesta, muestra, ola) %>%         
+  group_by(idencuesta, muestra) %>%
+  mutate(
+    across(
+      all_of(vars_invariantes),
+      ~ {
+        v1 <- .x[ola == 1 & !is.na(.x)]
+        if (length(v1) > 0) v1[1] else .x
+      }
+    )
+  ) %>%
+  ungroup()
+
+frq(df_study1_long_fix$ola) # ok
+
+waves_use <- c("2016","2017","2018","2019","2022","2023")
+
+df_study1_long_fix <- df_study1_long_fix %>% 
+  filter(ola %in% waves_use)
+
+```
+
+
+```{r}
+
+df_unbalanced <- df_study1_long_fix
+
+ids_t7 <- df_study1_long_fix %>%
+  filter(ola == "2023") %>%
+  distinct(idencuesta) %>%
+  pull(idencuesta)
+
+df_t7 <- df_study1_long_fix %>%
+  filter(idencuesta %in% ids_t7)
+
+df_ids_balanced <- df_t7 %>%
+  group_by(idencuesta) %>%
+  summarise(
+    n_olas_distintas = n_distinct(ola),
+    .groups = "drop"
+  ) %>%
+  filter(n_olas_distintas == length(waves_use)) %>%   # tiene las 6 olas
+  pull(idencuesta)
+
+df_balanced <- df_t7 %>%
+  filter(idencuesta %in% df_ids_balanced)
+
+# Número de individuos
+n_distinct(df_unbalanced$idencuesta)
+n_distinct(df_balanced$idencuesta)
+
+# Distribución por ola
+df_unbalanced %>% count(ola)
+df_balanced   %>% count(ola)
+
+```
+
+# Save and export
+
+```{r}
+save(df_study1_long,file = here::here("input/data/rob_income/df_study1_long_vf_rob_income.RData")) # original
+
+save(df_study1_long_fix,file = here::here("input/data/rob_income/df_study1_long_fix_vf_rob_income.RData")) # fix orginal
+
+save(df_unbalanced,file = here::here("input/data/rob_income/df_unbalanced_rob_income.RData")) # Filter data by the idencuesta of t7
+save(df_balanced,file = here::here("input/data/rob_income/df_balanced_rob_income.RData")) 
+```
+

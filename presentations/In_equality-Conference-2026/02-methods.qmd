@@ -103,98 +103,109 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 :::
 
 
-
-
 ## Dependent variable
+
+::: {.incremental style="font-size: 100%;"}
+
+- Item: **¿"It is fair that people with higher incomes have better pensions than people with lower incomes?"**
+
+:::
+
+::: {.fragment}
+
 ```{r}
 #| label: fig-desc
 #| fig-cap-location: bottom
 #| fig-cap: "Distribution of responses for preferences for market justice in pensions in Chile (2016–2023)"
 #| fig-align: center
-#| out-width: '90%'
+#| out-width: '85%'
 #| fig-asp: 0.6
-#| echo: false
-
-## Alluvial
-datos.pension <- df_study1 %>% 
-  mutate(just_pension = factor(just_pension, 
-                               levels = c("Strongly agree",
-                                          "Agree",
-                                          "Neither agree nor disagree",
-                                          "Disagree",
-                                          "Strongly disagree"))) %>% 
-  group_by(idencuesta, ola) %>% 
-  count(just_pension) %>% 
-  group_by(ola) %>% 
-  mutate(porcentaje=n/sum(n)) %>% 
-  ungroup() %>% 
-  na.omit() %>% 
-  mutate(wave = case_when(ola == 1 ~ "2016",
-                          ola == 2 ~ "2017",
-                          ola == 3 ~ "2018",
-                          ola == 4 ~ "2019",
-                          ola == 5 ~ "2022",
-                          ola == 6 ~ "2023"),
-         wave = factor(wave, levels = c("2016",
-                                        "2017",
-                                        "2018",
-                                        "2019",
-                                        "2022",
-                                        "2023")))
 
 
+### Alluvial
+#datos.pension <- df_study1 %>% 
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(idencuesta, ola) %>% 
+#  count(just_pension) %>% 
+#  group_by(ola) %>% 
+#  mutate(porcentaje=n/sum(n)) %>% 
+#  ungroup() %>% 
+#  na.omit() %>% 
+#  mutate(wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#
+#etiquetas.pension <- df_study1 %>%
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(ola, just_pension) %>%
+#  summarise(count = n(), .groups = "drop") %>%
+#  group_by(ola) %>%
+#  mutate(porcentaje = count / sum(count)) %>% 
+#  na.omit() %>% 
+#  mutate(idencuesta = 1,
+#         wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#datos.pension %>% 
+#  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+#             alluvium = idencuesta, y = porcentaje)) +
+#  ggalluvial::geom_flow(alpha = .4) + 
+#  ggalluvial::geom_stratum(linetype = 0) +
+#  scale_y_continuous(labels = scales::percent) + 
+#  scale_fill_manual(values =  #c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+#  geom_text(data = etiquetas.pension,
+#            aes(label = ifelse(porcentaje > 0 , #scales::percent(porcentaje, accuracy = .1),"")),
+#            position = position_stack(vjust = .5),
+#            show.legend = FALSE, fontface = "bold",
+#            size = 4,
+#            color = 'white') +
+#  labs(y = NULL,
+#       x = NULL,
+#       fill = NULL,
+##       title = "It is fair that people with higher #incomes have better #pensions than people\nwith lower #incomes?",
+#       caption = "Source: own elaboration with data from ELSOC 2016-2023 #(N obs = 7,522; N individuals = 1,317)") +
+#  theme_ggdist() +
+#  theme(legend.position = "top",
+#        plot.title = element_text(face = "bold"),
+#        text = element_text(size = 16)) 
+#
 
-etiquetas.pension <- df_study1 %>%
-  mutate(just_pension = factor(just_pension, 
-                               levels = c("Strongly agree",
-                                          "Agree",
-                                          "Neither agree nor disagree",
-                                          "Disagree",
-                                          "Strongly disagree"))) %>% 
-  group_by(ola, just_pension) %>%
-  summarise(count = n(), .groups = "drop") %>%
-  group_by(ola) %>%
-  mutate(porcentaje = count / sum(count)) %>% 
-  na.omit() %>% 
-  mutate(idencuesta = 1,
-         wave = case_when(ola == 1 ~ "2016",
-                          ola == 2 ~ "2017",
-                          ola == 3 ~ "2018",
-                          ola == 4 ~ "2019",
-                          ola == 5 ~ "2022",
-                          ola == 6 ~ "2023"),
-         wave = factor(wave, levels = c("2016",
-                                        "2017",
-                                        "2018",
-                                        "2019",
-                                        "2022",
-                                        "2023")))
-
-
-datos.pension %>% 
-  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
-             alluvium = idencuesta, y = porcentaje)) +
-  ggalluvial::geom_flow(alpha = .4) + 
-  ggalluvial::geom_stratum(linetype = 0) +
-  scale_y_continuous(labels = scales::percent) + 
-  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
-  geom_text(data = etiquetas.pension,
-            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = .1),"")),
-            position = position_stack(vjust = .5),
-            show.legend = FALSE, fontface = "bold",
-            size = 4,
-            color = 'white') +
-  labs(y = NULL,
-       x = NULL,
-       fill = NULL,
-       title = "It is fair that people with higher incomes have better pensions than people\nwith lower incomes?",
-       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)") +
-  theme_ggdist() +
-  theme(legend.position = "top",
-        plot.title = element_text(face = "bold"),
-        text = element_text(size = 16)) 
-
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/dv_alluvial.png"))
 ```
+
+::: 
 
 
 ## Independent variables: Level 1
@@ -208,13 +219,14 @@ datos.pension %>%
 #| fig-asp: 0.6
 #| echo: false
 
-
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(scales)
-library(forcats)
 
 df_plot <- df_study1 %>%
   select(merit_effort, merit_talent) %>%
-  pivot_longer(everything(), names_to = "item", values_to = "x") %>%
+  pivot_longer(everything(), names_to = "item", values_to = "value") %>%
   mutate(
     item = factor(
       item,
@@ -224,10 +236,8 @@ df_plot <- df_study1 %>%
         "People are rewarded for their \nintelligence and ability"
       )
     ),
-    # x ya viene etiquetada; solo la normalizamos como character -> factor
-    cat = as.character(x),
-    cat = factor(
-      cat,
+    value = factor(
+      as.character(value),
       levels = c(
         "Strongly disagree",
         "Disagree",
@@ -237,109 +247,45 @@ df_plot <- df_study1 %>%
       )
     )
   ) %>%
-  drop_na(cat) %>%
-  count(item, cat) %>%
+  drop_na(value) %>%
+  count(item, value) %>%
   group_by(item) %>%
-  mutate(p = n / sum(n)) %>%
+  mutate(
+    p = n / sum(n),
+    label = percent(p, accuracy = 0.1)
+  ) %>%
   ungroup()
 
-wide <- df_plot %>%
-  select(item, cat, p) %>%
-  pivot_wider(names_from = cat, values_from = p, values_fill = 0)
-
-# neutral separado a la izquierda
-neutral_rect <- wide %>%
-  transmute(
-    item,
-    cat = "Neither agree nor disagree",
-    xmin = -1.08,
-    xmax = -1.08 + `Neither agree nor disagree`,
-    xmid = -1.08 + (`Neither agree nor disagree` / 2),
-    p = `Neither agree nor disagree`
-  )
-
-# bloque principal divergente
-main_rect <- bind_rows(
-  wide %>%
-    transmute(
-      item,
-      cat = "Strongly agree",
-      xmin = -(`Agree` + `Strongly agree`),
-      xmax = -`Agree`,
-      p = `Strongly agree`
-    ),
-  wide %>%
-    transmute(
-      item,
-      cat = "Agree",
-      xmin = -`Agree`,
-      xmax = 0,
-      p = `Agree`
-    ),
-  wide %>%
-    transmute(
-      item,
-      cat = "Disagree",
-      xmin = 0,
-      xmax = `Disagree`,
-      p = `Disagree`
-    ),
-  wide %>%
-    transmute(
-      item,
-      cat = "Strongly disagree",
-      xmin = `Disagree`,
-      xmax = `Disagree` + `Strongly disagree`,
-      p = `Strongly disagree`
-    )
-) %>%
-  mutate(xmid = (xmin + xmax) / 2)
-
-rects <- bind_rows(main_rect, neutral_rect) %>%
-  mutate(
-    cat = factor(
-      cat,
-      levels = c(
-        "Strongly agree",
-        "Agree",
-        "Neither agree nor disagree",
-        "Disagree",
-        "Strongly disagree"
-      )
-    ),
-    label = percent(p, accuracy = 0.1))
-
-
-rects[1,3] <- (-0.29)
-rects[2,3] <- (-0.35)
-
-ggplot(rects) +
-  geom_rect(
-    aes(
-      xmin = xmin, xmax = xmax,
-      ymin = as.numeric(item) - 0.25,
-      ymax = as.numeric(item) + 0.25,
-      fill = cat
-    ),
-    linewidth = 0.5
+ggplot(df_plot, aes(x = item, y = p, fill = value)) +
+  geom_col(
+    width = 0.7,
+    linewidth = 0.4,
+    position = position_stack(reverse = TRUE)
   ) +
-  geom_vline(xintercept = 0, color = "gray40", linewidth = 0.4) +
   geom_text(
-    aes(x = xmid, y = item, label = label),
-    color = "white", fontface = "bold",
+    aes(label = label),
+    position = position_stack(vjust = 0.5, reverse = TRUE),
+    color = "white",
+    fontface = "bold",
     size = 4
   ) +
-  scale_fill_manual(values = c(
-    "Strongly disagree" = "#CA0020",
-    "Disagree" = "#F4A582",
-    "Agree" = "#92C5DE",
-    "Strongly agree" =  "#0571B0",
-    "Neither agree nor disagree" = "gray65"
-  )) +
-  scale_x_continuous(
-    limits = c(-1.15, 1),
-    breaks = seq(-1, 1, by = 0.2),
-    labels = function(x) percent(abs(x), accuracy = 1)
+  coord_flip() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(
+    values = c(
+      "Strongly disagree" = "#CA0020",
+      "Disagree" = "#F4A582",
+      "Neither agree nor disagree" = "gray65",
+      "Agree" = "#92C5DE",
+      "Strongly agree" = "#0571B0"
+    ),
+    breaks = c(
+      "Strongly disagree",
+      "Disagree",
+      "Neither agree nor disagree",
+      "Agree",
+      "Strongly agree"
+    )
   ) +
   labs(
     x = NULL,
@@ -354,6 +300,7 @@ ggplot(rects) +
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank()
   )
+
 
 ```
 
