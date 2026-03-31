@@ -115,7 +115,7 @@ knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/i
 - First, we estimate a Confirmatory Factor Analysis of the multidimensional meritocracy scale  
   → good model fit (CFI = 0.995, TLI = 0.991, RMSEA = 0.048)
 
-- Second, we estimate a Structural Equation Model (MIMIC model)  
+- Second, we estimate a Structural Equation Model  
   → pension market justice regressed on latent meritocracy factors
 
 ::: {.fragment}
@@ -156,7 +156,7 @@ likerplot
 #| echo: false
 #| fig-asp: 0.6
 #| fig-cap-location: bottom
-#| fig-cap: "MIMIC model"
+#| fig-cap: "Structural equation model"
 
 
 knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/sem.png"))

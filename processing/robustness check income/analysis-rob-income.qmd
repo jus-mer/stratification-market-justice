@@ -326,7 +326,7 @@ ccoef <- list(
   ola_num = "Wave",
   ola_2 = "Wave^2")
 
-texreg::screenreg(list(m1.1,m1.2,m1.3,m1.4),
+texreg::htmlreg(list(m1.1,m1.2,m1.3,m1.4),
                caption.above = T,
                caption = NULL,
                stars = c(0.05, 0.01, 0.001),
@@ -356,55 +356,55 @@ anova(m1.3, m1.4) # quedarse con tiempo continua y con pendiente aleatoria
 ```{r}
 #| results: asis
 ## WE and BE main effects
-m3 <- clmm(just_pension ~ 1 + ola_num + ola_2 +   
-             merit_effort_cwc + merit_talent_cwc + (1 + ola_num | idencuesta), 
-            link = "logit",
-           Hess = TRUE,
-           data = df_study1)
-
-m4 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
-             merit_effort_cwc + merit_talent_cwc + 
-             merit_effort_mean + merit_talent_mean + 
-             (1 + ola_num| idencuesta), 
-            link = "logit",
-           Hess = TRUE,
-           data = df_study1)
-
-m5 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
-              merit_effort_cwc + merit_talent_cwc + 
-              merit_effort_mean + merit_talent_mean + 
-              decile_eq_mean +  decile_eq_cwc +
-              (1 + ola_num| idencuesta), 
-            link = "logit",
-            Hess = TRUE,
-           data = df_study1)
-
-m6 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
-              merit_effort_cwc + merit_talent_cwc + 
-              merit_effort_mean + merit_talent_mean + 
-              decile_eq_mean +  decile_eq_cwc +
-             educ_mean + educ_cwc +
-              (1 + ola_num| idencuesta), 
-            link = "logit",
-            Hess = TRUE,
-           data = df_study1)
-
-m7 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
-              merit_effort_cwc + merit_talent_cwc + 
-              merit_effort_mean + merit_talent_mean + 
-              decile_eq_mean +  decile_eq_cwc +
-             educ_mean + educ_cwc + ideo + sex + age + 
-              (1 + ola_num| idencuesta), 
-            link = "logit",
-            Hess = TRUE,
-           data = df_study1)
-
+#m3 <- clmm(just_pension ~ 1 + ola_num + ola_2 +   
+#             merit_effort_cwc + merit_talent_cwc + (1 + ola_num | idencuesta), 
+#            link = "logit",
+#           Hess = TRUE,
+#           data = df_study1)
+#
+#m4 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
+#             merit_effort_cwc + merit_talent_cwc + 
+#             merit_effort_mean + merit_talent_mean + 
+#             (1 + ola_num| idencuesta), 
+#            link = "logit",
+#           Hess = TRUE,
+#           data = df_study1)
+#
+#m5 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
+#              merit_effort_cwc + merit_talent_cwc + 
+#              merit_effort_mean + merit_talent_mean + 
+#              decile_eq_mean +  decile_eq_cwc +
+#              (1 + ola_num| idencuesta), 
+#            link = "logit",
+#            Hess = TRUE,
+#           data = df_study1)
+#
+#m6 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
+#              merit_effort_cwc + merit_talent_cwc + 
+#              merit_effort_mean + merit_talent_mean + 
+#              decile_eq_mean +  decile_eq_cwc +
+#             educ_mean + educ_cwc +
+#              (1 + ola_num| idencuesta), 
+#            link = "logit",
+#            Hess = TRUE,
+#           data = df_study1)
+#
+#m7 <- clmm(just_pension ~ 1 + ola_num +  ola_2 + 
+#              merit_effort_cwc + merit_talent_cwc + 
+#              merit_effort_mean + merit_talent_mean + 
+#              decile_eq_mean +  decile_eq_cwc +
+#             educ_mean + educ_cwc + ideo + sex + age + 
+#              (1 + ola_num| idencuesta), 
+#            link = "logit",
+#            Hess = TRUE,
+#           data = df_study1)
+#
 
 #save(m3,m4,m5,m6,m7, file = here("output/rob_income/main_effects.RData"))
 
 load(file = here("output/rob_income/main_effects.RData"))
 
-screenreg(list(m3,m4,m5,m6,m7))
+htmlreg(list(m3,m4,m5,m6,m7))
 
 ```
 
@@ -438,7 +438,7 @@ ccoef <- list(
   educ_cwc = "Education (WE)"
   )
 
-screenreg(list(m1.1, m1.4, m3, m4, m5, m6, m7),
+htmlreg(list(m1.1, m1.4, m3, m4, m5, m6, m7),
                custom.model.names = c(paste0("Model ", seq(1:7))),
                caption.above = T,
                caption = NULL,
@@ -461,6 +461,8 @@ screenreg(list(m1.1, m1.4, m3, m4, m5, m6, m7),
 ```
 
 ```{r}
+#| eval: false
+#| include: false
 sjPlot::plot_model(
   m7,
   type = "est",
@@ -603,9 +605,8 @@ ggsave(
 
 load(file = here("output/rob_income/interactions_direct.RData"))
 
-screenreg(list(m11,m12,m13,m14))
+htmlreg(list(m11,m12,m13,m14))
 
-screenreg(list(m15,m16,m17,m18))
+htmlreg(list(m15,m16,m17,m18))
 ```
-
 

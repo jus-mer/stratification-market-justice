@@ -10,6 +10,9 @@
 
 [Paper Draft (PDF)](https://jus-mer.github.io/stratification-market-justice/paper/paper.pdf)
 
+[Analysis Income](https://jus-mer.github.io/stratification-market-justice/processing/robustess check income/analysis-rob-income.html)
+
+
 ## Presentations
 
 [Abstract conferencia COES 2025](https://jus-mer.github.io/stratification-market-justice/conferences/coes-2025/abstract.html)
