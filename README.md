@@ -10,7 +10,7 @@
 
 [Paper Draft (PDF)](https://jus-mer.github.io/stratification-market-justice/paper/paper.pdf)
 
-[Analysis Income](https://jus-mer.github.io/stratification-market-justice/processing/robustess-check-income/analysis-rob-income.html)
+[Analysis Income](https://jus-mer.github.io/stratification-market-justice/processing/robustness-check-income/analysis-rob-income.html)
 
 
 ## Presentations
