@@ -435,8 +435,8 @@ ccoef <- list(
   merit_talent_cwc = "Merit: Talent (WE)",
   merit_effort_mean = "Merit: Effort (BE)",
   merit_talent_mean = "Merit: Talent (BE)",
-  dummy_decile10_mean = "Income (BE)",
-  dummy_educ_mean = "Education (BE)"
+  dummy_decile10_mean = "Decile 10 (BE)",
+  dummy_educ_mean = "Universitary education (BE)"
   )
 
 htmlreg(list(m1.1, m1.4, m3, m4, m5, m6, m7),
@@ -475,8 +475,8 @@ sjPlot::plot_model(
             "merit_talent_mean",
             "dummy_decile10_mean" ,
             "dummy_educ_mean"),
-  axis.labels = c( "Education (BE)",
-                   "Income (BE)",
+  axis.labels = c( "Universitary education (BE)",
+                   "Decile 10 (BE)",
                    "Merit: Talent (BE)",
                   "Merit: Effort (BE)",
                   "Merit: Talent (WE)",
@@ -616,4 +616,75 @@ htmlreg(list(m11,m12,m13,m14))
 
 htmlreg(list(m15,m16,m17,m18))
 ```
+
+
+## Interactions WE x Time
+
+```{r}
+#| results: asis
+# ## WE and BE Interactions with controls
+#
+#df_study1 <- df_study1 |>
+#  mutate(
+#    time  = ola_num - min(ola_num),
+#    time2 = time^2
+#  )
+#
+#m19 <- clmm(just_pension ~ 1 + time*merit_effort_cwc +  
+#              time2 + merit_talent_cwc + 
+#               merit_effort_mean + merit_talent_mean + 
+#               dummy_decile10_mean + 
+#               dummy_educ_mean + ideo + sex + age + 
+#               (1 + time + merit_effort_cwc| idencuesta), 
+#            link = "logit",
+#  Hess = TRUE,
+#           data = df_study1)
+#
+#m20 <- clmm(just_pension ~ 1 + time*merit_talent_cwc +  
+#              time2 +  merit_effort_cwc + 
+#               merit_effort_mean + merit_talent_mean + 
+#               dummy_decile10_mean + 
+#               dummy_educ_mean + ideo + sex + age + 
+#               (1 + time + merit_talent_cwc| idencuesta), 
+#            link = "logit",
+#  Hess = TRUE,
+#           data = df_study1)
+#
+#
+#screenreg(list(m19, m20))
+#
+#m19_flex <- clmm(
+#  just_pension ~ 1 + factor(ola_num)*merit_effort_cwc +
+#    merit_talent_cwc +
+#    merit_effort_mean + merit_talent_mean +
+#    dummy_decile10_mean + dummy_educ_mean +
+#    ideo + sex + age +
+#    (1 + merit_effort_cwc | idencuesta),
+#  link = "logit",
+#  Hess = TRUE,
+#  data = df_study1
+#)
+#
+#m20_flex <- clmm(
+#  just_pension ~ 1 + factor(ola_num)*merit_talent_cwc + 
+#    merit_effort_cwc +
+#    merit_effort_mean + merit_talent_mean +
+#    dummy_decile10_mean + dummy_educ_mean +
+#    ideo + sex + age +
+#    (1 + merit_talent_cwc | idencuesta),
+#  link = "logit",
+#  Hess = TRUE,
+#  data = df_study1
+#)
+#
+#screenreg(list(m19_flex, m20_flex))
+#
+#save(m19,m20, m19_flex, m20_flex, file = #here("output/rob_income/interactions_withinxtime.RData"))
+
+load(file = here("output/rob_income/interactions_withinxtime.RData"))
+
+htmlreg(list(m19, m20, m19_flex, m20_flex))
+
+```
+
 

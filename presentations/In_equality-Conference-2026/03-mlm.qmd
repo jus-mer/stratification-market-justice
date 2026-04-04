@@ -268,10 +268,27 @@ p1
 
 :::: {.incremental style="font-size: 120%;"}
 
-- No evidence of class differences in support for pension market justice, but meritocratic beliefs show a strong and consistent effect  
+- No evidence of class differences in support for pension market justice, but what about a more direct measure of stratification differences? 
 
-- Yet, meritocracy is measured here in a highly reduced way, through effort and talent only  
+- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
 
 - Next step: model meritocracy as a multidimensional construct  
   → [@castillo_multidimensional_2023]
 ::::
+
+
+## The role of income and education
+
+```{r}
+#| label: fig-income
+#| fig-cap: "Main within- and between-person effects on market justice preferences in pension"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/income_regression.png"))
+
+```
+

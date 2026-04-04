@@ -87,20 +87,3 @@ knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/i
 
 ```
 
-## Multilevel models 
-
-```{r}
-#| label: fig-income
-#| fig-cap: "Main within- and between-person effects on market justice preferences in pension"
-#| fig-align: center
-#| out-width: '90%'
-#| fig-cap-location: bottom
-library(knitr)
-library(here)
-
-knitr::include_graphics(path = here("presentations/in_equality-Conference-2026/images/income_regression.png"))
-
-```
-
-
-    

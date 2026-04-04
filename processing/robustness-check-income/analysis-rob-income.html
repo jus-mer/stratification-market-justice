@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.8.27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Andreas Laffert">
-<meta name="dcterms.date" content="2026-04-01">
+<meta name="dcterms.date" content="2026-04-04">
 <title>Data analysis Income</title>
 <style>
 code{white-space: pre-wrap;}
@@ -91,7 +91,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 1, 2026</p>
+        <p class="date">April 4, 2026</p>
       </div>
     </div>
     
@@ -116,6 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#time-effects" id="toc-time-effects" class="nav-link" data-scroll-target="#time-effects"><span class="header-section-number">4.4</span> Time effects</a></li>
   <li><a href="#we-and-be-main-effects" id="toc-we-and-be-main-effects" class="nav-link" data-scroll-target="#we-and-be-main-effects"><span class="header-section-number">4.5</span> WE and BE main effects</a></li>
   <li><a href="#interactions-with-controls-direct-effect" id="toc-interactions-with-controls-direct-effect" class="nav-link" data-scroll-target="#interactions-with-controls-direct-effect"><span class="header-section-number">4.6</span> Interactions with controls (direct effect)</a></li>
+  <li><a href="#interactions-we-x-time" id="toc-interactions-we-x-time" class="nav-link" data-scroll-target="#interactions-we-x-time"><span class="header-section-number">4.7</span> Interactions WE x Time</a></li>
   </ul>
 </li>
   </ul></nav>
@@ -1437,7 +1438,7 @@ Merit: Talent (BE)
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Income (BE)
+Decile 10 (BE)
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 &nbsp;
@@ -1489,7 +1490,7 @@ Income (BE)
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Education (BE)
+Universitary education (BE)
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 &nbsp;
@@ -3655,6 +3656,1305 @@ Variance: idencuesta: merit_talent_mean
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 0.36
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="font-size: 0.8em;" colspan="5">
+<sup>***</sup>p &lt; 0.001; <sup>**</sup>p &lt; 0.01; <sup>*</sup>p &lt; 0.05
+</td>
+</tr></tfoot>
+</table></section><section id="interactions-we-x-time" class="level2" data-number="4.7"><h2 data-number="4.7" class="anchored" data-anchor-id="interactions-we-x-time">
+<span class="header-section-number">4.7</span> Interactions WE x Time</h2>
+<details class="code-fold"><summary>Show the code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ## WE and BE Interactions with controls</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#df_study1 &lt;- df_study1 |&gt;</span></span>
+<span><span class="co">#  mutate(</span></span>
+<span><span class="co">#    time  = ola_num - min(ola_num),</span></span>
+<span><span class="co">#    time2 = time^2</span></span>
+<span><span class="co">#  )</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#m19 &lt;- clmm(just_pension ~ 1 + time*merit_effort_cwc +  </span></span>
+<span><span class="co">#              time2 + merit_talent_cwc + </span></span>
+<span><span class="co">#               merit_effort_mean + merit_talent_mean + </span></span>
+<span><span class="co">#               dummy_decile10_mean + </span></span>
+<span><span class="co">#               dummy_educ_mean + ideo + sex + age + </span></span>
+<span><span class="co">#               (1 + time + merit_effort_cwc| idencuesta), </span></span>
+<span><span class="co">#            link = "logit",</span></span>
+<span><span class="co">#  Hess = TRUE,</span></span>
+<span><span class="co">#           data = df_study1)</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#m20 &lt;- clmm(just_pension ~ 1 + time*merit_talent_cwc +  </span></span>
+<span><span class="co">#              time2 +  merit_effort_cwc + </span></span>
+<span><span class="co">#               merit_effort_mean + merit_talent_mean + </span></span>
+<span><span class="co">#               dummy_decile10_mean + </span></span>
+<span><span class="co">#               dummy_educ_mean + ideo + sex + age + </span></span>
+<span><span class="co">#               (1 + time + merit_talent_cwc| idencuesta), </span></span>
+<span><span class="co">#            link = "logit",</span></span>
+<span><span class="co">#  Hess = TRUE,</span></span>
+<span><span class="co">#           data = df_study1)</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#screenreg(list(m19, m20))</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#m19_flex &lt;- clmm(</span></span>
+<span><span class="co">#  just_pension ~ 1 + factor(ola_num)*merit_effort_cwc +</span></span>
+<span><span class="co">#    merit_talent_cwc +</span></span>
+<span><span class="co">#    merit_effort_mean + merit_talent_mean +</span></span>
+<span><span class="co">#    dummy_decile10_mean + dummy_educ_mean +</span></span>
+<span><span class="co">#    ideo + sex + age +</span></span>
+<span><span class="co">#    (1 + merit_effort_cwc | idencuesta),</span></span>
+<span><span class="co">#  link = "logit",</span></span>
+<span><span class="co">#  Hess = TRUE,</span></span>
+<span><span class="co">#  data = df_study1</span></span>
+<span><span class="co">#)</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#m20_flex &lt;- clmm(</span></span>
+<span><span class="co">#  just_pension ~ 1 + factor(ola_num)*merit_talent_cwc + </span></span>
+<span><span class="co">#    merit_effort_cwc +</span></span>
+<span><span class="co">#    merit_effort_mean + merit_talent_mean +</span></span>
+<span><span class="co">#    dummy_decile10_mean + dummy_educ_mean +</span></span>
+<span><span class="co">#    ideo + sex + age +</span></span>
+<span><span class="co">#    (1 + merit_talent_cwc | idencuesta),</span></span>
+<span><span class="co">#  link = "logit",</span></span>
+<span><span class="co">#  Hess = TRUE,</span></span>
+<span><span class="co">#  data = df_study1</span></span>
+<span><span class="co">#)</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#screenreg(list(m19_flex, m20_flex))</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#save(m19,m20, m19_flex, m20_flex, file = #here("output/rob_income/interactions_withinxtime.RData"))</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"output/rob_income/interactions_withinxtime.RData"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">htmlreg</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">m19</span>, <span class="va">m20</span>, <span class="va">m19_flex</span>, <span class="va">m20_flex</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
+<caption>
+Statistical models
+</caption>
+<thead><tr>
+<th style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 1
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 2
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 3
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 4
+</th>
+</tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+time
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.39<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.39<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.15<sup>*</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.15<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.28<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.15<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.04)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.04)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+time2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.15<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.15<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.02)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.02)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.06
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.07
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.06
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.16<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.04)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.04)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+merit_effort_mean
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.33<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.34<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.33<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.34<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+merit_talent_mean
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.06
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.07
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.06
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.07
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dummy_decile10_mean
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.49<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.49<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.48<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.49<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dummy_educ_mean
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.35<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.35<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.35<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.35<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ideoCenter
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.32<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.32<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.31<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.32<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ideoRight
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.66<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.67<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.66<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.67<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ideoDoes not identify
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.23<sup>**</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.24<sup>**</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.24<sup>**</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.25<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+sexFemale
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.38<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.38<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.38<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.38<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+age
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.00)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.00)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.00)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.00)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+time:merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.02)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Strongly disagree|Disagree
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.13
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.16
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.09
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.11
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.22)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.22)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.22)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.22)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Disagree|Neither agree nor disagree
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.55<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.60<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.51<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.54<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Neither agree nor disagree|Agree
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.15<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.20<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.11<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.14<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.23)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Agree|Strongly agree
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.71<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.77<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.66<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.70<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.25)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.25)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.25)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.25)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+time:merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.00
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.02)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.38<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.39<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)3
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.05
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.05
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)4
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.09
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.09
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)5
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.84<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.85<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)2:merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.24<sup>*</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)3:merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.26<sup>*</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)4:merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.11
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)5:merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.08
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)2:merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.21
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)3:merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.17
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)4:merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.07
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+factor(ola_num)5:merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.08
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Log Likelihood
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-7605.74
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-7604.04
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-7597.43
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-7597.95
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+AIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15259.47
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15256.09
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15246.86
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15247.90
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+BIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15420.75
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15417.36
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15421.57
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15422.61
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. obs.
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+6123
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+6123
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+6123
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+6123
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Groups (idencuesta)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1327
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1327
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1327
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1327
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Variance: idencuesta: (Intercept)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.79
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.80
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.87
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.88
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Variance: idencuesta: time
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.01
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.01
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Variance: idencuesta: merit_effort_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.14
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.13
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+</tr>
+<tr style="border-bottom: 2px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Variance: idencuesta: merit_talent_cwc
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.16
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+&nbsp;
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.16
 </td>
 </tr>
 </tbody>
