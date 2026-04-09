@@ -516,7 +516,7 @@ fit_uniquenessinv <- cfa(uniquenessinv_model_smt, data = db_invariance,
 
 
 
-# Research problem {.xlarge data-background-color="#5f5758"}
+# Research problem {background-color="#491106ff"}
 
 ## Context and motivation 
 
@@ -591,7 +591,7 @@ fit_uniquenessinv <- cfa(uniquenessinv_model_smt, data = db_invariance,
 
 ::::
 
-# Method {.xlarge data-background-color="#5f5758"}
+# Method {background-color="#491106ff"}
 
 
 ## Participants and processedure
@@ -767,7 +767,7 @@ left_join(tot, edad) %>%
 
 :::
 
-# Results {.xlarge data-background-color="#5f5758"}
+# Results {background-color="#491106ff"}
 
 ## Measurement model
 
@@ -1501,7 +1501,7 @@ Cross-cohort non-invariance is mainly driven by the perceived-effort item, sugge
 
 :::
 
-# Discussion and conclusions {.xlarge data-background-color="#5f5758"}
+# Discussion and conclusions {background-color="#491106ff"}
 
 
 ## Discussion: meritocracy at schools
@@ -1533,7 +1533,7 @@ Cross-cohort non-invariance is mainly driven by the perceived-effort item, sugge
 ::: 
 
 
-## Conclusions {data-background-color="#5f5758"}
+## Conclusions 
 
 ::: {.incremental style="font-size: 120%;"}
 
