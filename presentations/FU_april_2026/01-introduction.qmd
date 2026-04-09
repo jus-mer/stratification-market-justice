@@ -1,0 +1,212 @@
+# Research project {background-color="#491106ff"}
+
+## Project
+::: {.columns}
+
+::: {.column width="20%"}
+
+![](images/jusmer-logo-vert.png)
+
+:::
+
+::: {.column width="80%"}
+::: {.incremental .highlight-last style="font-size: 110%;"}
+- ANID/FONDECYT N°1250518 2025-2028 - Market Justice and Deservingness of Social Welfare
+
+- Objective: *Analyze market justice preferences in Chile, their evolution over time, and their relation to welfare deservingness*
+
+- Main argument: *Chile’s highly commodified welfare system strengthens meritocratic deservingness beliefs, thereby increasing preferences for market justice relative to less commodified contexts*
+
+- Research design:
+  * Comparative and longitudinal data analysis
+  * Original survey
+  * Survey experiments
+  * Legislative debates on pensions
+:::
+:::
+:::
+
+## Team {background-color="#491106ff"}
+
+:::{=html}
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; justify-items: center; align-items: center; margin-top: 20px;">
+
+<div style="text-align: center;">
+  <img src="images/jc.png" style="width:200px; border-radius: 50%;" />
+  <div>Juan Carlos Castillo (PI)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/andreas.JPG" style="width:200px; border-radius: 50%;" />
+  <div>Andreas Laffert (RA)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/tomas.jpg" style="width:200px; border-radius: 50%;" />
+  <div>Tomás Urzúa (RA)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/rene.jpg" style="width:200px; border-radius: 50%;" />
+  <div>René Canales (RA)</div>
+</div>
+
+</div>
+
+:::
+
+
+## Agenda {style="font-size: 75%;"}
+
+### Peer-reviewed Articles
+
+::: {.box-inv-4 .sp-after .fragment}
+
+- Castillo, J. C., Canales Sellés, R., Laffert, A., & Urzúa, T. (2026). Justification trajectories for pension inequality in Chile (2016–2023): the role of social class and beliefs in meritocracy. *Frontiers in Sociology*, 11, 1771856. [https://doi.org/10.3389/fsoc.2026.1771856](https://doi.org/10.3389/fsoc.2026.1771856)
+
+:::
+
+::: {.incremental}
+- Castillo, J. C., Laffert, A., Carrasco, K., & Iturra-Sanhueza, J. (2025). Perceptions of inequality and meritocracy: their interplay in shaping preferences for market justice in Chile (2016–2023). Frontiers in Sociology, 10, 1634219. [https://doi.org/10.3389/fsoc.2025.1634219](https://doi.org/10.3389/fsoc.2025.1634219)
+
+
+- Castillo, J. C., Salgado, M., Carrasco, K., & Laffert, A. (2024). The Socialization of Meritocracy and Market Justice Preferences at School. *Societies*, 14(11), 214. [doi.org/10.3390/soc14110214](https://doi.org/10.3390/soc14110214)
+
+::: 
+### Forthcoming
+
+::: {.box-inv-4 .sp-after .fragment}
+
+- Pensions’ market justice and meritocracy: A structural equation modeling approach. Andreas Laffert, Tomás Urzúa, Juan Carlos Castillo & René Canales.
+
+:::
+
+::: {.incremental}
+- Stability and comparability of meritocratic beliefs in school-age students: A measurement invariance approach across time and cohorts. Andreas Laffert, Juan Carlos Castillo, René Canales, Tomás Urzúa & Kevin Carrasco. *Submited*.
+
+- Inequality and deservingness in higher education in Chile. A conjoint survey experiment. Juan Carlos Castillo, Andreas Laffert, René Canales & Tomás Urzúa. 
+:::
+
+
+
+# Background {background-color="#491106ff"}
+
+## The problem
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+1) Privatization and marketization of public goods, welfare policies, and social services [@gingrich_making_2011; @streeck_how_2016]
+
+:::
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+2) Changes in the institutional architecture of the welfare state; expansion of market logics [@ferre_welfare_2023; @busemeyer_welfare_2020]
+
+:::
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+3) This economic order is reflected in a specific moral economy and policy feedback dynamics [@mau_inequality_2015; @campbell_institutional_2020; @fernandez_positive_2013]
+
+:::
+
+::: {.box-inv-5 .sp-after-half .fragment style="font-size: 110%;"}
+
+Market justice preferences [@busemeyer_skills_2015; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
+
+:::
+
+
+## The Chilean case
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+- Economic growth alongside high inequality [@llorca-jana_historia_2021; @flores_top_2020]
+- Rigid relative mobility and strong closure at the top [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
+- Deep privatization and commodification of social reproduction domains, combined with strong state dependence [@madariaga_three_2020; @boccardo_30_2020]
+- Pensions: an **individual capitalization** system administered by **private pension funds (AFPs)**; covers ~11 million contributors, but **27% of the labor force** remains excluded due to **informality** [@superintendencia_cuadros_2025]
+- Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
+
+:::
+
+
+## Market justice preferences
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- Lane [-@lane_market_1986]: market justice vs. political justice
+
+- Normative beliefs that legitimize the idea that access to essential social services—such as healthcare, education, or pensions—should be determined by market-based criteria [@lindh_public_2015, p.895]
+
+- Measurement: assessing whether individuals consider it fair that access to these services depends on income [@lindh_public_2015; @kluegel_legitimation_1999; @castillo_perceptions_2025]
+
+:::
+
+
+## Factors associated with market justice
+
+
+::::: columns
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+### Individual
+
+- Socioeconomic status—income, education, and occupation [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
+- Perceptions of inequality and meritocracy [@castillo_perceptions_2025]
+- Economic conservatism/liberalism [@lee_fairness_2024]
+
+:::
+
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+### Contextual
+
+- Social spending [@immergut_it_2020; @busemeyer_skills_2015; @busemeyer_welfare_2020]
+- Economic inequality [@koos_moral_2019]
+- Degree of privatization and market regulation [@lindh_public_2015; @koos_moral_2019]
+
+:::
+:::::
+
+
+## This study
+
+</br>
+
+::: {.pull-left .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Analyze the relationship between social class and preferences for market justice in pensions in Chile, and how these evolve over time
+
+:::
+
+</br></br></br>
+
+::: {.pull-right .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Examine the role of meritocracy in shaping the relationship between class and preferences for pension market justice
+
+:::
+
+## Hypotheses
+
+
+::: {.fragment}
+
+```{r}
+#| label: fig-esque0
+#| echo: false
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics(path = "images/hipo3.png")
+
+```
+
+:::
+
+
+

@@ -1,0 +1,107 @@
+---
+bibliography: "bib/jusmer.bib"
+csl: "bib/apa6.csl"
+lang: in
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    R.options:
+      
+      knitr.graphics.auto_pdf: true
+format:
+  revealjs:
+    #logo: images/edumer.png
+    slide-number: true
+    theme: "libs/edumer.scss"
+    auto-stretch: false
+    title-slide-attributes:
+      visibility: false
+    transition: fade
+    transition-speed: slow
+# data-background-image: images/cover.jpg
+# data-background-size: cover
+    auto-play-media: true
+    mathjax: "default"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      error = F, 
+                      message = F) 
+```
+
+```{r}
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               here,
+               kableExtra)
+
+options(scipen=999)
+rm(list = ls())
+```
+
+
+
+::: columns
+
+
+::: {.column width="20%"}
+
+
+  </br></br>
+![](images/jusmer-logo-vert.png)
+
+
+:::
+
+::: {.column .column-right width="80%"}
+
+
+
+# Market justice, meritocracy & deservingness {style="font-size:21px; text-align:right; line-height:1.1;"}
+
+### **Agenda & work in progress**{style="font-size:35px; text-align:right; line-height:1.1; margin-top:12px;"}
+
+------------------------------------------------------------------------
+
+</br>
+**Juan Carlos Castillo, Andreas Laffert & </br> Tomás Urzúa**
+
+::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
+
+**Department of Sociology, University of Chile** </br>
+
+:::
+
+</br>
+
+### Freie Universität Berlin - April 2026 {style="color:black"}
+
+:::
+:::
+
+{{< include 01-introduction.qmd >}}
+
+{{< include 02-methods.qmd >}}
+
+{{< include 03-mlm.qmd >}}
+
+{{< include 03-sem.qmd >}}
+
+{{< include 04-conclusion.qmd >}}
+
+## References
+
+::: {#refs}
+:::
+
+{{< include 05-supplementary-material.qmd >}}

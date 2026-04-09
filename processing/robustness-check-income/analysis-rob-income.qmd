@@ -502,7 +502,7 @@ sjPlot::plot_model(
 
 ggsave(
   plot = last_plot(),
-  filename = here("presentations/in_equality-Conference-2026/images/income_regression.png"),
+  filename = ("images/income_regression.png"),
   device = "png",
   dpi = "retina",
   units = "cm",

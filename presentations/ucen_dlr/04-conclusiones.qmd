@@ -53,9 +53,10 @@
 
 :::
 
-# Gracias por su atención {background-color="#491106ff"}
+# Gracias por su atención!{background-color="#491106ff"}
 
 -   **Github del proyecto:** <https://github.com/jus-mer>
+
 
 :::{=html}
 <div style="text-align: center; margin-top: 30px;">
