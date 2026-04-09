@@ -6,8 +6,8 @@
 <script src="FU_april_2026_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="FU_april_2026_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="FU_april_2026_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="FU_april_2026_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.33">
+<link href="FU_april_2026_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <title>fu_april_2026</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,7 +48,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="FU_april_2026_files/libs/revealjs/dist/theme/quarto-782f1f194048d2a035d3c74332e51f4a.css">
+  <link rel="stylesheet" href="FU_april_2026_files/libs/revealjs/dist/theme/quarto-ad62115e0d368547511d7fe387e9725d.css">
   <link href="FU_april_2026_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="FU_april_2026_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="FU_april_2026_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -140,6 +140,8 @@
       margin-right: 0; 
     }
   </style>
+  <script src="FU_april_2026_files/libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="FU_april_2026_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -459,7 +461,7 @@ Figure&nbsp;4: Frecuency of class position
 <ul>
 <li class="fragment"><p>Panel structure: repeated observations (level 1) nested within individuals (level 2)</p></li>
 <li class="fragment"><p>Models both <em>within-person</em> (WE) and <em>between-person</em> (BE) effects; includes random effects (intercept and time slope)</p></li>
-<li class="fragment"><p>WE/BE decomposition (person-mean centering) <span class="citation" data-cites="bell_fixed_2019">(<a href="#/references" role="doc-biblioref" onclick="">Bell et al., 2019</a>)</span>:</p>
+<li class="fragment"><p>WE/BE decomposition (person-mean centering) <span class="citation" data-cites="bell_fixed_2019">(<a href="#/references" role="doc-biblioref" onclick="">A. Bell et al., 2019</a>)</span>:</p>
 <ul>
 <li class="fragment">Within: <span class="math inline">\(X^{WE}_{it}= X_{it}-\bar{X}_i\)</span></li>
 <li class="fragment">Between: <span class="math inline">\(X^{BE}_{i}=\bar{X}_i\)</span></li>
@@ -756,7 +758,6 @@ Figure&nbsp;10: Structural equation model
 </ul>
 </div>
 </section></section>
-<section>
 <section id="thank-you-for-your-attention" class="title-slide slide level1 center" data-background-color="#491106ff">
 <h1>Thank you for your attention</h1>
 <ul>
@@ -768,14 +769,527 @@ Figure&nbsp;10: Structural equation model
 </div>
 </div>
 </section>
+
+<section id="contents-3" class="title-slide slide level1 center" data-background-color="#2f0202" style="text-align: right;">
+<h1>Contents</h1>
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+<ul>
+<li><span style="color: #ab9f9f; font-size: 1.3em;">The project</span></li>
+<li><span style="color: #ab9f9f;font-size: 1.3em;">Paper market justice in pensions</span></li>
+<li><span style="color: #edde06;font-size: 1.3em;">Paper factorial invariance of merit scale</span></li>
+<li><span style="color: #ab9f9f;font-size: 1.3em;">Latent Class Analysis of merit scale</span></li>
+</ul>
+</div>
+</section>
+
+<section>
+<section id="research-problem" class="title-slide slide level1 xlarge center" data-background-color="#5f5758">
+<h1>Research problem</h1>
+
+</section>
+<section id="context-and-motivation" class="slide level2">
+<h2>Context and motivation</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p>Meritocracy: a distributive system where rewards are expected to reflect individual effort and ability rather than social origin or inherited privilege <span class="citation" data-cites="young_rise_1958 bell_equality_1972">(<a href="#/references" role="doc-biblioref" onclick="">D. Bell, 1972</a>; <a href="#/references" role="doc-biblioref" onclick="">Young, 1958</a>)</span></p></li>
+<li class="fragment"><p>Meritocratic beliefs help legitimize inequality <span class="citation" data-cites="mijs_paradox_2021 sandel_tyranny_2020 castillo_meritocracia_2019 heuer_legitimizing_2020 garcia-sierra_dark_2023">(<a href="#/references" role="doc-biblioref" onclick="">Castillo et al., 2019</a>; <a href="#/references" role="doc-biblioref" onclick="">García-Sierra, 2023</a>; <a href="#/references" role="doc-biblioref" onclick="">Heuer et al., 2020</a>; <a href="#/references" role="doc-biblioref" onclick="">Jonathan J. B. Mijs, 2021</a>; <a href="#/references" role="doc-biblioref" onclick="">Sandel, 2020</a>)</span></p>
+<ul>
+<li class="fragment">They shape how inequality is perceived and justified</li>
+<li class="fragment">They are reinforced through social institutions</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="context-and-motivation-1" class="slide level2">
+<h2>Context and motivation</h2>
+<div class="highlight-last" style="font-size: 110%;">
+<ul>
+<li class="fragment"><p>Schools are key sites for the formation and development of meritocratic beliefs</p>
+<ul>
+<li class="fragment">Cultural ideal: effort, achievement, self-improvement, and education as routes to mobility <span class="citation" data-cites="mijs_unfulfillable_2016 chauvin_school_2026 darnon_where_2018">(<a href="#/references" role="doc-biblioref" onclick="">Chauvin et al., 2026</a>; <a href="#/references" role="doc-biblioref" onclick="">Darnon, Wiederkehr, et al., 2018</a>; <a href="#/references" role="doc-biblioref" onclick="">J. Mijs, 2016</a>)</span></li>
+<li class="fragment">Institutional life: grading, tracking, selection, awards, and credentials <span class="citation" data-cites="resh_sense_2017 darnon_competitive_2023 traini_stratification_2022">(<a href="#/references" role="doc-biblioref" onclick="">Darnon et al., 2023</a>; <a href="#/references" role="doc-biblioref" onclick="">Resh &amp; Sabbagh, 2017</a>; <a href="#/references" role="doc-biblioref" onclick="">Traini, 2022</a>)</span></li>
+<li class="fragment">Non-meritocratic elements: structural advantages and dual consciousness <span class="citation" data-cites="tang_meritocratic_2025 goudeau_how_2021 liu_does_2025">(<a href="#/references" role="doc-biblioref" onclick="">Goudeau &amp; Cimpian, 2021</a>; <a href="#/references" role="doc-biblioref" onclick="">C. Liu &amp; Wang, 2025</a>; <a href="#/references" role="doc-biblioref" onclick="">Tang et al., 2025</a>)</span></li>
+<li class="fragment">Consequences within and beyond school: greater legitimation of unequal outcomes, from grades to income inequality and lower support for redistribution <span class="citation" data-cites="castillo_socialization_2024 batruch_belief_2022 wiederkehr_belief_2015 darnon_belief_2018">(<a href="#/references" role="doc-biblioref" onclick="">Batruch et al., 2022</a>; <a href="#/references" role="doc-biblioref" onclick="">Castillo et al., 2024</a>; <a href="#/references" role="doc-biblioref" onclick="">Darnon, Smeding, et al., 2018</a>; <a href="#/references" role="doc-biblioref" onclick="">Wiederkehr et al., 2015</a>)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="research-gaps-and-contributions" class="slide level2">
+<h2>Research gaps and contributions</h2>
+<div style="font-size: 115%;">
+<ul>
+<li class="fragment"><p>The measurement of meritocratic beliefs remains limited in school-based research</p></li>
+<li class="fragment"><p>Existing scales are still narrow: BSM <span class="citation" data-cites="wiederkehr_belief_2015">(<a href="#/references" role="doc-biblioref" onclick="">Wiederkehr et al., 2015</a>)</span> focuses mainly on effort and opportunity, while <span class="citation" data-cites="chauvin_school_2026">Chauvin et al. (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span> centers on perceived meritocracy and blends school with broader social meritocracy</p></li>
+<li class="fragment"><p>These limitations matter because measurement shapes the validity and interpretation of findings</p></li>
+<li class="fragment"><p>We address this gap with a multidimensional approach <span class="citation" data-cites="castillo_multidimensional_2023">(<a href="#/references" role="doc-biblioref" onclick="">Castillo et al., 2023</a>)</span> that distinguishes perceptions from preferences, and meritocratic from non-meritocratic principles</p></li>
+</ul>
+</div>
+</section>
+<section id="research-gaps-and-contributions-1" class="slide level2">
+<h2>Research gaps and contributions</h2>
+<div style="font-size: 115%;">
+<ul>
+<li class="fragment"><p>Beyond factorial validity, we test measurement stability across school stages and over time</p></li>
+<li class="fragment"><p>Measurement invariance is necessary for valid group and longitudinal comparisons <span class="citation" data-cites="chen_sensitivity_2007 putnick_measurement_2016">(<a href="#/references" role="doc-biblioref" onclick="">Chen, 2007</a>; <a href="#/references" role="doc-biblioref" onclick="">Putnick &amp; Bornstein, 2016</a>)</span></p></li>
+<li class="fragment"><p>These cohorts capture distinct stages of adolescence, when beliefs about justice and inequality become more complex and school sorting more salient <span class="citation" data-cites="resh_sense_2014 henry_development_2006">(<a href="#/references" role="doc-biblioref" onclick="">Henry &amp; Saul, 2006</a>; <a href="#/references" role="doc-biblioref" onclick="">Resh &amp; Sabbagh, 2014</a>)</span></p></li>
+<li class="fragment"><p>This lets us assess whether meritocratic beliefs remain stable or shift as students encounter the limits of meritocratic ideals <span class="citation" data-cites="tang_meritocratic_2025">(<a href="#/references" role="doc-biblioref" onclick="">Tang et al., 2025</a>)</span></p></li>
+</ul>
+</div>
+</section>
+<section id="this-study-1" class="slide level2">
+<h2>This study</h2>
+<div style="font-size: 120%;">
+<ol type="1">
+<li class="fragment"><p>We ask whether students distinguish between meritocratic and non-meritocratic principles, and between perceptions (“what is”) and preferences (“what should be”)</p></li>
+<li class="fragment"><p>We also ask whether these dimensions can be measured comparably across age cohorts and over time</p></li>
+</ol>
+<ul>
+<li class="fragment"><p><span class="math inline">\(H1\)</span>: Meritocratic beliefs are best represented by the four factors</p></li>
+<li class="fragment"><p><span class="math inline">\(H2–H3\)</span>: This four-factor model is invariant across cohorts and longitudinally within students</p></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="method" class="title-slide slide level1 xlarge center" data-background-color="#5f5758">
+<h1>Method</h1>
+
+</section>
+<section id="participants-and-processedure" class="slide level2">
+<h2>Participants and processedure</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p><a href="https://github.com/educacion-meritocracia/edumer-data">Panel Survey on Education and Meritocracy (EDUMER)</a>, using the 2023 and 2024 student waves</p></li>
+<li class="fragment"><p>CAWI surveys administered to primary and secondary school students from 9 schools in the Metropolitan and Valparaíso regions of Chile</p></li>
+<li class="fragment"><p>Wave 1 (N = 846): 386 girls, 421 boys, and 39 identifying as other; <span class="math inline">\(M_{age}\)</span> = 13.4, <span class="math inline">\(SD_{age}\)</span> = 1.6</p></li>
+<li class="fragment"><p>Wave 2 (N = 662): 303 girls, 338 boys, and 21 identifying as other; <span class="math inline">\(M_{age}\)</span> = 14.4, <span class="math inline">\(SD_{age}\)</span> = 1.6</p></li>
+<li class="fragment"><p>Attrition: 22% (78% retention), mainly due to school absenteeism and school transfers</p></li>
+</ul>
+</div>
+</section>
+<section id="measures-5" class="slide level2">
+<h2>Measures</h2>
+<div style="font-size: 110%;">
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-vars-ppms" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-vars-ppms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Scale of Perceptions and Preferences of Meritocracy
+</figcaption>
+<div aria-describedby="fig-vars-ppms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="images/items_ingles.png" class="quarto-figure quarto-figure-center" style="width:70.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="measures-6" class="slide level2">
+<h2>Measures</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><strong>Cohorts</strong>: To distinguish educational level across waves in the invariance analyses, we use a cohort indicator defined at each wave (primary vs.&nbsp;secondary school).</li>
+</ul>
+</div>
+<div class="fragment" style="font-size: 120%;">
+<div class="cell" data-tbl-cap-location="top">
+<div id="tbl-cohort" class="cell quarto-float quarto-figure quarto-figure-center" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cohort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Descriptive statistics for cohort level
+</figcaption>
+<div aria-describedby="tbl-cohort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-striped table-bordered do-not-create-environment cell caption-top" style="font-size: 23px; margin-left: auto; margin-right: auto;">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th colspan="3" data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Age
+</div></th>
+<th colspan="3" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Gender
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Wave</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Cohort level</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">N</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Mean</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">SD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Man</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Women</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Others</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="3" style="text-align: left; vertical-align: middle !important;">Wave 1</td>
+<td style="text-align: left;">Primary</td>
+<td style="text-align: right;">406</td>
+<td style="text-align: right;">11.85</td>
+<td style="text-align: right;">0.56</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">191</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Secondary</td>
+<td style="text-align: right;">440</td>
+<td style="text-align: right;">14.79</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">226</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">846</td>
+<td style="text-align: right;">13.38</td>
+<td style="text-align: right;">1.63</td>
+<td style="text-align: right;">421</td>
+<td style="text-align: right;">386</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr class="even">
+<td rowspan="3" style="text-align: left; vertical-align: middle !important;">Wave 2</td>
+<td style="text-align: left;">Primary</td>
+<td style="text-align: right;">319</td>
+<td style="text-align: right;">12.83</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">145</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Secondary</td>
+<td style="text-align: right;">343</td>
+<td style="text-align: right;">15.76</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">177</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">662</td>
+<td style="text-align: right;">14.35</td>
+<td style="text-align: right;">1.61</td>
+<td style="text-align: right;">338</td>
+<td style="text-align: right;">303</td>
+<td style="text-align: right;">21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="analytical-strategy-1" class="slide level2">
+<h2>Analytical strategy</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p><strong>Confirmatory Factor Analysis (CFA)</strong>:</p>
+<ul>
+<li class="fragment">A four-factor latent model estimated with WLSMV <span class="citation" data-cites="kline_principles_2023">(<a href="#/references" role="doc-biblioref" onclick="">Kline, 2023</a>)</span></li>
+<li class="fragment">Model fit cutoffs <span class="citation" data-cites="brown_confirmatory_2015">(<a href="#/references" role="doc-biblioref" onclick="">Brown, 2015</a>)</span>: <span class="math inline">\(\text{CFI or TLI} &gt; 0.95\)</span>; <span class="math inline">\(RMSEA &lt; 0.06\)</span>; nonsignificant <span class="math inline">\(\chi^2\)</span> (<span class="math inline">\(p &gt; 0.05\)</span>), and <span class="math inline">\(\chi^2/df &lt; 3\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="analytical-strategy-2" class="slide level2">
+<h2>Analytical strategy</h2>
+<div class="highlight-last" style="font-size: 110%;">
+<ul>
+<li class="fragment"><p><strong>Measurement invariance</strong>: a set of procedures used to assess the comparability of a measurement model <span class="citation" data-cites="vandeschoot_editorial_2015 putnick_measurement_2016">(<a href="#/references" role="doc-biblioref" onclick="">Putnick &amp; Bornstein, 2016</a>; <a href="#/references" role="doc-biblioref" onclick="">Van De Schoot et al., 2015</a>)</span></p></li>
+<li class="fragment"><p>Two types:</p>
+<ul>
+<li class="fragment">Between cohorts (primary vs.&nbsp;secondary school) –&gt; <span class="citation" data-cites="davidov_measurement_2014">Davidov et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span></li>
+<li class="fragment">Longitudinal (two waves; within individuals) –&gt; <span class="citation" data-cites="liu_testing_2017">Y. Liu et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
+</ul></li>
+<li class="fragment"><p>Procedure: four sequentially constrained, hierarchical models</p>
+<ul>
+<li class="fragment">Configural (same factor structure)</li>
+<li class="fragment">Weak (+ equal factor loadings)</li>
+<li class="fragment">Strong (+ equal intercepts)</li>
+<li class="fragment">Strict (+ equal error variances)</li>
+<li class="fragment">Fit cutoffs <span class="citation" data-cites="chen_sensitivity_2007">(<a href="#/references" role="doc-biblioref" onclick="">Chen, 2007</a>)</span>: CFI (<span class="math inline">\(\Delta \geq -0.010\)</span>) and RMSEA (<span class="math inline">\(\Delta \geq 0.0\)</span>)</li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="results-2" class="title-slide slide level1 xlarge center" data-background-color="#5f5758">
+<h1>Results</h1>
+
+</section>
+<section id="measurement-model" class="slide level2">
+<h2>Measurement model</h2>
+<div style="font-size: 110%;">
+<div class="cell fig-cap-location-top">
+<div class="cell-output-display">
+<div id="fig-general" class="quarto-float quarto-figure quarto-figure-center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Multigroup model diagram
+</figcaption>
+<div aria-describedby="fig-general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="images/esquema-general.png" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="longitudinal-descriptives" class="slide level2">
+<h2>Longitudinal descriptives</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-likerplot1" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-likerplot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Distribution of responses on the scale of perceptions and preferences regarding meritocracy by wave
+</figcaption>
+<div aria-describedby="fig-likerplot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="FU_april_2026_files/figure-revealjs/fig-likerplot1-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="longitudinal-invariance" class="slide level2">
+<h2>Longitudinal invariance</h2>
+<div style="font-size: 120%;">
+<div class="cell" data-tbl-cap-location="top">
+<div id="tbl-longinv" class="cell quarto-float quarto-figure quarto-figure-center" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-longinv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Longitudinal invariance results
+</figcaption>
+<div aria-describedby="tbl-longinv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-striped table-bordered table-condensed do-not-create-environment cell caption-top" style="font-size: 23px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">χ^2 (df)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">CFI</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">RMSEA (90% CI)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ χ^2 (Δ df)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ CFI</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ RMSEA</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; width: 2cm;">Configural</td>
+<td style="text-align: center;">117.7 (68)</td>
+<td style="text-align: center;">0.991</td>
+<td style="text-align: center; width: 2 cm;">0.035 (0.024-0.046)</td>
+<td style="text-align: center;">0 (0)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.000</td>
+<td style="text-align: center;">Reference</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; width: 2cm;">Weak</td>
+<td style="text-align: center;">122.51 (72)</td>
+<td style="text-align: center;">0.990</td>
+<td style="text-align: center; width: 2 cm;">0.034 (0.024-0.045)</td>
+<td style="text-align: center;">4.809 (4)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-0.001</td>
+<td style="text-align: center;">Accept</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; width: 2cm;">Strong</td>
+<td style="text-align: center;">128.53 (80)</td>
+<td style="text-align: center;">0.991</td>
+<td style="text-align: center; width: 2 cm;">0.032 (0.021-0.042)</td>
+<td style="text-align: center;">6.02 (8)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-0.002</td>
+<td style="text-align: center;">Accept</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; width: 2cm;">Strict</td>
+<td style="text-align: center;">130.17 (84)</td>
+<td style="text-align: center;">0.991</td>
+<td style="text-align: center; width: 2 cm;">0.031 (0.02-0.04)</td>
+<td style="text-align: center;">1.635 (4)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-0.002</td>
+<td style="text-align: center;">Accept</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cohort-descriptives" class="slide level2">
+<h2>Cohort descriptives</h2>
+<div class="cell fig-cap-location-top" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-likerplot2" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" data-cap-location="top">
+<figure class="quarto-float quarto-float-fig">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-likerplot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Distribution of responses on the scale of perceptions and preferences regarding meritocracy by cohort
+</figcaption>
+<div aria-describedby="fig-likerplot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="FU_april_2026_files/figure-revealjs/fig-likerplot2-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cohort-invariance" class="slide level2">
+<h2>Cohort invariance</h2>
+<div style="font-size: 120%;">
+<div class="cell" data-tbl-cap-location="top">
+<div id="tbl-cohort2" class="cell quarto-float quarto-figure quarto-figure-center" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cohort2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Cohort (multigroup) invariance results
+</figcaption>
+<div aria-describedby="tbl-cohort2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-striped table-bordered table-condensed do-not-create-environment cell caption-top" style="font-size: 23px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">χ^2 (df)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">CFI</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">RMSEA (90% CI)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ χ^2 (Δ df)</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ CFI</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Δ RMSEA</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; width: 2cm;">Configural</td>
+<td style="text-align: center;">24.95 (26)</td>
+<td style="text-align: center;">0.993</td>
+<td style="text-align: center; width: 2 cm;">0.036 (0.009-0.057)</td>
+<td style="text-align: center; width: 2 cm;">0 (0)</td>
+<td style="text-align: center;">0.000</td>
+<td style="text-align: center;">0.000</td>
+<td style="text-align: center;">Reference</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; width: 2cm;">Tresholds</td>
+<td style="text-align: center;">57.56 (42)</td>
+<td style="text-align: center;">0.980</td>
+<td style="text-align: center; width: 2 cm;">0.049 (0.033-0.064)</td>
+<td style="text-align: center; width: 2 cm;">43.875 (16) ***</td>
+<td style="text-align: center;">-0.013</td>
+<td style="text-align: center;">0.013</td>
+<td style="text-align: center;">Reject</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; width: 2cm;">Tresholds + Loadings</td>
+<td style="text-align: center;">72.35 (46)</td>
+<td style="text-align: center;">0.973</td>
+<td style="text-align: center; width: 2 cm;">0.053 (0.039-0.067)</td>
+<td style="text-align: center; width: 2 cm;">17.075 (4) **</td>
+<td style="text-align: center;">-0.006</td>
+<td style="text-align: center;">0.005</td>
+<td style="text-align: center;">Reject</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div class="fragment" style="font-size: 120%;">
+<p>Cross-cohort non-invariance is mainly driven by the perceived-effort item, suggesting that older students apply a more critical standard when judging whether effort is rewarded.</p>
+</div>
+</section></section>
+<section>
+<section id="discussion-and-conclusions-2" class="title-slide slide level1 xlarge center" data-background-color="#5f5758">
+<h1>Discussion and conclusions</h1>
+
+</section>
+<section id="discussion-meritocracy-at-schools" class="slide level2">
+<h2>Discussion: meritocracy at schools</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(H1\)</span> is supported: students already organize meritocratic beliefs into four distinct dimensions</p></li>
+<li class="fragment"><p>They distinguish both between “what is” and “what should be,” and between merit and privilege</p></li>
+<li class="fragment"><p>Merit and non-merit do not work as opposites: recognizing privilege does not eliminate support for merit <span class="citation" data-cites="tang_meritocratic_2025 mijs_visualizing_2026">(<a href="#/references" role="doc-biblioref" onclick="">Jonathan J. B. Mijs, 2026</a>; <a href="#/references" role="doc-biblioref" onclick="">Tang et al., 2025</a>)</span></p></li>
+<li class="fragment"><p>This suggests that the link between meritocratic beliefs and inequality legitimization is likely dimension-specific <span class="citation" data-cites="castillo_multidimensional_2023">(<a href="#/references" role="doc-biblioref" onclick="">Castillo et al., 2023</a>)</span></p></li>
+</ul>
+</div>
+</section>
+<section id="discussion-measurement-invariance" class="slide level2">
+<h2>Discussion: measurement invariance</h2>
+<div class="highlight-last" style="font-size: 120%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(H2\)</span> is supported: the scale is longitudinally stable, so within-student change over time can be interpreted substantively</p>
+<ul>
+<li class="fragment">This strengthens the basis for studying developmental change in meritocratic beliefs</li>
+</ul></li>
+<li class="fragment"><p><span class="math inline">\(H3\)</span> is not supported: the scale is not fully invariant across educational levels</p>
+<ul>
+<li class="fragment">Perceived meritocracy seems to shift across school stages, suggesting that older students see effort as less clearly rewarded than younger students do <span class="citation" data-cites="tang_meritocratic_2025">(<a href="#/references" role="doc-biblioref" onclick="">Tang et al., 2025</a>)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="conclusions" class="slide level2" data-background-color="#5f5758">
+<h2>Conclusions</h2>
+<div style="font-size: 120%;">
+<ol type="1">
+<li class="fragment"><p>Students already distinguish between perceptions and preferences, and between meritocratic and non-meritocratic principles</p></li>
+<li class="fragment"><p>Merit endorsement can coexist with recognition of privilege, so meritocratic beliefs are better understood as multidimensional rather than one-dimensional</p></li>
+<li class="fragment"><p>The scale is stable over time, enabling valid longitudinal analysis, but not fully across school stages, which limits cross-cohort comparison</p></li>
+<li class="fragment"><p>Future research should refine the measure and examine how these beliefs shape school experiences, inequality legitimization, and attitudes toward educational opportunity</p></li>
+</ol>
+</div>
+</section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-batruch_belief_2022" class="csl-entry" role="listitem">
+Batruch, A., Jetten, J., Van de Werfhorst, H., Darnon, C., &amp; Butera, F. (2022). Belief in <span>School Meritocracy</span> and the <span>Legitimization</span> of <span>Social</span> and <span>Income Inequality</span>. <em>Social Psychological and Personality Science</em>, 194855062211110. <a href="https://doi.org/10.1177/19485506221111017">https://doi.org/10.1177/19485506221111017</a>
+</div>
 <div id="ref-bell_fixed_2019" class="csl-entry" role="listitem">
 Bell, A., Fairbrother, M., &amp; Jones, K. (2019). Fixed and random effects models: Making an informed choice. <em>Quality &amp; Quantity</em>, <em>53</em>(2), 1051–1074. <a href="https://doi.org/10.1007/s11135-018-0802-x">https://doi.org/10.1007/s11135-018-0802-x</a>
 </div>
+<div id="ref-bell_equality_1972" class="csl-entry" role="listitem">
+Bell, D. (1972). On equality: <span>I</span>. <span>Meritocracy</span> and equality. <em>The Public Interest</em>, <em>29</em>, 29–68.
+</div>
 <div id="ref-boccardo_30_2020" class="csl-entry" role="listitem">
 Boccardo, G. (2020). <em>30 años de privatizaciones en <span>Chile</span>: <span>Lo</span> que la pandemia reveló</em>. Nodo XXI.
+</div>
+<div id="ref-brown_confirmatory_2015" class="csl-entry" role="listitem">
+Brown, T. A. (2015). <em>Confirmatory factor analysis for applied research</em> (Second edition). New York London: The Guilford Press.
 </div>
 <div id="ref-busemeyer_skills_2015" class="csl-entry" role="listitem">
 Busemeyer, M. (2015). <em>Skills and inequality: Partisan politics and the political economy of education reforms in western welfare states</em>. Cambridge: Cambridge University Press. <a href="https://doi.org/10.1017/CBO9781107477650">https://doi.org/10.1017/CBO9781107477650</a>
@@ -795,6 +1309,30 @@ Castillo, J. C., Iturra, J., Maldonado, L., Atria, J., &amp; Meneses, F. (2023).
 <div id="ref-castillo_perceptions_2025" class="csl-entry" role="listitem">
 Castillo, J. C., Laffert, A., Carrasco, K., &amp; Iturra-Sanhueza, J. (2025). Perceptions of inequality and meritocracy: Their interplay in shaping preferences for market justice in <span>Chile</span> (2016–2023). <em>Frontiers in Sociology</em>, <em>10</em>, 1634219. <a href="https://doi.org/10.3389/fsoc.2025.1634219">https://doi.org/10.3389/fsoc.2025.1634219</a>
 </div>
+<div id="ref-castillo_socialization_2024" class="csl-entry" role="listitem">
+Castillo, J. C., Salgado, M., Carrasco, K., &amp; Laffert, A. (2024). The <span>Socialization</span> of <span>Meritocracy</span> and <span>Market Justice Preferences</span> at <span>School</span>. <em>Societies</em>, <em>14</em>(11), 214. <a href="https://doi.org/10.3390/soc14110214">https://doi.org/10.3390/soc14110214</a>
+</div>
+<div id="ref-castillo_meritocracia_2019" class="csl-entry" role="listitem">
+Castillo, J. C., Torres, A., Atria, J., &amp; Maldonado, L. (2019). Meritocracia y desigualdad económica: <span>Percepciones</span>, preferencias e implicancias. <em>Revista Internacional de Sociología</em>, <em>77</em>(1), 117. <a href="https://doi.org/10.3989/ris.2019.77.1.17.114">https://doi.org/10.3989/ris.2019.77.1.17.114</a>
+</div>
+<div id="ref-chauvin_school_2026" class="csl-entry" role="listitem">
+Chauvin, B., Rauscher, C., Saidah, B., &amp; Louvet, E. (2026). School meritocracy: A multidimensional construct? <span>Evidence</span> from the development of a school meritocracy scale by exploratory and confirmatory bifactor modeling. <em>Current Psychology</em>, <em>45</em>(5), 519. <a href="https://doi.org/10.1007/s12144-026-09134-1">https://doi.org/10.1007/s12144-026-09134-1</a>
+</div>
+<div id="ref-chen_sensitivity_2007" class="csl-entry" role="listitem">
+Chen, F. F. (2007). Sensitivity of <span>Goodness</span> of <span>Fit Indexes</span> to <span>Lack</span> of <span>Measurement Invariance</span>. <em>Structural Equation Modeling: A Multidisciplinary Journal</em>, <em>14</em>(3), 464–504. <a href="https://doi.org/10.1080/10705510701301834">https://doi.org/10.1080/10705510701301834</a>
+</div>
+<div id="ref-darnon_competitive_2023" class="csl-entry" role="listitem">
+Darnon, C., Jury, M., Goudeau, S., &amp; Portex, M. (2023). Competitive and cooperative practices in education: <span>How</span> teachers’ beliefs in school meritocracy are related to their daily practices with students. <em>Social Psychology of Education</em>, <em>26</em>(6), 1789–1805. <a href="https://doi.org/10.1007/s11218-023-09824-9">https://doi.org/10.1007/s11218-023-09824-9</a>
+</div>
+<div id="ref-darnon_belief_2018" class="csl-entry" role="listitem">
+Darnon, C., Smeding, A., &amp; Redersdorff, S. (2018). Belief in school meritocracy as an ideological barrier to the promotion of equality. <em>European Journal of Social Psychology</em>, <em>48</em>(4), 523–534. <a href="https://doi.org/10.1002/ejsp.2347">https://doi.org/10.1002/ejsp.2347</a>
+</div>
+<div id="ref-darnon_where_2018" class="csl-entry" role="listitem">
+Darnon, C., Wiederkehr, V., Dompnier, B., &amp; Martinot, D. (2018). <span>“<span>Where</span> there is a will, there is a way”</span>: <span>Belief</span> in school meritocracy and the social-class achievement gap. <em>British Journal of Social Psychology</em>, <em>57</em>(1), 250–262. <a href="https://doi.org/10.1111/bjso.12214">https://doi.org/10.1111/bjso.12214</a>
+</div>
+<div id="ref-davidov_measurement_2014" class="csl-entry" role="listitem">
+Davidov, E., Meuleman, B., Cieciuch, J., Schmidt, P., &amp; Billiet, J. (2014). Measurement <span>Equivalence</span> in <span>Cross-National Research</span>. <em>Annual Review of Sociology</em>, <em>40</em>(Volume 40, 2014), 55–75. <a href="https://doi.org/10.1146/annurev-soc-071913-043137">https://doi.org/10.1146/annurev-soc-071913-043137</a>
+</div>
 <div id="ref-fernandez_positive_2013" class="csl-entry" role="listitem">
 Fernandez, J. J., &amp; Jaime-Castillo, A. M. (2013). Positive or <span>Negative Policy Feedbacks</span>? <span>Explaining Popular Attitudes Towards Pragmatic Pension Policy Reforms</span>. <em>European Sociological Review</em>, <em>29</em>(4), 803–815. <a href="https://doi.org/10.1093/esr/jcs059">https://doi.org/10.1093/esr/jcs059</a>
 </div>
@@ -804,8 +1342,20 @@ Ferre, J. C. (2023). Welfare regimes in twenty-first-century <span>Latin America
 <div id="ref-flores_top_2020" class="csl-entry" role="listitem">
 Flores, I., Sanhueza, C., Atria, J., &amp; Mayer, R. (2020). Top <span>Incomes</span> in <span>Chile</span>: <span>A Historical Perspective</span> on <span>Income Inequality</span>, 1964–2017. <em>Review of Income and Wealth</em>, <em>66</em>(4), 850–874. <a href="https://doi.org/10.1111/roiw.12441">https://doi.org/10.1111/roiw.12441</a>
 </div>
+<div id="ref-garcia-sierra_dark_2023" class="csl-entry" role="listitem">
+García-Sierra, A. (2023). The dark side of meritocratic beliefs: <span>Is</span> believing in meritocracy detrimental to individuals from low socioeconomic backgrounds? <em>Social Justice Research</em>, <em>36</em>(4), 385–409. <a href="https://doi.org/10.1007/s11211-023-00413-x">https://doi.org/10.1007/s11211-023-00413-x</a>
+</div>
 <div id="ref-gingrich_making_2011" class="csl-entry" role="listitem">
 Gingrich, J. R. (2011). <em>Making <span>Markets</span> in the <span>Welfare State</span>: <span>The Politics</span> of <span>Varying Market Reforms</span></em> (1st ed.). Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511791529">https://doi.org/10.1017/CBO9780511791529</a>
+</div>
+<div id="ref-goudeau_how_2021" class="csl-entry" role="listitem">
+Goudeau, S., &amp; Cimpian, A. (2021). How <span>Do Young Children Explain Differences</span> in the <span>Classroom</span>? <span>Implications</span> for <span>Achievement</span>, <span>Motivation</span>, and <span>Educational Equity</span>. <em>Perspectives on Psychological Science</em>, <em>16</em>(3), 533–552. <a href="https://doi.org/10.1177/1745691620953781">https://doi.org/10.1177/1745691620953781</a>
+</div>
+<div id="ref-henry_development_2006" class="csl-entry" role="listitem">
+Henry, P. J., &amp; Saul, A. (2006). The <span>Development</span> of <span>System Justification</span> in the <span>Developing World</span>. <em>Social Justice Research</em>, <em>19</em>(3), 365–378. <a href="https://doi.org/10.1007/s11211-006-0012-x">https://doi.org/10.1007/s11211-006-0012-x</a>
+</div>
+<div id="ref-heuer_legitimizing_2020" class="csl-entry" role="listitem">
+Heuer, J.-O., Lux, T., Mau, S., &amp; Zimmermann, K. (2020). Legitimizing <span>Inequality</span>: <span>The Moral Repertoires</span> of <span>Meritocracy</span> in <span>Four Countries</span>. <em>Comparative Sociology</em>, <em>19</em>(4-5), 542–584. <a href="https://doi.org/10.1163/15691330-BJA10017">https://doi.org/10.1163/15691330-BJA10017</a>
 </div>
 <div id="ref-immergut_it_2020" class="csl-entry" role="listitem">
 Immergut, E. M., &amp; Schneider, S. M. (2020). Is it unfair for the affluent to be able to purchase <span>“better”</span> healthcare? <span>Existential</span> standards and institutional norms in healthcare attitudes across 28 countries. <em>Social Science &amp; Medicine</em>, <em>267</em>, 113146. <a href="https://doi.org/10.1016/j.socscimed.2020.113146">https://doi.org/10.1016/j.socscimed.2020.113146</a>
@@ -831,6 +1381,12 @@ Lee, J.-S., &amp; Stacey, M. (2024). Fairness perceptions of educational inequal
 <div id="ref-lindh_public_2015" class="csl-entry" role="listitem">
 Lindh, A. (2015). Public <span>Opinion</span> against <span>Markets</span>? <span>Attitudes</span> towards <span>Market Distribution</span> of <span>Social Services</span> – <span>A Comparison</span> of 17 <span>Countries</span>. <em>Social Policy &amp; Administration</em>, <em>49</em>(7), 887–910. <a href="https://doi.org/10.1111/spol.12105">https://doi.org/10.1111/spol.12105</a>
 </div>
+<div id="ref-liu_does_2025" class="csl-entry" role="listitem">
+Liu, C., &amp; Wang, J. (2025). Does <span>Education Legitimise Inequality</span>? <span>Comparative Analysis</span> of <span>Income Inequality</span>, <span>Education</span>, and <span>Meritocratic Beliefs</span>. <em>The British Journal of Sociology</em>, 1468–4446.70029. <a href="https://doi.org/10.1111/1468-4446.70029">https://doi.org/10.1111/1468-4446.70029</a>
+</div>
+<div id="ref-liu_testing_2017" class="csl-entry" role="listitem">
+Liu, Y., Millsap, R. E., West, S. G., Tein, J.-Y., Tanaka, R., &amp; Grimm, K. J. (2017). Testing measurement invariance in longitudinal data with ordered-categorical measures. <em>Psychological Methods</em>, <em>22</em>(3), 486–506. <a href="https://doi.org/10.1037/met0000075">https://doi.org/10.1037/met0000075</a>
+</div>
 <div id="ref-llorca-jana_historia_2021" class="csl-entry" role="listitem">
 Llorca-Jaña, M., &amp; Miller, R. M. D. (2021). <em><span>Historia económica de Chile desde la independencia</span></em>. Santiago de Chile: RIL editores.
 </div>
@@ -842,6 +1398,27 @@ Madariaga, A. (2020). The three pillars of neoliberalism: <span>Chile</span>’s
 </div>
 <div id="ref-mau_inequality_2015" class="csl-entry" role="listitem">
 Mau, S. (2015). <em>Inequality, <span>Marketization</span> and the <span>Majority Class</span>: <span>Why Did</span> the <span>European Middle Classes Accept Neo-Liberalism</span>?</em> London: Palgrave Macmillan UK.
+</div>
+<div id="ref-mijs_unfulfillable_2016" class="csl-entry" role="listitem">
+Mijs, J. (2016). The <span>Unfulfillable Promise</span> of <span>Meritocracy</span>: <span>Three Lessons</span> and <span>Their Implications</span> for <span>Justice</span> in <span>Education</span>. <em>Social Justice Research</em>, <em>29</em>(1), 14–34. <a href="https://doi.org/10.1007/s11211-014-0228-0">https://doi.org/10.1007/s11211-014-0228-0</a>
+</div>
+<div id="ref-mijs_paradox_2021" class="csl-entry" role="listitem">
+Mijs, Jonathan J. B. (2021). The paradox of inequality: Income inequality and belief in meritocracy go hand in hand. <em>Socio-Economic Review</em>, <em>19</em>(1), 7–35. <a href="https://doi.org/10.1093/ser/mwy051">https://doi.org/10.1093/ser/mwy051</a>
+</div>
+<div id="ref-mijs_visualizing_2026" class="csl-entry" role="listitem">
+Mijs, Jonathan J. B. (2026). Visualizing <span>Belief</span> in <span>Merit</span> and <span>Privilege</span>, 1930 to 2020: <span>Rejoinder</span>. <em>Socius</em>, <em>12</em>, 23780231261426413. <a href="https://doi.org/10.1177/23780231261426413">https://doi.org/10.1177/23780231261426413</a>
+</div>
+<div id="ref-putnick_measurement_2016" class="csl-entry" role="listitem">
+Putnick, D. L., &amp; Bornstein, M. H. (2016). Measurement invariance conventions and reporting: <span>The</span> state of the art and future directions for psychological research. <em>Developmental Review</em>, <em>41</em>, 71–90. <a href="https://doi.org/10.1016/j.dr.2016.06.004">https://doi.org/10.1016/j.dr.2016.06.004</a>
+</div>
+<div id="ref-resh_sense_2014" class="csl-entry" role="listitem">
+Resh, N., &amp; Sabbagh, C. (2014). Sense of justice in school and civic attitudes. <em>Social Psychology of Education</em>, <em>17</em>(1), 51–72. <a href="https://doi.org/10.1007/s11218-013-9240-8">https://doi.org/10.1007/s11218-013-9240-8</a>
+</div>
+<div id="ref-resh_sense_2017" class="csl-entry" role="listitem">
+Resh, N., &amp; Sabbagh, C. (2017). Sense of justice in school and civic behavior. <em>Social Psychology of Education</em>, <em>20</em>(2), 387–409. <a href="https://doi.org/10.1007/s11218-017-9375-0">https://doi.org/10.1007/s11218-017-9375-0</a>
+</div>
+<div id="ref-sandel_tyranny_2020" class="csl-entry" role="listitem">
+Sandel, M. J. (2020). <em>The <span>Tyranny</span> of <span>Merit</span>: <span>What</span>’s <span>Become</span> of the <span>Common Good</span>?</em> Penguin UK.
 </div>
 <div id="ref-somma_no_2021" class="csl-entry" role="listitem">
 Somma, N. M., Bargsted, M., Disi Pavlic, R., &amp; Medel, R. M. (2021). No water in the oasis: The <span>Chilean Spring</span> of 2019–2020. <em>Social Movement Studies</em>, <em>20</em>(4), 495–502. <a href="https://doi.org/10.1080/14742837.2020.1727737">https://doi.org/10.1080/14742837.2020.1727737</a>
@@ -855,8 +1432,23 @@ Superintendencia, de P. (2025). Cuadros de afiliación a <span>AFP</span>.
 <div id="ref-svallfors_political_2007" class="csl-entry" role="listitem">
 Svallfors, S. (Ed.). (2007). <em>The <span>Political Sociology</span> of the <span>Welfare State</span>: <span>Institutions</span>, <span>Social Cleavages</span>, and <span>Orientations</span></em> (1st ed.). Stanford University Press. <a href="https://doi.org/10.2307/j.ctvr0qv0q">https://doi.org/10.2307/j.ctvr0qv0q</a>
 </div>
+<div id="ref-tang_meritocratic_2025" class="csl-entry" role="listitem">
+Tang, M., Li, A., &amp; Wu, X. (2025). Meritocratic <span>Myth</span> in <span>Mind</span>? <span>Socioeconomic Backgrounds</span> and <span>Shifting Beliefs</span> about <span>Meritocracy</span> among <span>College Students</span> in <span>China</span>. <em>Sociology of Education</em>, 00380407251360432. <a href="https://doi.org/10.1177/00380407251360432">https://doi.org/10.1177/00380407251360432</a>
+</div>
 <div id="ref-torche_intergenerational_2014" class="csl-entry" role="listitem">
 Torche, F. (2014). Intergenerational <span>Mobility</span> and <span>Inequality</span>: <span>The Latin American Case</span>. <em>Annual Review of Sociology</em>, <em>40</em>(1), 619–642. <a href="https://doi.org/10.1146/annurev-soc-071811-145521">https://doi.org/10.1146/annurev-soc-071811-145521</a>
+</div>
+<div id="ref-traini_stratification_2022" class="csl-entry" role="listitem">
+Traini, C. (2022). The stratification of education systems and social background inequality of educational opportunity. <em>International Journal of Comparative Sociology</em>, <em>63</em>(1-2), 10–29. <a href="https://doi.org/10.1177/00207152211033015">https://doi.org/10.1177/00207152211033015</a>
+</div>
+<div id="ref-vandeschoot_editorial_2015" class="csl-entry" role="listitem">
+Van De Schoot, R., Schmidt, P., De Beuckelaer, A., Lek, K., &amp; Zondervan-Zwijnenburg, M. (2015). Editorial: <span>Measurement Invariance</span>. <em>Frontiers in Psychology</em>, <em>6</em>. <a href="https://doi.org/10.3389/fpsyg.2015.01064">https://doi.org/10.3389/fpsyg.2015.01064</a>
+</div>
+<div id="ref-wiederkehr_belief_2015" class="csl-entry" role="listitem">
+Wiederkehr, V., Bonnot, V., Krauth-Gruber, S., &amp; Darnon, C. (2015). Belief in school meritocracy as a system-justifying tool for low status students. <em>Frontiers in Psychology</em>, <em>6</em>.
+</div>
+<div id="ref-young_rise_1958" class="csl-entry" role="listitem">
+Young, M. (1958). <em>The rise of the meritocracy</em>. New Brunswick, N.J., U.S.A: Transaction Publishers.
 </div>
 </div>
 </section></section>
@@ -875,7 +1467,7 @@ Torche, F. (2014). Intergenerational <span>Mobility</span> and <span>Inequality<
 <img data-src="FU_april_2026_files/figure-revealjs/fig-cor-1.png" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11: Correlation matrix between market justice and meritocracy scale
+Figure&nbsp;15: Correlation matrix between market justice and meritocracy scale
 </figcaption>
 </figure>
 </div>
@@ -892,7 +1484,7 @@ Figure&nbsp;11: Correlation matrix between market justice and meritocracy scale
 <img data-src="images/sem2.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-educ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12: MIMIC Model for market justice preferences in education
+Figure&nbsp;16: MIMIC Model for market justice preferences in education
 </figcaption>
 </figure>
 </div>
@@ -909,7 +1501,7 @@ Figure&nbsp;12: MIMIC Model for market justice preferences in education
 <img data-src="images/sem3.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-health-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13: MIMIC Model for market justice preferences in healthcare
+Figure&nbsp;17: MIMIC Model for market justice preferences in healthcare
 </figcaption>
 </figure>
 </div>
@@ -1106,7 +1698,7 @@ Figure&nbsp;13: MIMIC Model for market justice preferences in healthcare
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1218,13 +1810,14 @@ Figure&nbsp;13: MIMIC Model for market justice preferences in healthcare
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-            const codeEl = trigger.previousElementSibling.cloneNode(true);
-            for (const childEl of codeEl.children) {
-              if (isCodeAnnotation(childEl)) {
-                childEl.remove();
-              }
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
             }
-            return codeEl.innerText;
+          }
+          return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

@@ -129,6 +129,8 @@ rm(list = ls())
 
 {{< include 04-conclusion.qmd >}}
 
+{{< include merit-factorial.qmd >}}
+
 ## References
 
 ::: {#refs}

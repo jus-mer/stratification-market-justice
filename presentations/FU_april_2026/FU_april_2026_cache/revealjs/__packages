@@ -39,3 +39,6 @@ MASS
 poLCA
 reshape
 summarytools
+semTools
+gtools
+conflicted

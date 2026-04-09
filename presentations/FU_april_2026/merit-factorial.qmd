@@ -1,0 +1,1549 @@
+---
+bibliography: "bib/jusmer.bib"
+csl: "bib/apa6.csl"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      error = F, 
+                      message = F) 
+
+table_format <- if (is_html_output()) {
+  "html"
+} else if (is_latex_output()) {
+  "latex"
+}
+table_format2 <- if (is_html_output()) {
+  T
+} else if (is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+```{r}
+#| include: false
+#| echo: false
+
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  tidyverse,
+  sjmisc,
+  sjPlot,
+  here,
+  lavaan,
+  psych,
+  corrplot,
+  ggdist,
+  patchwork,
+  semTools,
+  gtools,
+  kableExtra,
+  scales
+)
+
+options(scipen = 999)
+rm(list = ls())
+
+library(conflicted)
+
+for (fun in c("filter", "select", "lag", "rename", "mutate", "arrange",
+              "summarise", "summarize", "slice", "between", "rename")) {
+  conflict_prefer(fun, "dplyr")
+}
+
+conflicts_prefer(cowplot::plot_grid)
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+load(url("https://github.com/educacion-meritocracia/merit-factorial/raw/refs/heads/main/output/data/db_long_proc.RData"))
+
+names(db_long)
+glimpse(db_long)
+dim(db_long)
+```
+
+```{r}
+#| label: data 2
+#| results: asis
+#| echo: false
+#| warning: false
+#| output: false
+
+# Crear base en formato wide con dummy de cohorte (0 = primaria, 1 = secundaria)
+db_invariance <- db_long %>%
+  group_by(id_estudiante) %>%
+  mutate(
+    cohort_level = first(cohort_level),
+    cohort_dummy = case_when(
+      cohort_level == "Primary" ~ 0,
+      cohort_level == "Secondary" ~ 1,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  ungroup() %>%
+  dplyr::select(id_estudiante, cohort_dummy, ola, starts_with(c("perc", "pref"))) %>%
+  pivot_wider(
+    id_cols = c(id_estudiante, cohort_dummy),
+    names_from = ola,
+    names_glue = "{.value}{ola}",
+    values_from = c(
+      perc_effort, perc_talent,
+      perc_rich_parents, perc_contact,
+      pref_effort, pref_talent,
+      pref_rich_parents, pref_contact
+    )
+  ) %>%
+  na.omit() %>%
+  dplyr::rename_with(~ str_replace_all(., "_", ""))
+
+# Reescalar variables y convertir a ordinales
+db_invariance <- db_invariance %>% 
+  mutate(
+    across(
+      .cols = -c(idestudiante, cohortdummy),
+      .fns = ~ case_when(. == 1 ~ 0,
+                         . == 2 ~ 1,
+                         . == 3 ~ 2,
+                         . == 4 ~ 3)
+    )
+  ) %>%
+  mutate(
+    across(
+      .cols = -c(idestudiante),
+      .fns = ~ ordered(.)
+    )
+  )
+```
+
+```{r}
+#| label: conf-model
+#| tbl-cap: "Longitudinal Invariance Test"
+#| results: asis
+#| echo: false
+#| warning: false
+
+# First, define the configural model, using the repeated measures factors and
+# indicators
+baseline_model_smt <- ('
+
+###########################################
+# Definición de factores (1 marcador por factor)
+###########################################
+
+percmerit1  =~ 1*perceffort1     + perctalent1
+percmerit2  =~ 1*perceffort2     + perctalent2
+
+percnmerit1 =~ 1*percrichparents1 + perccontact1
+percnmerit2 =~ 1*percrichparents2 + perccontact2
+
+prefmerit1  =~ 1*prefeffort1     + preftalent1
+prefmerit2  =~ 1*prefeffort2     + preftalent2
+
+prefnmerit1 =~ 1*prefrichparents1 + prefcontact1
+prefnmerit2 =~ 1*prefrichparents2 + prefcontact2
+
+
+###########################################
+# Covarianzas entre errores (mismo ítem, distintas olas)
+###########################################
+
+perceffort1 ~~ perceffort2
+perctalent1 ~~ perctalent2
+
+percrichparents1 ~~ percrichparents2
+perccontact1     ~~ perccontact2
+
+prefeffort1 ~~ prefeffort2
+preftalent1 ~~ preftalent2
+
+prefrichparents1 ~~ prefrichparents2
+prefcontact1     ~~ prefcontact2
+')
+
+
+
+# Model Estimation
+fit_baseline <- cfa(baseline_model_smt, data = db_invariance,
+                    ordered = c("perceffort1", "perctalent1", "perceffort2", "perctalent2",
+                                "percrichparents1", "perccontact1", "percrichparents2", "perccontact2",
+                                "prefeffort1", "preftalent1", "prefeffort2", "preftalent2",
+                                "prefrichparents1", "prefcontact1", "prefrichparents2", "prefcontact2"),
+                    parameterization = "theta",
+                    estimator = "WLSMV")
+```
+
+```{r}
+#| label: Weak-Model
+#| tbl-cap: "Longitudinal Invariance Weak Model"
+#| results: asis
+#| echo: false
+#| warning: false
+
+loadinginv_model_smt <- ('
+
+# Igualación de cargas (invarianza débil)
+
+percmerit1  =~ 1*perceffort1 + pe_loading*perctalent1
+percmerit2  =~ 1*perceffort2 + pe_loading*perctalent2
+
+percnmerit1 =~ 1*percrichparents1 + prc_loading*perccontact1
+percnmerit2 =~ 1*percrichparents2 + prc_loading*perccontact2
+
+prefmerit1  =~ 1*prefeffort1 + pfe_loading*preftalent1
+prefmerit2  =~ 1*prefeffort2 + pfe_loading*preftalent2
+
+prefnmerit1 =~ 1*prefrichparents1 + pfrc_loading*prefcontact1
+prefnmerit2 =~ 1*prefrichparents2 + pfrc_loading*prefcontact2
+
+
+# Varianzas y covarianzas latentes
+
+percmerit1  ~~ percmerit1 + percmerit2
+percmerit2  ~~ percmerit2
+percnmerit1 ~~ percnmerit1 + percnmerit2
+percnmerit2 ~~ percnmerit2
+prefmerit1  ~~ prefmerit1 + prefmerit2
+prefmerit2  ~~ prefmerit2
+prefnmerit1 ~~ prefnmerit1 + prefnmerit2
+prefnmerit2 ~~ prefnmerit2
+
+
+# Umbrales (uno igualado por ítem)
+
+# perceffort1 | pe1t1*t1 + pe1t2*t2
+# perceffort2 | pe2t1*t1 + pe2t2*t2
+# perctalent1 | pt1t1*t1 + pt1t2*t2
+# perctalent2 | pt2t1*t1 + pt2t2*t2
+# percrichparents1 | prp1t1*t1 + prp1t2*t2
+# percrichparents2 | prp2t1*t1 + prp2t2*t2
+# perccontact1 | pc1t1*t1 + pc1t2*t2
+# perccontact2 | pc2t1*t1 + pc2t2*t2
+# prefeffort1 | pre1t1*t1 + pre1t2*t2
+# prefeffort2 | pre2t1*t1 + pre2t2*t2
+# preftalent1 | prt1t1*t1 + prt1t2*t2
+# preftalent2 | prt2t1*t1 + prt2t2*t2
+# prefrichparents1 | pfrp1t1*t1 + pfrp1t2*t2
+# prefrichparents2 | pfrp2t1*t1 + pfrp2t2*t2
+# prefcontact1 | pfc1t1*t1 + pfc1t2*t2
+# prefcontact2 | pfc2t1*t1 + pfc2t2*t2
+ 
+
+# Covarianzas entre errores
+
+perceffort1 ~~ perceffort2
+perctalent1 ~~ perctalent2
+percrichparents1 ~~ percrichparents2
+perccontact1 ~~ perccontact2
+prefeffort1 ~~ prefeffort2
+preftalent1 ~~ preftalent2
+prefrichparents1 ~~ prefrichparents2
+prefcontact1 ~~ prefcontact2
+')
+
+
+fit_loadinginv <- cfa(loadinginv_model_smt, data = db_invariance,
+                      ordered = c("perceffort1", "perctalent1", "perceffort2", "perctalent2",
+                                  "percrichparents1", "perccontact1", "percrichparents2", "perccontact2",
+                                  "prefeffort1", "preftalent1", "prefeffort2", "preftalent2",
+                                  "prefrichparents1", "prefcontact1", "prefrichparents2", "prefcontact2"),
+                      parameterization = "theta",
+                      estimator = "WLSMV")
+```
+
+```{r}
+#| label: strong-model
+#| tbl-cap: "Longitudinal Invariance Strong Model"
+#| results: asis
+#| echo: false
+#| warning: false
+
+thresholdinv_model_smt <- ('
+
+# Igualación de cargas (como en el modelo débil)
+
+percmerit1  =~ 1*perceffort1 + pe_loading*perctalent1
+percmerit2  =~ 1*perceffort2 + pe_loading*perctalent2
+
+percnmerit1 =~ 1*percrichparents1 + prc_loading*perccontact1
+percnmerit2 =~ 1*percrichparents2 + prc_loading*perccontact2
+
+prefmerit1  =~ 1*prefeffort1 + pfe_loading*preftalent1
+prefmerit2  =~ 1*prefeffort2 + pfe_loading*preftalent2
+
+prefnmerit1 =~ 1*prefrichparents1 + pfrc_loading*prefcontact1
+prefnmerit2 =~ 1*prefrichparents2 + pfrc_loading*prefcontact2
+
+
+# Varianzas y covarianzas latentes
+
+percmerit1  ~~ percmerit1 + percmerit2
+percmerit2  ~~ percmerit2
+percnmerit1 ~~ percnmerit1 + percnmerit2
+percnmerit2 ~~ percnmerit2
+prefmerit1  ~~ prefmerit1 + prefmerit2
+prefmerit2  ~~ prefmerit2
+prefnmerit1 ~~ prefnmerit1 + prefnmerit2
+prefnmerit2 ~~ prefnmerit2
+
+
+# Thresholds iguales entre olas (invarianza fuerte)
+
+perceffort1     | pe_t1*t1 + pe_t2*t2
+perceffort2     | pe_t1*t1 + pe_t2*t2
+perctalent1     | pt_t1*t1 + pt_t2*t2
+perctalent2     | pt_t1*t1 + pt_t2*t2
+percrichparents1| prp_t1*t1 + prp_t2*t2
+percrichparents2| prp_t1*t1 + prp_t2*t2
+perccontact1    | pc_t1*t1 + pc_t2*t2
+perccontact2    | pc_t1*t1 + pc_t2*t2
+prefeffort1     | pre_t1*t1 + pre_t2*t2
+prefeffort2     | pre_t1*t1 + pre_t2*t2
+preftalent1     | prt_t1*t1 + prt_t2*t2
+preftalent2     | prt_t1*t1 + prt_t2*t2
+prefrichparents1| pfrp_t1*t1 + pfrp_t2*t2
+prefrichparents2| pfrp_t1*t1 + pfrp_t2*t2
+prefcontact1    | pfc_t1*t1 + pfc_t2*t2
+prefcontact2    | pfc_t1*t1 + pfc_t2*t2
+
+
+# Interceptos fijos
+
+perceffort1 + perctalent1 ~ 0*1
+perceffort2 + perctalent2 ~ 0*1
+percrichparents1 + perccontact1 ~ 0*1
+percrichparents2 + perccontact2 ~ 0*1
+prefeffort1 + preftalent1 ~ 0*1
+prefeffort2 + preftalent2 ~ 0*1
+prefrichparents1 + prefcontact1 ~ 0*1
+prefrichparents2 + prefcontact2 ~ 0*1
+
+
+# Varianzas únicas
+
+perceffort1 ~~ 1*perceffort1
+perctalent1 ~~ 1*perctalent1
+percrichparents1 ~~ 1*percrichparents1
+perccontact1 ~~ 1*perccontact1
+prefeffort1 ~~ 1*prefeffort1
+preftalent1 ~~ 1*preftalent1
+prefrichparents1 ~~ 1*prefrichparents1
+prefcontact1 ~~ 1*prefcontact1
+
+perceffort2 ~~ NA*perceffort2
+perctalent2 ~~ NA*perctalent2
+percrichparents2 ~~ NA*percrichparents2
+perccontact2 ~~ NA*perccontact2
+prefeffort2 ~~ NA*prefeffort2
+preftalent2 ~~ NA*preftalent2
+prefrichparents2 ~~ NA*prefrichparents2
+prefcontact2 ~~ NA*prefcontact2
+
+
+# Covarianzas entre errores longitudinales
+
+perceffort1 ~~ perceffort2
+perctalent1 ~~ perctalent2
+percrichparents1 ~~ percrichparents2
+perccontact1 ~~ perccontact2
+prefeffort1 ~~ prefeffort2
+preftalent1 ~~ preftalent2
+prefrichparents1 ~~ prefrichparents2
+prefcontact1 ~~ prefcontact2
+')
+
+fit_thresholdinv <- cfa(thresholdinv_model_smt, data = db_invariance,
+                        ordered = c("perceffort1", "perctalent1", "perceffort2", "perctalent2",
+                                    "percrichparents1", "perccontact1", "percrichparents2", "perccontact2",
+                                    "prefeffort1", "preftalent1", "prefeffort2", "preftalent2",
+                                    "prefrichparents1", "prefcontact1", "prefrichparents2", "prefcontact2"),
+                        parameterization = "theta",
+                        estimator = "WLSMV")
+```
+
+```{r}
+#| label: strict-model
+#| tbl-cap: "Longitudinal Invariance Strict Model"
+#| results: asis
+#| echo: false
+#| warning: false
+
+uniquenessinv_model_smt <- ('
+
+# Cargas factoriales (invarianza débil)
+
+percmerit1  =~ 1*perceffort1 + pe_loading*perctalent1
+percmerit2  =~ 1*perceffort2 + pe_loading*perctalent2
+
+percnmerit1 =~ 1*percrichparents1 + prc_loading*perccontact1
+percnmerit2 =~ 1*percrichparents2 + prc_loading*perccontact2
+
+prefmerit1  =~ 1*prefeffort1 + pfe_loading*preftalent1
+prefmerit2  =~ 1*prefeffort2 + pfe_loading*preftalent2
+
+prefnmerit1 =~ 1*prefrichparents1 + pfrc_loading*prefcontact1
+prefnmerit2 =~ 1*prefrichparents2 + pfrc_loading*prefcontact2
+
+
+# Varianzas y covarianzas de factores latentes
+
+percmerit1  ~~ percmerit1 + percmerit2
+percmerit2  ~~ percmerit2
+percnmerit1 ~~ percnmerit1 + percnmerit2
+percnmerit2 ~~ percnmerit2
+prefmerit1  ~~ prefmerit1 + prefmerit2
+prefmerit2  ~~ prefmerit2
+prefnmerit1 ~~ prefnmerit1 + prefnmerit2
+prefnmerit2 ~~ prefnmerit2
+
+
+# Medias latentes
+
+percmerit1  ~ 0*1
+percmerit2  ~ 1
+percnmerit1 ~ 0*1
+percnmerit2 ~ 1
+prefmerit1  ~ 0*1
+prefmerit2  ~ 1
+prefnmerit1 ~ 0*1
+prefnmerit2 ~ 1
+
+
+# Umbrales (invarianza fuerte)
+
+perceffort1     | pe_t1*t1 + pe_t2*t2
+perceffort2     | pe_t1*t1 + pe_t2*t2
+perctalent1     | pt_t1*t1 + pt_t2*t2
+perctalent2     | pt_t1*t1 + pt_t2*t2
+percrichparents1| prp_t1*t1 + prp_t2*t2
+percrichparents2| prp_t1*t1 + prp_t2*t2
+perccontact1    | pc_t1*t1 + pc_t2*t2
+perccontact2    | pc_t1*t1 + pc_t2*t2
+prefeffort1     | pre_t1*t1 + pre_t2*t2
+prefeffort2     | pre_t1*t1 + pre_t2*t2
+preftalent1     | prt_t1*t1 + prt_t2*t2
+preftalent2     | prt_t1*t1 + prt_t2*t2
+prefrichparents1| pfrp_t1*t1 + pfrp_t2*t2
+prefrichparents2| pfrp_t1*t1 + pfrp_t2*t2
+prefcontact1    | pfc_t1*t1 + pfc_t2*t2
+prefcontact2    | pfc_t1*t1 + pfc_t2*t2
+
+
+# Interceptos fijos
+
+perceffort1 + perctalent1 ~ 0*1
+perceffort2 + perctalent2 ~ 0*1
+percrichparents1 + perccontact1 ~ 0*1
+percrichparents2 + perccontact2 ~ 0*1
+prefeffort1 + preftalent1 ~ 0*1
+prefeffort2 + preftalent2 ~ 0*1
+prefrichparents1 + prefcontact1 ~ 0*1
+prefrichparents2 + prefcontact2 ~ 0*1
+
+
+# Varianzas únicas (invarianza estricta)
+# Fijadas a 1 en todas las olas
+
+perceffort1 ~~ 1*perceffort1
+perceffort2 ~~ 1*perceffort2
+perctalent1 ~~ 1*perctalent1
+perctalent2 ~~ 1*perctalent2
+
+percrichparents1 ~~ 1*percrichparents1
+percrichparents2 ~~ 1*percrichparents2
+perccontact1 ~~ 1*perccontact1
+perccontact2 ~~ 1*perccontact2
+
+prefeffort1 ~~ 1*prefeffort1
+prefeffort2 ~~ 1*prefeffort2
+preftalent1 ~~ 1*preftalent1
+preftalent2 ~~ 1*preftalent2
+
+prefrichparents1 ~~ 1*prefrichparents1
+prefrichparents2 ~~ 1*prefrichparents2
+prefcontact1 ~~ 1*prefcontact1
+prefcontact2 ~~ 1*prefcontact2
+
+
+# Covarianzas entre errores (mismo ítem, diferente ola)
+
+perceffort1 ~~ perceffort2
+perctalent1 ~~ perctalent2
+percrichparents1 ~~ percrichparents2
+perccontact1 ~~ perccontact2
+prefeffort1 ~~ prefeffort2
+preftalent1 ~~ preftalent2
+prefrichparents1 ~~ prefrichparents2
+prefcontact1 ~~ prefcontact2
+')
+
+fit_uniquenessinv <- cfa(uniquenessinv_model_smt, data = db_invariance,
+                         ordered = c("perceffort1", "perctalent1", "perceffort2", "perctalent2",
+                                     "percrichparents1", "perccontact1", "percrichparents2", "perccontact2",
+                                     "prefeffort1", "preftalent1", "prefeffort2", "preftalent2",
+                                     "prefrichparents1", "prefcontact1", "prefrichparents2", "prefcontact2"),
+                         parameterization = "theta",
+                         estimator = "WLSMV")
+```
+
+
+
+# Contents {data-background-color="#2f0202" style="text-align: right;"}
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+
+- [The project]{style="color: #ab9f9f; font-size: 1.3em;"}
+- [Paper market justice in pensions]{style="color: #ab9f9f;font-size: 1.3em;"}
+- [Paper factorial invariance of merit scale ]{style="color: #edde06;font-size: 1.3em;"}
+- [Latent Class Analysis of merit scale]{style="color: #ab9f9f;font-size: 1.3em;"}
+
+</div>
+
+
+
+# Research problem {.xlarge data-background-color="#5f5758"}
+
+## Context and motivation 
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- Meritocracy: a distributive system where rewards are expected to reflect individual effort and ability rather than social origin or inherited privilege [@young_rise_1958; @bell_equality_1972]
+
+- Meritocratic beliefs help legitimize inequality [@mijs_paradox_2021; @sandel_tyranny_2020; @castillo_meritocracia_2019; @heuer_legitimizing_2020; @garcia-sierra_dark_2023]
+
+    * They shape how inequality is perceived and justified
+    * They are reinforced through social institutions
+
+:::
+
+
+## Context and motivation 
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+- Schools are key sites for the formation and development of meritocratic beliefs
+
+    * Cultural ideal: effort, achievement, self-improvement, and education as routes to mobility [@mijs_unfulfillable_2016; @chauvin_school_2026; @darnon_where_2018]
+    * Institutional life: grading, tracking, selection, awards, and credentials [@resh_sense_2017; @darnon_competitive_2023; @traini_stratification_2022]
+    * Non-meritocratic elements: structural advantages and dual consciousness [@tang_meritocratic_2025; @goudeau_how_2021; @liu_does_2025]
+    * Consequences within and beyond school: greater legitimation of unequal outcomes, from grades to income inequality and lower support for redistribution [@castillo_socialization_2024; @batruch_belief_2022; @wiederkehr_belief_2015; @darnon_belief_2018]
+
+:::
+
+## Research gaps and contributions 
+
+::: {.incremental style="font-size: 115%;"}
+
+- The measurement of meritocratic beliefs remains limited in school-based research
+
+- Existing scales are still narrow: BSM [@wiederkehr_belief_2015] focuses mainly on effort and opportunity, while @chauvin_school_2026 centers on perceived meritocracy and blends school with broader social meritocracy
+
+- These limitations matter because measurement shapes the validity and interpretation of findings
+
+- We address this gap with a multidimensional approach [@castillo_multidimensional_2023] that distinguishes perceptions from preferences, and meritocratic from non-meritocratic principles
+
+:::
+
+## Research gaps and contributions 
+
+::: {.incremental style="font-size: 115%;"}
+
+
+- Beyond factorial validity, we test measurement stability across school stages and over time
+
+- Measurement invariance is necessary for valid group and longitudinal comparisons [@chen_sensitivity_2007; @putnick_measurement_2016]
+
+- These cohorts capture distinct stages of adolescence, when beliefs about justice and inequality become more complex and school sorting more salient [@resh_sense_2014; @henry_development_2006]
+
+- This lets us assess whether meritocratic beliefs remain stable or shift as students encounter the limits of meritocratic ideals [@tang_meritocratic_2025]
+
+:::
+
+
+## This study 
+
+
+:::: {.incremental style="font-size: 120%;"}
+
+
+1. We ask whether students distinguish between meritocratic and non-meritocratic principles, and between perceptions (“what is”) and preferences (“what should be”)
+
+2. We also ask whether these dimensions can be measured comparably across age cohorts and over time
+
+- $H1$: Meritocratic beliefs are best represented by the four factors
+
+- $H2–H3$: This four-factor model is invariant across cohorts and longitudinally within students
+
+::::
+
+# Method {.xlarge data-background-color="#5f5758"}
+
+
+## Participants and processedure
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- [Panel Survey on Education and Meritocracy (EDUMER)](https://github.com/educacion-meritocracia/edumer-data), using the 2023 and 2024 student waves
+
+- CAWI surveys administered to primary and secondary school students from 9 schools in the Metropolitan and Valparaíso regions of Chile
+
+- Wave 1 (N = 846): 386 girls, 421 boys, and 39 identifying as other; $M_{age}$ = 13.4, $SD_{age}$ = 1.6
+
+- Wave 2 (N = 662): 303 girls, 338 boys, and 21 identifying as other; $M_{age}$ = 14.4, $SD_{age}$ = 1.6
+
+- Attrition: 22% (78% retention), mainly due to school absenteeism and school transfers
+
+:::
+
+## Measures
+
+::: {style="font-size: 110%;"}
+
+```{r}
+#| label: fig-vars-ppms
+#| fig-cap-location: top
+#| fig-cap: Scale of Perceptions and Preferences of Meritocracy
+#| fig-align: center
+#| out-width: '70%'
+
+library(knitr)
+
+knitr::include_graphics(path = "images/items_ingles.png")
+
+```
+::: 
+
+
+## Measures
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- **Cohorts**: To distinguish educational level across waves in the invariance analyses, we use a cohort indicator defined at each wave (primary vs. secondary school).
+
+:::
+
+
+::: {.fragment style="font-size: 120%;"}
+
+```{r}
+#| tbl-cap: Descriptive statistics for cohort level
+#| tbl-cap-location: top
+#| echo: false
+#| label: tbl-cohort
+#| message: false
+#| warning: false
+
+
+tot <- db_long %>% 
+  na.omit() %>% 
+  group_by(ola, cohort_level) %>% 
+  tally() %>% 
+  dplyr::rename(n_total = n) %>% 
+  mutate(ola = if_else(ola == "1", "Wave 1", "Wave 2")) %>% 
+  ungroup()
+
+tot <- tot %>% 
+    add_row(
+      ola = "Wave 1",
+      cohort_level = "Total",
+      n_total = sum(tot[c(1,2),3])
+    ) %>% 
+  add_row(
+      ola = "Wave 2",
+      cohort_level = "Total",
+      n_total = sum(tot[c(3,4),3]))
+
+
+edad <- db_long %>% 
+  na.omit() %>% 
+  group_by(ola, cohort_level) %>% 
+  summarise(m = round(mean(age),2),
+            sd = round(sd(age),2),
+            .groups = "drop_last") %>% 
+  mutate(ola = if_else(ola == "1", "Wave 1", "Wave 2")) %>% 
+  ungroup()
+
+edad_ola <- db_long %>% 
+  na.omit() %>% 
+  group_by(ola) %>% 
+  summarise(m = round(mean(age),2),
+            sd = round(sd(age),2),
+            .groups = "drop_last") %>% 
+  mutate(ola = if_else(ola == "1", "Wave 1", "Wave 2"),
+         cohort_level = "Total") %>% 
+  dplyr::select(ola, cohort_level, m, sd)
+
+
+edad <- bind_rows(edad, edad_ola)
+
+gen <- db_long %>% 
+  na.omit() %>% 
+  group_by(ola, cohort_level, p20) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  pivot_wider(id_cols = c(ola, cohort_level),
+              names_from = p20,
+              values_from = n) %>% 
+  mutate(ola = if_else(ola == "1", "Wave 1", "Wave 2"))
+
+gen_ola <- db_long %>% 
+  na.omit() %>% 
+  group_by(ola, p20) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  pivot_wider(id_cols = c(ola),
+              names_from = p20,
+              values_from = n) %>% 
+  mutate(ola = if_else(ola == "1", "Wave 1", "Wave 2"),
+         cohort_level = "Total") %>% 
+  dplyr::select(ola, cohort_level, H, M, O)
+
+gen <- bind_rows(gen, gen_ola)
+
+left_join(tot, edad) %>% 
+  left_join(., gen) %>% 
+  arrange(ola) %>% 
+   knitr::kable(., "html", escape = T,
+                booktabs = T, 
+                linesep = "",
+                col.names = c("Wave", "Cohort level", "N", "Mean", "SD", "Man", "Women", "Others")) %>%
+    kableExtra::add_header_above(c(" " = 3, "Age" = 2, "Gender" = 3)) %>% 
+   kableExtra::kable_styling(
+     full_width = T,
+     latex_options = c("hold_position"),
+     position = "center",
+     font_size = 23,
+     bootstrap_options=c("striped", "bordered")) %>% 
+  kableExtra::collapse_rows(1)
+
+```
+
+:::
+
+## Analytical strategy
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- **Confirmatory Factor Analysis (CFA)**:
+
+    * A four-factor latent model estimated with WLSMV [@kline_principles_2023]
+    * Model fit cutoffs [@brown_confirmatory_2015]: $\text{CFI or TLI} > 0.95$; $RMSEA < 0.06$; nonsignificant $\chi^2$ ($p > 0.05$), and $\chi^2/df < 3$
+
+::: 
+
+
+## Analytical strategy
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+- **Measurement invariance**: a set of procedures used to assess the comparability of a measurement model [@vandeschoot_editorial_2015; @putnick_measurement_2016]
+
+- Two types:
+  * Between cohorts (primary vs. secondary school) --> @davidov_measurement_2014
+  * Longitudinal (two waves; within individuals) --> @liu_testing_2017
+
+- Procedure: four sequentially constrained, hierarchical models
+  
+    * Configural (same factor structure)
+    * Weak (+ equal factor loadings)
+    * Strong (+ equal intercepts)
+    * Strict (+ equal error variances)
+    * Fit cutoffs [@chen_sensitivity_2007]: CFI ($\Delta \geq -0.010$) and RMSEA ($\Delta \geq 0.0$)
+
+:::
+
+# Results {.xlarge data-background-color="#5f5758"}
+
+## Measurement model
+
+::: {style="font-size: 110%;"}
+
+```{r}
+#| label: fig-general
+#| fig-cap: Multigroup model diagram
+#| fig-cap-location: top
+#| echo: false
+#| out.width: '100%'
+#| out.height: "auto" 
+
+knitr::include_graphics(path = "images/esquema-general.png")
+
+
+```
+:::
+
+## Longitudinal descriptives
+
+```{r}
+#| label: fig-likerplot1
+#| fig-align: center
+#| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy by wave"
+#| fig-cap-location: top
+#| fig-asp: 0.6
+#| out-width: '100%'
+#| echo: false
+#| warning: false
+#| message: false
+
+library(cowplot)
+
+cols  <- RColorBrewer::brewer.pal(4, "RdBu")
+items1 <- c("perc_effort","perc_talent","perc_rich_parents","perc_contact")
+
+db_likert1 <- db_long %>%
+  dplyr::filter(ola == 1) %>%
+  dplyr::select(starts_with(c("perc"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items1),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert1 <- db_likert1 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab1 <- db_likert1 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+a <- ggplot(db_likert1, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab1, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(title = "Perceptions", x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+items2 <- c("pref_effort","pref_talent","pref_rich_parents","pref_contact")
+
+db_likert2 <- db_long %>%
+  dplyr::filter(ola == 1) %>%
+  dplyr::select(starts_with(c("pref"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items2),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert2 <- db_likert2 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab2 <- db_likert2 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+b <- ggplot(db_likert2, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab2, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(title = "Preferences", x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+# ----
+
+
+db_likert3 <- db_long %>%
+  dplyr::filter(ola == 2) %>%
+  dplyr::select(starts_with(c("perc"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items1),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert3 <- db_likert3 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab3 <- db_likert3 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+c <- ggplot(db_likert3, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab3, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+db_likert4 <- db_long %>%
+  dplyr::filter(ola == 2) %>%
+  dplyr::select(starts_with(c("pref"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items2),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert4 <- db_likert4 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab4 <- db_likert4 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+d <- ggplot(db_likert4, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab4, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+# 4) grilla 2x2
+panels <- cowplot::plot_grid(a, b, c, d, ncol = 2, align = "hv", axis = "tblr")
+
+# 5) poner Wave 1 / Wave 2 encima (no consume ancho)
+panels_labeled <- cowplot::ggdraw(panels) +
+  draw_label("Wave 1", x = 0.03, y = 0.75, angle = 0, hjust = 1.5, vjust = 0.5, size = 11) +
+  draw_label("Wave 2", x = 0.03, y = 0.25, angle = 0, hjust = 1.5, vjust = 0.5, size = 11)
+
+# 6) leyenda a mano COMO PANEL (sin extraer grobs)
+lik_labels <- c("Strongly disagree", "Disagree", "Agree", "Strongly agree")
+df_leg <- tibble(cat = factor(lik_labels, levels = lik_labels))
+
+legend_only <- ggplot(df_leg, aes(x = 2, y = 2, fill = cat)) +
+  geom_point(shape = 22, size = 6, color = "black", stroke = 0.3) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1), clip = "on") +  # “esconde” los puntos
+  scale_fill_manual(values = cols, drop = FALSE) +
+  guides(fill = guide_legend(nrow = 1, byrow = TRUE, title = NULL)) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    legend.text     = element_text(size = 9),
+    legend.key.size = unit(4, "mm"),
+    plot.margin     = margin(0, 0, 0, 0)
+  )
+# 7) caption común como panel
+cap <- cowplot::ggdraw() +
+  draw_label("Source: own elaboration based on EDUMER Panel Survey (N Wave 1 =  846; N Wave 2 = 662)", x = 0, hjust = 0, size = 9)
+
+# 8) final: todo junto
+final <- cowplot::plot_grid(
+  panels_labeled,
+  legend_only,
+  cap,
+  ncol = 1,
+  rel_heights = c(1.5, 0.10, 0.06)
+)
+
+final +
+  theme(plot.margin = margin(t = 5.5, r = 5.5, b = 5.5, l = 50))
+
+```
+
+
+## Longitudinal invariance
+
+:::: {style="font-size: 120%;"}
+
+```{r}
+#| tbl-cap: "Longitudinal invariance results"
+#| tbl-cap-location: top
+#| echo: false
+#| warning: false
+#| label: tbl-longinv
+
+# Compare fit
+
+an1 <- anova(fit_baseline, fit_loadinginv)
+an2 <- anova(fit_loadinginv, fit_thresholdinv)
+an3 <- anova(fit_thresholdinv, fit_uniquenessinv)
+
+tab01 <- bind_rows(
+  as_tibble(an1)[2,],
+  as_tibble(an2)[2,],
+  as_tibble(an3)[2,]
+) %>%
+  dplyr::select("Chisq", "Df", chisq_diff = `Chisq diff`, df_diff = `Df diff`, pvalue = `Pr(>Chisq)`) %>%
+  mutate(
+    stars = stars.pval(pvalue),
+    chisqt = paste0(round(Chisq, 2), " (", Df, ")"),
+    decision = ifelse(pvalue > 0.05, "Accept", "Reject"),
+    model = c("Weak", "Strong", "Strict")
+  ) %>%
+  bind_rows(
+    tibble(Chisq = an1$Chisq[1], Df = an1$Df[1], chisq_diff = NA, df_diff = NA,
+           pvalue = NA, stars = "", chisqt = paste0(round(an1$Chisq[1], 2), " (", an1$Df[1], ")"),
+           decision = "Reference", model = "Configural")
+  ) %>%
+  dplyr::select(model, chisqt, chisq_diff, df_diff, pvalue, stars, decision) %>%
+  mutate(model = factor(model, levels = c("Configural", "Weak", "Strong", "Strict"))) %>%
+  arrange(model)
+
+
+fit.meas <- dplyr::bind_rows(lavaan::fitmeasures(fit_baseline, output ="matrix")[c("chisq","df","cfi","rmsea","rmsea.ci.lower","rmsea.ci.upper"),],
+                             lavaan::fitmeasures(fit_loadinginv,  output ="matrix")[c("chisq","df","cfi","rmsea","rmsea.ci.lower","rmsea.ci.upper"),],
+                             lavaan::fitmeasures(fit_thresholdinv, output ="matrix")[c("chisq","df","cfi","rmsea","rmsea.ci.lower","rmsea.ci.upper"),],
+                             lavaan::fitmeasures(fit_uniquenessinv, output ="matrix")[c("chisq","df","cfi","rmsea","rmsea.ci.lower","rmsea.ci.upper"),])
+
+fit.meas <- fit.meas %>%
+  dplyr::mutate(diff.chi2 = chisq    - dplyr::lag(chisq,default = dplyr::first(chisq)),
+                diff.df   = df       - dplyr::lag(df,   default = dplyr::first(df)),
+                diff.cfi  = cfi      - dplyr::lag(cfi,  default = dplyr::first(cfi)),
+                diff.rmsea   = rmsea - dplyr::lag(rmsea,default = dplyr::first(rmsea))) %>%
+  round(3) %>%
+  dplyr::mutate(rmsea.ci=paste0(rmsea," \n ", "(",rmsea.ci.lower,"-",rmsea.ci.upper,")"))
+
+tab.inv <- dplyr::bind_cols(tab01,fit.meas) %>%
+  dplyr::select(model,chisqt,cfi,rmsea.ci,diff.chi2,diff.df,diff.cfi,diff.rmsea,stars,decision) %>%
+  dplyr::mutate(diff.chi2=paste0(diff.chi2," (",diff.df,") ",stars)) %>%
+  dplyr::select(model,chisqt,cfi,rmsea.ci,diff.chi2,diff.cfi,diff.rmsea,decision)
+
+
+col.nam <- c(
+  "Model", "&chi;^2 (df)", "CFI", "RMSEA (90% CI)",
+  "&Delta; &chi;^2 (&Delta; df)", "&Delta; CFI", "&Delta; RMSEA", "Decision"
+)
+
+tab.inv %>% 
+  kableExtra::kable(format = "html",
+                    align = "c",
+                    booktabs = T,
+                    escape = F,
+                    caption = NULL,
+                    col.names = col.nam) %>%
+  kableExtra::kable_styling(full_width = T,
+                            latex_options = "hold_position",
+                            bootstrap_options=c("striped", "bordered", "condensed"),
+                           font_size =23) %>% 
+  kableExtra::column_spec(column = 1, width = "2cm") %>%
+   kableExtra::column_spec(column = 4,width = "2 cm")
+```
+
+:::: 
+
+## Cohort descriptives
+
+```{r}
+#| label: fig-likerplot2
+#| fig-align: center
+#| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy by cohort"
+#| fig-cap-location: top
+#| fig-asp: 0.6
+#| out-width: '100%'
+#| echo: false
+#| warning: false
+#| message: false
+cols  <- RColorBrewer::brewer.pal(4, "RdBu")
+items1 <- c("perc_effort","perc_talent","perc_rich_parents","perc_contact")
+
+db_likert1 <- db_long %>%
+  dplyr::filter(cohort_level == "Primary") %>%
+  dplyr::select(starts_with(c("perc"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items1),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert1 <- db_likert1 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab1 <- db_likert1 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+a <- ggplot(db_likert1, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab1, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(title = "Perceptions", x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+items2 <- c("pref_effort","pref_talent","pref_rich_parents","pref_contact")
+
+db_likert2 <- db_long %>%
+  dplyr::filter(cohort_level == "Primary") %>%
+  dplyr::select(starts_with(c("pref"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items2),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert2 <- db_likert2 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab2 <- db_likert2 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+b <- ggplot(db_likert2, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab2, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(title = "Preferences", x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+# ----
+
+
+db_likert3 <- db_long %>%
+  dplyr::filter(cohort_level == "Secondary") %>%
+  dplyr::select(starts_with(c("perc"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items1),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert3 <- db_likert3 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab3 <- db_likert3 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+c <- ggplot(db_likert3, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab3, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+
+db_likert4 <- db_long %>%
+  dplyr::filter(cohort_level == "Secondary") %>%
+  dplyr::select(starts_with(c("pref"))) %>%
+  tidyr::drop_na() %>%                     # <- igual que tu na.omit() (complete-cases)
+  pivot_longer(everything(), names_to="item", values_to="x") %>%
+  mutate(
+    item = factor(item, levels = rev(items2),
+                  labels = c("Contacts","Rich parents","Talent","Effort")),
+    cat  = factor(x, 1:4,
+                  c("Strongly disagree","Disagree","Agree","Strongly agree"),
+                  ordered = TRUE)
+  ) %>% 
+  na.omit()
+
+db_likert4 <- db_likert4 %>% count(item, cat) %>% group_by(item) %>% mutate(p = n/sum(n)) %>% ungroup() %>%
+  mutate(s = ifelse(as.integer(cat) <= 2, -p, p))
+
+lab4 <- db_likert4 %>%
+  mutate(side = ifelse(as.integer(cat) <= 2, "Disagree", "Agree")) %>%
+  group_by(item, side) %>% summarise(p = sum(p), .groups="drop") %>%
+  mutate(x = ifelse(side=="Disagree", -(p+.03), (p+.03)),
+         h = ifelse(side=="Disagree", 1, 0),
+         lab = scales::percent(p, 0.1))
+
+d <- ggplot(db_likert4, aes(s, item, fill = cat)) +
+  geom_col(width = .8) +
+  geom_vline(xintercept = 0, linewidth = .35) +
+  geom_text(data = lab4, aes(x = x, y = item, label = lab, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(values = cols) +
+  scale_x_continuous(labels = \(z) scales::percent(abs(z)), limits = c(-1.1, 1.1)) +
+  coord_cartesian(clip = "off") +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme(legend.position = "none", panel.grid.major.y = element_blank(),
+        plot.margin = margin(5, 18, 5, 10))
+# 4) grilla 2x2
+panels <- cowplot::plot_grid(a, b, c, d, ncol = 2, align = "hv", axis = "tblr")
+
+# 5) poner Wave 1 / Wave 2 encima (no consume ancho)
+panels_labeled <- cowplot::ggdraw(panels) +
+  draw_label("Primary", x = 0.03, y = 0.75, angle = 0, hjust = 1.2, vjust = 0.5, size = 11) +
+  draw_label("Secondary", x = 0.03, y = 0.25, angle = 0, hjust = 1.2, vjust = 0.5, size = 11)
+
+# 6) leyenda a mano COMO PANEL (sin extraer grobs)
+lik_labels <- c("Strongly disagree", "Disagree", "Agree", "Strongly agree")
+df_leg <- tibble(cat = factor(lik_labels, levels = lik_labels))
+
+legend_only <- ggplot(df_leg, aes(x = 2, y = 2, fill = cat)) +
+  geom_point(shape = 22, size = 6, color = "black", stroke = 0.3) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1), clip = "on") +  # “esconde” los puntos
+  scale_fill_manual(values = cols, drop = FALSE) +
+  guides(fill = guide_legend(nrow = 1, byrow = TRUE, title = NULL)) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    legend.text     = element_text(size = 9),
+    legend.key.size = unit(4, "mm"),
+    plot.margin     = margin(0, 0, 0, 0)
+  )
+# 7) caption común como panel
+cap <- cowplot::ggdraw() +
+  draw_label("Source: own elaboration based on EDUMER Panel Survey (N Primary =  725; N Secondary = 783)", x = 0, hjust = 0, size = 9)
+
+# 8) final: todo junto
+final <- cowplot::plot_grid(
+  panels_labeled,
+  legend_only,
+  cap,
+  ncol = 1,
+  rel_heights = c(1.5, 0.10, 0.06)
+)
+
+final +
+  theme(plot.margin = margin(t = 5.5, r = 5.5, b = 5.5, l = 50))
+
+```
+
+
+## Cohort invariance
+
+
+```{r}
+#| echo: false
+#| include: false
+
+
+db1 <- db_long %>%
+dplyr::filter(ola == 1) %>% # quedarse con solo la ola 1
+dplyr::select(id_estudiante, starts_with(c("perc", "pref")), cohort_level)
+
+model_restricted <- ('
+perc_merit =~ perc_effort + perc_talent
+perc_nmerit =~ a*perc_rich_parents + a*perc_contact
+pref_merit =~ pref_effort + pref_talent
+pref_nmerit =~ pref_rich_parents + pref_contact
+perc_effort ~~ pref_talent
+')
+
+
+mbasica_cfa <- cfa(model = model_restricted, 
+                   data = subset(db1, cohort_level == "Primary"), 
+                   estimator = "WLSMV",
+                   ordered = T,
+                   std.lv = F)
+
+mmedia_cfa <- cfa(model = model_restricted, 
+                  data = subset(db1, cohort_level == "Secondary"), 
+                  estimator = "WLSMV",
+                  ordered = T,
+                  std.lv = F)
+
+summary(mmedia_cfa, standardized = TRUE, fit.measures = TRUE)
+summary(mbasica_cfa, standardized = TRUE, fit.measures = TRUE)
+
+modificationIndices(mmedia_cfa) %>% 
+  dplyr::filter(mi > 3.84)
+```
+
+```{r}
+#| label: configural model
+#| include: false 
+
+baseline <- measEq.syntax(
+  configural.model = model_restricted, # se especifica el modelo que se usará
+  data = db1,
+  ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact", # se explicita que las 
+              "pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"),# variables son ordinales 
+  parameterization = "theta", #parametrización ideal para indicadores ordinales
+  ID.fac = "std.lv", # identidica el factor con varianza 1
+  ID.cat = "Wu.Estabrook.2016", # tipo de estrategia ideal para indicadores ordinales
+  group = "cohort_level", # identificación de los grupos
+  group.equal = "configural" # nivel de invarianza 
+)
+
+model.baseline <- as.character(baseline) # se crea un objeto con el modelo configural como caracter para que puedan visualizarse sus datos
+
+fit.baseline <- cfa(model.baseline, data = db1, group = "cohort_level",
+ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact", 
+              "pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"))
+
+```
+
+```{r}
+#| label: weak model
+#| include: false
+
+# los siguientes dos modelos siguen los pasos de análisis de Dubravka et al, 2019.
+
+thresholds <- measEq.syntax(
+configural.model = model_restricted,
+data = db1,
+ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact",
+"pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"),
+parameterization = "theta",
+ID.fac = "std.lv",
+ID.cat = "Wu.Estabrook.2016",
+group = "cohort_level",
+group.equal = c("thresholds") # aquí se aplica lo mismo que el código anterior excepto que ahora se restringen los thresholds
+)
+
+model.thres <- as.character(thresholds)
+
+fit.thres <- cfa(model.thres, data = db1, group = "cohort_level",
+ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact",
+"pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"))
+
+summary(fit.thres, fit.measures = TRUE)
+lavTestScore(fit.thres)
+pt <- lavaan::parTable(fit.thres)
+
+pt[pt$plabel %in% c(".p9.", ".p10.", ".p80.", ".p81."),
+   c("id","group","lhs","op","rhs","label","plabel","free","ustart","est")]
+```
+
+```{r}
+#| label: loading-threshold model
+#| include: false
+
+strong <- measEq.syntax(
+configural.model = model_restricted,
+data = db1,
+ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact",
+"pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"),
+parameterization = "theta",
+ID.fac = "std.lv",
+ID.cat = "Wu.Estabrook.2016",
+group = "cohort_level",
+group.equal = c("thresholds", "loadings") # ahora se restringen los tresholds y las cargas factoriales
+)
+
+model.strong <- as.character(strong)
+
+fit.strong <- cfa(model.strong, data = db1, group = "cohort_level",
+ordered = c("perc_effort", "perc_talent", "perc_rich_parents", "perc_contact",
+"pref_effort", "pref_talent", "pref_rich_parents", "pref_contact"))
+
+summary(fit.strong, fit.measures = TRUE)
+
+```
+
+
+:::: {style="font-size: 120%;"}
+
+```{r}
+#| echo: false
+#| label: tbl-cohort2
+#| tbl-cap: Cohort (multigroup) invariance results
+#| tbl-cap-location: top
+
+# Comparaciones de Chi²
+an1 <- anova(fit.baseline, fit.thres)
+an2 <- anova(fit.thres, fit.strong)
+
+tab01 <- bind_rows(
+  as_tibble(an1)[2,],
+  as_tibble(an2)[2,] # aqui se toma la segunda fila de comparación de cada anova
+) %>%
+  dplyr::select("Chisq", "Df", chisq.diff = `Chisq diff`, df.diff = `Df diff`, pvalue = `Pr(>Chisq)`) %>%
+  mutate(
+    stars = stars.pval(pvalue),
+    chisqt = paste0(round(Chisq, 2), " (", Df, ")"),
+    decision = ifelse(pvalue > 0.05, "Accept", "Reject"),
+    model = c("Tresholds", "Tresholds + Loadings") # etiqueta los modelos que se extraen de los anova
+  ) %>%
+  bind_rows(
+    tibble(
+      Chisq = an1$Chisq[1],
+      Df = an1$Df[1],
+      chisq.diff = NA,
+      df.diff = NA,
+      pvalue = NA,
+      stars = "",
+      chisqt = paste0(round(an1$Chisq[1], 2), " (", an1$Df[1], ")"),
+      decision = "Reference",
+      model = "Configural" # se añade el modelo configural como referencia para clarificar la comparación
+    )
+  ) %>%
+  dplyr::select(model, chisqt, chisq.diff, df.diff, pvalue, stars, decision) %>%
+  mutate(model = factor(model, levels = c("Configural", "Tresholds", "Tresholds + Loadings"))) %>%
+  arrange(model)
+
+# se extraen los índices de ajuste para cada modelo
+fit.meas <- bind_rows(
+  fitMeasures(fit.baseline, output = "matrix")[c("chisq.scaled", "df.scaled", "cfi.scaled", "rmsea.scaled", "rmsea.ci.lower.scaled", "rmsea.ci.upper.scaled"),],
+  fitMeasures(fit.thres, output = "matrix")[c("chisq.scaled", "df.scaled", "cfi.scaled", "rmsea.scaled", "rmsea.ci.lower.scaled", "rmsea.ci.upper.scaled"),],
+  fitMeasures(fit.strong, output = "matrix")[c("chisq.scaled", "df.scaled", "cfi.scaled", "rmsea.scaled", "rmsea.ci.lower.scaled", "rmsea.ci.upper.scaled"),]
+)
+
+fit.meas <- fit.meas %>% # se calculan las diferencias de cada modelo con el anterior para 
+  dplyr::rename_with(~str_remove(., ".scaled")) %>% 
+  mutate(                # analizar si se cumplen criterios de invarianza 
+    diff.chi2 = chisq - dplyr::lag(chisq, default = first(chisq)),
+    diff.df = df - dplyr::lag(df, default = first(df)),
+    diff.cfi = cfi - dplyr::lag(cfi, default = first(cfi)),
+    diff.rmsea = rmsea - dplyr::lag(rmsea, default = first(rmsea))
+  ) %>%
+  round(3) %>%
+  mutate(rmsea.ci = paste0(rmsea, " \n(", rmsea.ci.lower, "-", rmsea.ci.upper, ")"))
+
+# Tabla final (mantener diff.df hasta formatear)
+tab.inv <- bind_cols(tab01, fit.meas) %>%
+  dplyr::select(model, chisqt, cfi, rmsea.ci, diff.chi2, diff.df, diff.cfi, diff.rmsea, stars, decision) %>%
+  mutate(diff.chi2 = paste0(diff.chi2, " (", diff.df, ") ", stars)) %>%
+  dplyr::select(model, chisqt, cfi, rmsea.ci, diff.chi2, diff.cfi, diff.rmsea, decision)
+
+# Encabezados de columna
+col.nam <- c(
+  "Model", "&chi;^2 (df)", "CFI", "RMSEA (90% CI)",
+  "&Delta; &chi;^2 (&Delta; df)", "&Delta; CFI", "&Delta; RMSEA", "Decision"
+)
+# Se formatea la tabla en kable
+tab.inv %>%
+  kableExtra::kable(
+    format = "html",
+    align = "c",
+    booktabs = TRUE,
+    escape = F,
+    col.names = col.nam
+  ) %>%
+  kableExtra::kable_styling(
+    full_width = TRUE, 
+    latex_options = "hold_position",
+    bootstrap_options = c("striped", "bordered", "condensed"),
+   font_size = 23) %>% 
+  kableExtra::column_spec(column = 1, width = "2cm") %>%
+   kableExtra::column_spec(column = c(4:5),width = "2 cm")
+
+```
+
+:::: 
+
+::: {.fragment style="font-size: 120%;"}
+
+Cross-cohort non-invariance is mainly driven by the perceived-effort item, suggesting that older students apply a more critical standard when judging whether effort is rewarded.
+
+:::
+
+# Discussion and conclusions {.xlarge data-background-color="#5f5758"}
+
+
+## Discussion: meritocracy at schools
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- $H1$ is supported: students already organize meritocratic beliefs into four distinct dimensions
+
+- They distinguish both between “what is” and “what should be,” and between merit and privilege
+
+- Merit and non-merit do not work as opposites: recognizing privilege does not eliminate support for merit [@tang_meritocratic_2025; @mijs_visualizing_2026]
+
+- This suggests that the link between meritocratic beliefs and inequality legitimization is likely dimension-specific [@castillo_multidimensional_2023]
+
+::: 
+
+## Discussion: measurement invariance
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- $H2$ is supported: the scale is longitudinally stable, so within-student change over time can be interpreted substantively
+
+    * This strengthens the basis for studying developmental change in meritocratic beliefs
+    
+- $H3$ is not supported: the scale is not fully invariant across educational levels
+    
+    * Perceived meritocracy seems to shift across school stages, suggesting that older students see effort as less clearly rewarded than younger students do [@tang_meritocratic_2025]
+
+::: 
+
+
+## Conclusions {data-background-color="#5f5758"}
+
+::: {.incremental style="font-size: 120%;"}
+
+1. Students already distinguish between perceptions and preferences, and between meritocratic and non-meritocratic principles
+
+2. Merit endorsement can coexist with recognition of privilege, so meritocratic beliefs are better understood as multidimensional rather than one-dimensional
+
+3. The scale is stable over time, enabling valid longitudinal analysis, but not fully across school stages, which limits cross-cohort comparison
+
+4. Future research should refine the measure and examine how these beliefs shape school experiences, inequality legitimization, and attitudes toward educational opportunity
+
+:::
+

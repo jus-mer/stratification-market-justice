@@ -23,4 +23,7 @@
 
 [Presentación - Seminario UCentral-DLR](https://jus-mer.github.io/stratification-market-justice/presentations/ucen_dlr/UCEN2026.html)
 
+[Presentation - Freie Universität Berlin - April 2026](https://jus-mer.github.io/stratification-market-justice/presentations/FU_april_2026/FU_april_2026.html)
+
 [Presentation - In_equality Conference 2026 - Universität Konstanz](https://jus-mer.github.io/stratification-market-justice/presentations/In_equality-Conference-2026/In_equality-Conference-2026.html)
+
