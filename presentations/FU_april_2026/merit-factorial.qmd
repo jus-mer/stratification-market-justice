@@ -1533,17 +1533,14 @@ Cross-cohort non-invariance is mainly driven by the perceived-effort item, sugge
 ::: 
 
 
-## Conclusions 
+## Next steps 
 
 ::: {.incremental style="font-size: 120%;"}
 
-1. Students already distinguish between perceptions and preferences, and between meritocratic and non-meritocratic principles
+1. Future research should refine the measure and examine how these beliefs shape school experiences, inequality legitimization, and attitudes toward educational opportunity
 
-2. Merit endorsement can coexist with recognition of privilege, so meritocratic beliefs are better understood as multidimensional rather than one-dimensional
+2. Start from the items’ covariance structure, and assess whether their relationships form distinguishable clusters.
 
-3. The scale is stable over time, enabling valid longitudinal analysis, but not fully across school stages, which limits cross-cohort comparison
-
-4. Future research should refine the measure and examine how these beliefs shape school experiences, inequality legitimization, and attitudes toward educational opportunity
 
 :::
 
