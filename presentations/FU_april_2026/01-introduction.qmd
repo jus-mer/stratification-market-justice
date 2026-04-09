@@ -1,5 +1,3 @@
-# Research project {background-color="#491106ff"}
-
 ## Project
 ::: {.columns}
 
@@ -90,7 +88,16 @@
 
 
 
-# Background {background-color="#491106ff"}
+# Contents {data-background-color="#2f0202" style="text-align: right;"}
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+
+- [The project]{style="color: #ab9f9f; font-size: 1.3em;"}
+- [Paper market justice in pensions]{style="color: #edde06;font-size: 1.3em;"}
+- [Paper factorial invariance of merit scale ]{style="color: #ab9f9f;font-size: 1.3em;"}
+- [Latent Class Analysis of merit scale]{style="color: #ab9f9f;font-size: 1.3em;"}
+
+</div>
 
 ## The problem
 

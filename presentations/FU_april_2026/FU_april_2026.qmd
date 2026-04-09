@@ -25,6 +25,9 @@ format:
     mathjax: "default"
 editor_options: 
   chunk_output_type: console
+execute:
+  cache: true
+freeze: auto
 ---
 
 ```{r}
@@ -88,6 +91,33 @@ rm(list = ls())
 
 :::
 :::
+
+# Contents {data-background-color="#2f0202" style="text-align: right;"}
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+
+- [The project]{style="color: #fff; font-size: 1.3em;"}
+- [Paper market justice in pensions]{style="color: #fff;font-size: 1.3em;"}
+- [Paper factorial invariance of merit scale ]{style="color: #fff;font-size: 1.3em;"}
+- [Latent Class Analysis of merit scale]{style="color: #fff;font-size: 1.3em;"}
+
+</div>
+
+
+
+# Contents {data-background-color="#2f0202" style="text-align: right;"}
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+
+- [The project]{style="color: #edde06; font-size: 1.3em;"}
+- [Paper market justice in pensions]{style="color: #ab9f9f;font-size: 1.3em;"}
+- [Paper factorial invariance of merit scale ]{style="color: #ab9f9f;font-size: 1.3em;"}
+- [Latent Class Analysis of merit scale]{style="color: #ab9f9f;font-size: 1.3em;"}
+
+</div>
+
+
+
 
 {{< include 01-introduction.qmd >}}
 
