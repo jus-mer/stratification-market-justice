@@ -24,14 +24,3 @@
 - **Next analyses**: We will further examine how meritocratic deservingness relates to market justice in pensions, health, and education using latent class analysis and comparative ISSP data, with attention to institutional and economic cross-national differences
 
 
-::::
-
-# Thank you for your attention {background-color="#491106ff"}
-
--   **Github project:** <https://github.com/jus-mer>
-
-:::{=html}
-<div style="text-align: center; margin-top: 30px;">
-  <img src="images/octowars.jpg" style="width: 300px; height: auto;" />
-</div>
-:::

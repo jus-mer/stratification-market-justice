@@ -79,6 +79,8 @@ rm(list = ls())
 </br>
 **Juan Carlos Castillo, Andreas Laffert & </br> Tomás Urzúa**
 
+Project: [*Market Justice and Deservingness of Social Welfare*](https://jus-mer.github.io/web-proyecto/docs/) (ANID/FONDECYT N°1250518 2025-2028)
+
 ::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
 
 **Department of Sociology, University of Chile** </br>
