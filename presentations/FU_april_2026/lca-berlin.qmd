@@ -1,0 +1,346 @@
+
+
+# Contents {data-background-color="#2f0202" style="text-align: right;"}
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;">
+
+- [The project]{style="color: #ab9f9f; font-size: 1.3em;"}
+- [Paper market justice in pensions]{style="color: #ab9f9f; font-size: 1.3em;"}
+- [Paper factorial invariance of merit scale ]{style="color: #ab9f9f; font-size: 1.3em;"}
+- [Latent Class Analysis of merit scale]{style="color: #edde06; font-size: 1.3em;"}
+
+</div>
+
+:::{.notes}
+
+Hello, I am Tomás Urzúa, I am a research assisstant of the project and today I am going to present a working paper that we are d**i**veloping about a Latent Class Analysis of meritocratic beliefs in Chile.
+
+:::
+
+## So far
+
+:::{.incremental .highlight-last}
+
+- Meritocracy as factor associated: relationships with market justice preferences, redistributive preferences and perceptions of inequality.
+
+- Measurement of meritocracy: developed scale that allows for an understanding of meritocratic beliefs from a multidimensional approach
+
+- **Key findings**
+
+  - Meritocracy is not one-dimensional 
+
+  - Nor does it follow a continuous logic 
+
+- **Blind spots**
+
+  - Variable-centered instead of person-centered approaches
+
+  - It is not possible to determine whether people hold different meritocratic beliefs and how they form groups based on their similarities and differences
+
+:::
+
+:::{.notes}
+
+Well, our agenda on meritocratic beliefs has focused primarily on two areas: 
+
+f{e}rst, understand the relationship between meritocracy and attitudes such as preferences for market justice, redistributive preferences, and perceptions of inequality 
+
+and second, in the area of measurement, we have d**i**veloped a scale that allows us to understand meritocratic beliefs from a multidimensional perspective
+
+Based on this, we have found evidence such as
+
+The scale has been validated in a metric way **and** in differents populations as adults and s**tiu**dents. In this frame, we found that they can differ between percepcions and preferen**ces**
+
+
+Secondly, we have observed that people may feel they prefer society to be organized according to meritocratic ideals as well as non-meritocratic ones. In other words, elements that appear to be óppo**sit**s, can actually coexist 
+
+However, we have identified some blind spots in our research.
+
+Much of our work has focused on variable-based methods, which has a number of implications for the scope and interpretation of the results. The most important limitation is that we don’t know what are the most probable combinations of meritocratics perceptions and preferences in the population
+
+
+**Aa**nd this is possible thanks to the multidimensional meritocracy scale
+
+In this regard, we have a multidimensional tool that still holds explanatory potential, but which has not yet been f**Ü**lly explored
+
+:::
+
+## Objective of this paper
+
+<br>
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 45px"}
+Examine the patterns of meritocratic and non-meritocratic beliefs and identify different groups and their size based on the meritocratic beliefs configurations
+:::
+
+:::{.notes}
+
+Examine the patterns of meritocratic and non-meritocratic beliefs and **ai**dentify different groups and their size based on the meritocratic beliefs configurations
+
+:::
+
+## Data
+
+:::{.incremental .highlight-last style="font-size: 40px;"}
+- Dataset: EDUMERCO (2024)
+
+- Online survey (CAWI) applied to Adults in the Metropolitan Region of Chile
+
+- Sampling: Non-probability quota-based design
+
+- Analytical sample: N = 2,740
+:::
+
+:::{.notes}
+
+The data we used for this study comes from the EDUMERCO dataset, which is an online survey (CAWI) applied to ád**o**lts in the Metropolitan Region of Chile.
+
+ The sampling method was a non-probability quota-based design, and our analytical sample consists of two thousand seven houndred fourty respondents
+
+:::
+
+## Method
+
+:::{.incremental .highlight-last style="font-size: 30px;"}
+
+- Latent Class Analysis (LCA): It is a statistical method that models the relationships between observed variables based on the assumption that an unobserved categorical latent variable explains their underlying structure
+
+- LCA is specifically used for studies involving categorical or ordinal variables
+
+- Exploratory and confirmatory utility
+
+  - allows for the identification of different types of groups based on the probability that they will give similar responses
+
+  - allows for the testing of hypotheses regarding the number and size of existing groups in society
+
+:::
+
+:::{.notes}
+
+We use latent class analysis, which allows us to model observed variables based on the assumption that an **an**observed categorical latent variable explains their underlying structure 
+
+This method is used for studies involving categorical or ordinal variables, and it has both exploratory and confirmatory utility.
+
+ It allows us to identify different types of groups of people based on the probability that they will give similar responses, and also to test hypotheses regarding the number and size of existing groups in society
+
+:::
+
+## Parameters and estimation
+
+:::{.incremental .highlight-last style="font-size: 30px;"}
+
+- **Parameters**
+
+  - Class probability: Indicates the probability of belonging to each class and reflects the relative size of the group
+
+  - Conditional response probabilities: These indicates the probability of endorsing a particular response category, given membership in a latent class. These parameters are used to interpret and label the classes.
+
+<br>
+
+- **Estimation and fit**
+
+  - Bayesian Information Criteria (BIC)
+  - Akaike Information Criteria (AIC)
+
+:::
+
+# Results
+
+:::{.notes}
+and now, let's move on to the results
+:::
+
+##
+
+```{r}
+#| label: fig-likert
+#| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy"
+#| fig-align: center
+#| out-width: '80%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/fig-likert-1.png")
+```
+
+
+:::{.notes}
+
+here we have the distribution of responses on the scale, and we can see that in the perceptions dimension, the people perceive higher levels of non-meritocracy than meritocracy elements in society. 
+
+
+whereas, in the preferences dimension we can see the opposite
+
+:::
+
+
+##
+
+```{r}
+#| label: fig-corr
+#| fig-cap: "Correlation matrix"
+#| fig-align: center
+#| out-width: '80%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/fig-cor-1.png")
+```
+
+:::{.notes}
+
+regard the correlation matrix, we can see that the strongest correlations are between the indicators that belong to the same latent factor. 
+
+:::
+
+## 
+
+
+```{r}
+#| label: fig-fit
+#| fig-cap: "AIC/BIC by K"
+#| fig-align: center
+#| out-width: '80%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/fig-visaic-1.png")
+```
+
+:::{.notes}
+
+Here we can see the fit indices for the different models we estimated
+
+and the Model fit impr**u**ved significantly as the number of classes increased, as indicated by decreasing **EiAiCi (AIC)** and BIC values
+
+However, the incremental improvement in fit became substantially smaller after the four-class solution. Thus, although the five-class model fit the data slightly better in statistical terms, the gain was comparatively limited. 
+
+Therefore, we selected the four-class solution as the most parsimonious and interpretable model.
+
+
+:::
+
+## 
+
+:::{.incremental}
+```{r}
+#| label: fig-lca-1
+#| fig-cap: "Conditional probabilities of the 4-class solution"
+#| fig-align: center
+#| out-width: '70%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/lca_1.png")
+```
+
+:::{style="font-size: 24px;"}
+- [Class 1 Critical Meritocrats]{style="color: #961010;"} (36.2%): This group is characterized by its belief in meritocracy as a moral ideal, while acknowledging that, in reality, certain privileges influence success. It does not consider the current system to be meritocratic, but it **strongly advocates for it to be so**
+:::
+
+:::
+
+:::{.notes}
+
+Now i want to show you a serie of graphs that illustrate the conditional probabilities for each of the four classes one by one.
+
+Starting with the f{e}rst class, it combines a low perception of meritocracy with a high perception of the influence of privilege. Its members believe that success does not depend on effort and talent, but rather on factors such as social background and networks. However, at the normative level, they strongly support meritocracy and reject the le**gí**timacy of non-meritocratic advantages, especially those linked to personal connections.
+
+the name of this class is critical meritocrats and has a size of 36% This group is cháracterized by its belief in meritocracy as a moral **ai**deal, while acknowledging that, in reality, certain prívileges influence success. It does not consider the current system to be meritocratic, but it **strongly ádvocats for it to be so**
+
+:::
+
+## 
+
+:::{.incremental}
+```{r}
+#| label: fig-lca-2
+#| fig-cap: "Conditional probabilities of the 4-class solution"
+#| fig-align: center
+#| out-width: '70%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/lca_2.png")
+```
+
+:::{style="font-size: 24px;"}
+- [Class 2: Anything goes]{style="color: #ffbb00;"} (36.3%): This class combines a realistic assessment of a stratified society with a normative justification of privilege. Thus, meritocracy is not presented as an alternative to privilege; rather, **the two principles coexist** and are viewed as compatible foundations for the functioning of society.
+:::
+:::
+
+
+:::{.notes}
+
+The second class follows the same descriptive framework as the first, perceiving low levels of meritocratic functions and high levels of non-meritocratic indicators. The main difference lies in the fact that this class accepts that society operates according to norms based on family background and social capital.
+
+This class is called Anything goes and has a size of 36%, combines a realistic assessment of a stratified society with a normative justification of privilege. Thus, meritocracy is not presented as an alternative to privilege; rather, **the two principles coexist** and are viewed as compatible foundations for the functioning of society.
+
+:::
+
+
+## 
+
+:::{.incremental}
+```{r}
+#| label: fig-lca-3
+#| fig-cap: "Conditional probabilities of the 4-class solution"
+#| fig-align: center
+#| out-width: '70%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/lca_3.png")
+```
+
+:::{style="font-size: 24px;"}
+- [Class 3 Structurally Aware Meritocrats]{style="color: #1e358a;"} (20.7%): This profile reflects a belief system in which merit and privilege operate simultaneously. They strongly support meritocracy, though they hold an ambivalent stance toward privilege: they view it as less legitimate than other groups do, but they **do not reject it entirely**
+
+:::
+:::
+
+:::{.notes}
+
+Now, as we can see, people in the th**e**rd group recognize both meritocratic and non-meritocratic elements in society, which sets them apart from the previous two groups. And  normatively, they strongly endorse meritocracy, while taking a more ambivalent stance toward privilege, but they still show support for non-meritocracy
+
+- This class is called Structurally Aware Meritocrats and has a size of 21%. This profile reflects a belief system in which merit and privilege operate simultaneously. They strongly support meritocracy, though they hold an ambivalent stance toward privilege: they view it as less legitimate than other groups do, but they **do not reject it entirely**, considering the system to be partially meritocratic and acceptable.
+
+:::
+
+##
+
+:::{.incremental}
+
+```{r}
+#| label: fig-lca-4
+#| fig-cap: "Conditional probabilities of the 4-class solution"
+#| fig-align: center
+#| out-width: '70%'
+#| fig-cap-location: bottom
+
+knitr::include_graphics("images/lca_4.png")
+```
+
+:::{style="font-size: 30px;"}
+  - [Class 4 Neutral naives]{style="color: #78c99a; font-size: 28px;"} (6.8%): This group exhibits an **ambivalent character** as they do not strongly support meritocracy neither non-meritocracy
+:::
+
+:::
+
+:::{.notes}
+
+Finally, the fourth class is the smallest with 6% and is characterized by a low perception of meritocracy and a low perception of the influence of privilege, specially the rich parents item. In the same logic, This group does not have a clear preference regarding the values that should guide society, as they do not strongly support meritocracy nor do they clearly recognize the significance of privilege
+:::
+
+
+## Next steps
+
+:::{.incremental .highlight-last style="font-size: 34px;"}
+- Delving deeper into the interpretation of the lessons: find a more substantive explanation for the ambivalent class and connecting the findings to the literature
+
+<br>
+
+- Estimate regressions using latent classes as independent variables to predict support for market-based justice in social services
+:::
+
+:::{.notes}
+
+Finally, we are currently working on delving deeper into the interpretation of the classes, finding a more substantive explanation for the fourth class and connecting the findings to the l**ít**erature
+
+And we are thinking to estimate regressions using latent classes as independent variables to predict support for market-based justice in social services such as health, pensions and education
+
+:::

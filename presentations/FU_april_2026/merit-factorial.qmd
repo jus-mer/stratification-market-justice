@@ -594,7 +594,7 @@ fit_uniquenessinv <- cfa(uniquenessinv_model_smt, data = db_invariance,
 # Method {background-color="#491106ff"}
 
 
-## Participants and processedure
+## Participants and procedure
 
 ::: {.incremental .highlight-last style="font-size: 120%;"}
 

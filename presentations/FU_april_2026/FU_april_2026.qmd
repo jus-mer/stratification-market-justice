@@ -117,8 +117,6 @@ rm(list = ls())
 </div>
 
 
-
-
 {{< include 01-introduction.qmd >}}
 
 {{< include 02-methods.qmd >}}
@@ -130,6 +128,8 @@ rm(list = ls())
 {{< include 04-conclusion.qmd >}}
 
 {{< include merit-factorial.qmd >}}
+
+{{< include lca-berlin.qmd >}}
 
 ## References
 
