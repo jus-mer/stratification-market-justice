@@ -22,5 +22,5 @@
 - **Class measurement**: Despite the null findings, we do not abandon the argument that objective stratification shapes these preferences; we will test alternative measures of class and inequality
 
 - **Next analyses**: We will further examine how meritocratic deservingness relates to market justice in pensions, health, and education using latent class analysis and comparative ISSP data, with attention to institutional and economic cross-national differences
-
+::::
 
