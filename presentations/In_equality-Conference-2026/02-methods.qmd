@@ -207,6 +207,15 @@ knitr::include_graphics(path = ("images/dv_alluvial.png"))
 
 ::: 
 
+::: {.notes}
+
+- the dependent variable is preferences for market justice in pensions, measured with the item "It is fair that people with higher incomes have better pensions than people with lower incomes?" (5-point Likert scale)
+
+- as we observe in the alluvial diagram, there is a clear trend towards more agreement with market justice in pensions, changing from 17% in 2016 to 29.4% in 2023, representing an increase of about 60%.
+
+:::
+
+
 
 ## Independent variables: Level 1
 

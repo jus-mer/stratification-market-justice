@@ -4,34 +4,53 @@
 ## Conclusions
 :::: {.incremental style="font-size: 110%;"}
 
-1. **Research agenda**: The expansion of market-based welfare is reflected in public attitudes [@lindh_public_2015; @busemeyer_welfare_2020], helping explain support for neoliberal arrangements [@mau_inequality_2015]
+1. Reflection of market-based welfare on public attitudes [@lindh_public_2015; @busemeyer_welfare_2020] -> increasing support for neoliberal arrangements
 
-2. **Chile**: Support remains minority but is rising over time, consistent with longitudinal evidence from a highly commodified welfare context marked by mixed policy feedback [@castillo_perceptions_2025]
+2. Effort-based meritocratic perceptions are positively associated with pension market justice, both between and within individuals
 
-3. **Main result**: Effort-based meritocratic perceptions are positively associated with pension market justice, both between and within individuals
+3. **Chile**: Support remains minority but is rising over time, consistent with longitudinal evidence from a highly commodified welfare context
 
-4. **Extension**: With a multidimensional measure of meritocracy [@castillo_multidimensional_2023], support is highest among those who normatively accept non-meritocratic advantage, while perceiving society as non-meritocratic lowers it 
+4. Expanding meritocracy analysis: the multidimensional measure of meritocracy offers new insights regarding the role of non-meritocratic (privelege) factors. 
 
 ::::
 
 ## Next steps
 :::: {.incremental style="font-size: 110%;"}
 
-- **Market justice measurement**: We are refining the measure and extending it to additional welfare domains
+- **Market justice measurement**: We are refining the measure and extending it to additional welfare domains (as health and education)
 
 - **Class measurement**: Despite the null findings, we do not abandon the argument that objective stratification shapes these preferences; we will test alternative measures of class and inequality
 
-- **Next analyses**: We will further examine how meritocratic deservingness relates to market justice in pensions, health, and education using latent class analysis and comparative ISSP data, with attention to institutional and economic cross-national differences
+- **Meritocracy**: use of latent clases/profiles in order to capture different combinations of meritocratic beliefs, and their relationship with market justice preferences
 
+- **Comparative analysis**: we are extending the analysis to ISSP data in order to compare the Chilean case with other welfare contexts 
 
 ::::
 
-# Thank you for your attention {background-color="#491106ff"}
+# {background-color="#882b2b"}
 
--   **Website:** <https://jus-mer.com/>
+::: {.columns}
 
-:::{=html}
-<div style="text-align: center; margin-top: 30px;">
-  <img src="images/octowars.jpg" style="width: 300px; height: auto;" />
-</div>
+::: {.column width="50%"}
+![](images/english-logo-jusmer.png){align='center'}
 :::
+
+::: {.column .column-right width="50%"}
+
+<br>
+
+### Thanks you for your attention! {style="font-size:3em; text-align:right; line-height:1.1; color:white;"}
+
+<br>
+
+
+<p style="color: white; font-size: 1.5em; text-align: right;">Comments most welcome  🫡</p> 
+
+
+:::
+
+
+
+:::
+
+
