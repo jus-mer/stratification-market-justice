@@ -1,0 +1,387 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: packages
+#| include: false
+#| echo: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               srvyr,
+               ordinal,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+```{r}
+#| label: data
+#| include: false
+#| echo: false
+
+load(file = here("input/data/proc/df_balanced.RData"))
+
+glimpse(df_balanced)
+
+# Generate analytical sample
+
+df_study1 <- df_balanced %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+
+```
+
+# Methodology {background-color="#491106ff"}
+
+## Data
+
+::: {.incremental   style="font-size: 120%;"}
+
+- [ELSOC (COES)](https://coes.cl/elsoc/): a representative panel survey of the urban adult population in Chile, based on a probabilistic, stratified, clustered, and multistage sampling design across large and small cities
+
+- Period: six waves (2016, 2017, 2018, 2019, 2022, and 2023)
+
+- Attrition 2016→2023: ~ 40%
+
+- Analytical sample (**balanced 6-wave panel**): 
+
+    * **N = 7,522 observations** (level 1) nested within 
+    * **N = 1,317 individuals** (level 2)
+
+:::
+
+
+## Dependent variable
+
+::: {.incremental style="font-size: 100%;"}
+
+- Item: **¿"It is fair that people with higher incomes have better pensions than people with lower incomes?"**
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| label: fig-desc
+#| fig-cap-location: bottom
+#| fig-cap: "Distribution of responses for preferences for market justice in pensions in Chile (2016–2023)"
+#| fig-align: center
+#| out-width: '85%'
+#| fig-asp: 0.6
+
+
+### Alluvial
+#datos.pension <- df_study1 %>% 
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(idencuesta, ola) %>% 
+#  count(just_pension) %>% 
+#  group_by(ola) %>% 
+#  mutate(porcentaje=n/sum(n)) %>% 
+#  ungroup() %>% 
+#  na.omit() %>% 
+#  mutate(wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#
+#etiquetas.pension <- df_study1 %>%
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(ola, just_pension) %>%
+#  summarise(count = n(), .groups = "drop") %>%
+#  group_by(ola) %>%
+#  mutate(porcentaje = count / sum(count)) %>% 
+#  na.omit() %>% 
+#  mutate(idencuesta = 1,
+#         wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#datos.pension %>% 
+#  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+#             alluvium = idencuesta, y = porcentaje)) +
+#  ggalluvial::geom_flow(alpha = .4) + 
+#  ggalluvial::geom_stratum(linetype = 0) +
+#  scale_y_continuous(labels = scales::percent) + 
+#  scale_fill_manual(values =  #c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+#  geom_text(data = etiquetas.pension,
+#            aes(label = ifelse(porcentaje > 0 , #scales::percent(porcentaje, accuracy = .1),"")),
+#            position = position_stack(vjust = .5),
+#            show.legend = FALSE, fontface = "bold",
+#            size = 4,
+#            color = 'white') +
+#  labs(y = NULL,
+#       x = NULL,
+#       fill = NULL,
+##       title = "It is fair that people with higher #incomes have better #pensions than people\nwith lower #incomes?",
+#       caption = "Source: own elaboration with data from ELSOC 2016-2023 #(N obs = 7,522; N individuals = 1,317)") +
+#  theme_ggdist() +
+#  theme(legend.position = "top",
+#        plot.title = element_text(face = "bold"),
+#        text = element_text(size = 16)) 
+#
+
+knitr::include_graphics(path = ("images/dv_alluvial.png"))
+```
+
+::: 
+
+
+## Independent variables: Level 1
+
+```{r}
+#| label: fig-merit
+#| fig-cap-location: bottom
+#| fig-cap: "Distribution of responses for meritocracy items"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.6
+#| echo: false
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+
+df_plot <- df_study1 %>%
+  select(merit_effort, merit_talent) %>%
+  pivot_longer(everything(), names_to = "item", values_to = "value") %>%
+  mutate(
+    item = factor(
+      item,
+      levels = c("merit_effort", "merit_talent"),
+      labels = c(
+        "People are rewarded for their efforts",
+        "People are rewarded for their \nintelligence and ability"
+      )
+    ),
+    value = factor(
+      as.character(value),
+      levels = c(
+        "Strongly disagree",
+        "Disagree",
+        "Neither agree nor disagree",
+        "Agree",
+        "Strongly agree"
+      )
+    )
+  ) %>%
+  drop_na(value) %>%
+  count(item, value) %>%
+  group_by(item) %>%
+  mutate(
+    p = n / sum(n),
+    label = percent(p, accuracy = 0.1)
+  ) %>%
+  ungroup()
+
+ggplot(df_plot, aes(x = item, y = p, fill = value)) +
+  geom_col(
+    width = 0.7,
+    linewidth = 0.4,
+    position = position_stack(reverse = TRUE)
+  ) +
+  geom_text(
+    aes(label = label),
+    position = position_stack(vjust = 0.5, reverse = TRUE),
+    color = "white",
+    fontface = "bold",
+    size = 4
+  ) +
+  coord_flip() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(
+    values = c(
+      "Strongly disagree" = "#CA0020",
+      "Disagree" = "#F4A582",
+      "Neither agree nor disagree" = "gray65",
+      "Agree" = "#92C5DE",
+      "Strongly agree" = "#0571B0"
+    ),
+    breaks = c(
+      "Strongly disagree",
+      "Disagree",
+      "Neither agree nor disagree",
+      "Agree",
+      "Strongly agree"
+    )
+  ) +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16) +
+  theme(
+    legend.position = "top",
+    axis.text.y = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+
+```
+
+
+
+
+## Independent variables: Level 2
+
+
+```{r}
+#| label: fig-class
+#| fig-cap-location: bottom
+#| fig-cap: "Frecuency of class position"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.6
+#| echo: false
+
+df_study1 %>%
+  count(egp) %>%
+  mutate(prop = (n / sum(n))*100) %>%
+  ungroup() %>% 
+  mutate(egp = fct_rev(egp)) %>% 
+  ggplot(
+    aes(x = egp, y = prop, group = egp, fill = egp)
+  ) +
+  geom_col(position = "stack", width = .9, alpha = 1, show.legend = F) +
+  scale_y_continuous(limits = c(0, 40), 
+                       breaks = seq(0, 40, 10),
+                       labels = function(prop){paste0(prop, "%")},
+                       expand = c(0,1)) +
+  MetBrewer::scale_fill_met_d("VanGogh2") +
+  coord_flip()+
+  geom_text(mapping = aes(label = scales::percent(prop, accuracy = 0.1, scale = 1, decimal.mark = ",")),
+              hjust = -0.2,
+              fontface = "bold",
+              size = 4,
+              position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Class position based on EGP scheme",
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16)+
+  theme(
+    legend.position = "top",
+    plot.title = element_text(face = "bold"))
+
+```
+
+
+    
+- Fixed at the first wave (i.e., time-invariant) → captures average between-person differences (BE = $\bar X_{i}$)
+
+
+
+## Estimation strategy
+
+:::: {.incremental style="font-size: 110%;"}
+
+**Cumulative link mixed models (CLMM)**:
+
+- Panel structure: repeated observations (level 1) nested within individuals (level 2)
+
+- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope) 
+
+- WE/BE decomposition (person-mean centering) [@bell_fixed_2019]: 
+
+     * Within: $X^{WE}_{it}= X_{it}-\bar{X}_i$
+     * Between: $X^{BE}_{i}=\bar{X}_i$
+
+- Formally:  
+
+::: {.fragment}
+$$\begin{aligned}
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{Time}_{it} +\beta_2\,\text{Meritocracy}^{WE}_{it} +\beta_3\,\text{Meritocracy}^{BE}_{i} +\beta_4\,\mathrm{Class}^{BE}_i +
+    \end{aligned}$$
+    
+$$\beta_5\,(\mathrm{Class}^{BE}_i\!\times\! \text{Meritocracy}^{WE}_{it}) +\beta_6\,(\mathrm{Class}^{BE}_i\!\times\! \text{Meritocracy}^{BE}_{i}) +u_{0i}+u_{1i}\,\text{Time}_{it}\\$$
+:::
+
+::::
