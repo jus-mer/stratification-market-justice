@@ -216,6 +216,8 @@ sjPlot::plot_model(
 
 - No evidence of class differences in support for pension market justice, but what about a more direct measure of stratification differences? 
 
+- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
+
 ::::
 
 
@@ -235,12 +237,3 @@ knitr::include_graphics("images/income_regression.png")
 ```
 
 
-## Caveats
-
-:::: {.incremental style="font-size: 120%;"}
-
-- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
-
-- Next step: model meritocracy as a multidimensional construct  
-  → [@castillo_multidimensional_2023]
-::::

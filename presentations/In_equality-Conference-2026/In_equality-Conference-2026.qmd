@@ -103,7 +103,7 @@ rm(list = ls())
 
 {{< include 04-conclusion.qmd >}}
 
-## References
+# References
 
 ::: {#refs}
 :::

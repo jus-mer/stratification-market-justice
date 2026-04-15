@@ -29,7 +29,7 @@
 
 # {background-color="#882b2b"}
 
-::: {.columns}
+:::: {.columns}
 
 ::: {.column width="50%"}
 ![](images/english-logo-jusmer.png){align='center'}
@@ -49,8 +49,6 @@
 
 :::
 
-
-
-:::
+::::
 
 
