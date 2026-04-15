@@ -184,9 +184,9 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #  ggalluvial::geom_flow(alpha = .4) + 
 #  ggalluvial::geom_stratum(linetype = 0) +
 #  scale_y_continuous(labels = scales::percent) + 
-#  scale_fill_manual(values =  #c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+#  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020#")) #+
 #  geom_text(data = etiquetas.pension,
-#            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, #accuracy = .1),"")),
+#            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = #.1),"")),
 #            position = position_stack(vjust = .5),
 #            show.legend = FALSE, fontface = "bold",
 #            size = 4,
@@ -194,13 +194,13 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #  labs(y = NULL,
 #       x = NULL,
 #       fill = NULL,
-##       title = "It is fair that people with higher #incomes have better #pensions than people\nwith lower #incomes?",
-#       caption = "Source: own elaboration with data from ELSOC 2016-2023 #(N #obs = 7,522; N individuals = 1,317)") +
+##       title = "It is fair that people with higher #incomes have better #pensions han #people\nwith lower #incomes?",
+#       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs #= ,522; N individuals = 1,317)") +
 #  theme_ggdist() +
 #  theme(legend.position = "top",
 #        plot.title = element_text(face = "bold"),
-#        text = element_text(size = 16)) 
-#
+#        text = element_text(size = 16))# 
+
 #ggsave(
 #  plot = last_plot(),
 #  filename = "dv_alluvial.png",
