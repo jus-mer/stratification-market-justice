@@ -1,0 +1,1252 @@
+---
+bibliography: "bib/jusmer.bib"
+csl: "bib/apa6.csl"
+lang: en
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    R.options:
+      
+      knitr.graphics.auto_pdf: true
+format:
+  revealjs:
+    #logo: images/edumer.png
+    slide-number: true
+    theme: "libs/edumer.scss"
+    auto-stretch: false
+    title-slide-attributes:
+      visibility: false
+    transition: fade
+    transition-speed: slow
+# data-background-image: images/cover.jpg
+# data-background-size: cover
+    auto-play-media: true
+    mathjax: "default"
+editor_options: 
+  chunk_output_type: console
+freeze: auto
+execute:
+  cache: true
+---
+
+```{r}
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      error = F, 
+                      message = F) 
+```
+
+```{r}
+#| include: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               here,
+               kableExtra)
+
+options(scipen=999)
+rm(list = ls())
+```
+
+
+::: columns
+
+
+::: {.column width="20%"}
+
+
+![](images/conference.png){width='80%'}
+
+![](images/jusmer-logo-vert.png){width='75%'}
+
+![](images/qr.png){width='80%'}
+
+:::
+
+::: {.column .column-right width="80%"}
+
+
+
+# Justification trajectories for pension inequality in Chile (2016–2023) {style="font-size:21px; text-align:right; line-height:1.1;"}
+
+### **The role of social class and beliefs in meritocracy**{style="font-size:35px; text-align:right; line-height:1.1; margin-top:12px;"}
+
+------------------------------------------------------------------------
+
+</br>
+**Juan Carlos Castillo, Andreas Laffert, René Canales & </br> Tomás Urzúa**
+
+::: {.blue2 .medium style="line-height:0.4; margin-top:0; margin-bottom:0;"}
+
+**Department of Sociology, University of Chile** </br>
+
+:::
+
+</br>
+
+### In_equality Conference | Panel 17: Meritocracy and Inequality Beliefs - April 2026, Universität Konstanz {style="color:black"}
+
+:::
+:::
+
+# Research project {background-color="#491106ff"}
+
+## Project
+::: {.columns}
+
+::: {.column width="20%"}
+
+![](images/jusmer-logo-vert.png)
+
+:::
+
+::: {.column width="80%"}
+::: {.incremental .highlight-last style="font-size: 110%;"}
+- ANID/FONDECYT N°1250518 2025-2028 - Market Justice and Deservingness of Social Welfare
+
+- Objective: *Analyze market justice preferences in Chile, their evolution over time, and their relation to welfare deservingness*
+
+- Main argument: *Chile’s highly commodified welfare system strengthens meritocratic deservingness beliefs, thereby increasing preferences for market justice relative to less commodified contexts*
+
+- Research design:
+  * Comparative and longitudinal data analysis
+  * Original survey
+  * Survey experiments
+  * Legislative debates on pensions
+:::
+:::
+:::
+
+## Team {background-color="#491106ff"}
+
+:::{=html}
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; justify-items: center; align-items: center; margin-top: 20px;">
+
+<div style="text-align: center;">
+  <img src="images/jc.png" style="width:200px; border-radius: 50%;" />
+  <div>Juan Carlos Castillo (PI)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/andreas.JPG" style="width:200px; border-radius: 50%;" />
+  <div>Andreas Laffert (RA)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/tomas.jpg" style="width:200px; border-radius: 50%;" />
+  <div>Tomás Urzúa (RA)</div>
+</div>
+
+<div style="text-align: center;">
+  <img src="images/rene.jpg" style="width:200px; border-radius: 50%;" />
+  <div>René Canales (RA)</div>
+</div>
+
+</div>
+
+:::
+
+
+## Agenda {style="font-size: 75%;"}
+
+### Peer-reviewed Articles
+
+::: {.box-inv-4 .sp-after .fragment}
+
+- Castillo, J. C., Canales Sellés, R., Laffert, A., & Urzúa, T. (2026). Justification trajectories for pension inequality in Chile (2016–2023): the role of social class and beliefs in meritocracy. *Frontiers in Sociology*, 11, 1771856. [https://doi.org/10.3389/fsoc.2026.1771856](https://doi.org/10.3389/fsoc.2026.1771856)
+
+:::
+
+::: {.incremental}
+- Castillo, J. C., Laffert, A., Carrasco, K., & Iturra-Sanhueza, J. (2025). Perceptions of inequality and meritocracy: their interplay in shaping preferences for market justice in Chile (2016–2023). Frontiers in Sociology, 10, 1634219. [https://doi.org/10.3389/fsoc.2025.1634219](https://doi.org/10.3389/fsoc.2025.1634219)
+
+
+- Castillo, J. C., Salgado, M., Carrasco, K., & Laffert, A. (2024). The Socialization of Meritocracy and Market Justice Preferences at School. *Societies*, 14(11), 214. [doi.org/10.3390/soc14110214](https://doi.org/10.3390/soc14110214)
+
+::: 
+### Forthcoming
+
+::: {.box-inv-4 .sp-after .fragment}
+
+- Pensions’ market justice and meritocracy: A structural equation modeling approach. Andreas Laffert, Tomás Urzúa, Juan Carlos Castillo & René Canales.
+
+:::
+
+::: {.incremental}
+- Stability and comparability of meritocratic beliefs in school-age students: A measurement invariance approach across time and cohorts. Andreas Laffert, Juan Carlos Castillo, René Canales, Tomás Urzúa & Kevin Carrasco. *Submited*.
+
+- Inequality and deservingness in higher education in Chile. A conjoint survey experiment. Juan Carlos Castillo, Andreas Laffert, René Canales & Tomás Urzúa. 
+:::
+
+
+
+# Background {background-color="#491106ff"}
+
+## The problem
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+1) Privatization and marketization of public goods, welfare policies, and social services [@gingrich_making_2011; @streeck_how_2016]
+
+:::
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+2) Changes in the institutional architecture of the welfare state; expansion of market logics [@ferre_welfare_2023; @busemeyer_welfare_2020]
+
+:::
+
+::: {.box-inv-4 .sp-after .fragment style="font-size: 110%;"}
+
+3) This economic order is reflected in a specific moral economy and policy feedback dynamics [@mau_inequality_2015; @campbell_institutional_2020; @fernandez_positive_2013]
+
+:::
+
+::: {.box-inv-5 .sp-after-half .fragment style="font-size: 110%;"}
+
+Market justice preferences [@busemeyer_skills_2015; @castillo_perceptions_2025; @koos_moral_2019; @lindh_public_2015]
+
+:::
+
+
+## The Chilean case
+
+::: {.incremental .highlight-last style="font-size: 110%;"}
+
+
+- Chile combines high inequality with limited upward mobility and strong elite closure [@flores_top_2020; @lopez-roldan_comparative_2021; @torche_intergenerational_2014]
+
+- Since the dictatorship (1973-1989), neoliberal reforms have deeply privatized and commodified key social services, while preserving strong state dependence [@madariaga_three_2020]
+
+- Pensions: a **mandatory individual capitalization** system administered by **private pension funds** (AFP's) [@superintendencia_cuadros_2025]
+
+- Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025]
+
+:::
+
+
+## Market justice preferences
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- Lane [-@lane_market_1986]: market justice vs. political justice
+
+- Normative beliefs that legitimize the idea that access to essential social services—such as healthcare, education, or pensions—should be determined by market-based criteria [@lindh_public_2015, p.895]
+
+- Measurement: assessing whether individuals consider it fair that access to these services depends on income [@lindh_public_2015; @kluegel_legitimation_1999; @castillo_perceptions_2025]
+
+:::
+
+
+## Factors associated with market justice
+
+
+::::: columns
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+### Individual
+
+- Socioeconomic status—income, education, and occupation [@lindh_public_2015; @koos_moral_2019; @busemeyer_welfare_2020; @svallfors_political_2007]
+- Perceptions of inequality and meritocracy [@castillo_perceptions_2025]
+- Economic conservatism/liberalism [@lee_fairness_2024]
+
+:::
+
+::: {.column width="50%" .incremental .highlight-last style="font-size: 110%;"}
+### Contextual
+
+- Social spending [@immergut_it_2020; @busemeyer_skills_2015; @busemeyer_welfare_2020]
+- Economic inequality [@koos_moral_2019]
+- Degree of privatization and market regulation [@lindh_public_2015; @koos_moral_2019]
+
+:::
+:::::
+
+
+## This study
+
+</br>
+
+::: {.pull-left .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Analyze the relationship between social class and preferences for market justice in pensions in Chile, and how these evolve over time
+
+:::
+
+</br></br></br>
+
+::: {.pull-right .box-inv-5 .sp-after .fragment style="font-size: 125%;"}
+
+Examine the role of meritocracy in shaping the relationship between class and preferences for pension market justice
+
+:::
+
+## Hypotheses
+
+
+::: {.fragment}
+
+```{r}
+#| label: fig-esque0
+#| echo: false
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap: "Hypotheses diagram"
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics(path = "images/hipo3.png")
+
+```
+
+:::
+
+
+
+
+
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: packages
+#| include: false
+#| echo: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               sjPlot, 
+               lme4, 
+               here, 
+               performance,
+               influence.ME, 
+               srvyr,
+               ordinal,
+               texreg, 
+               ggdist,
+               misty,
+               kableExtra,
+               ggalluvial, 
+               shadowtext,
+               MetBrewer,
+               patchwork,
+               sjlabelled)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+```{r}
+#| label: data
+#| include: false
+#| echo: false
+
+load(file = here("input/data/proc/df_balanced.RData"))
+
+glimpse(df_balanced)
+
+# Generate analytical sample
+
+df_study1 <- df_balanced %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+
+```
+
+# Methodology {background-color="#491106ff"}
+
+## Data
+
+::: {.incremental .highlight-last style="font-size: 120%;"}
+
+- [ELSOC (COES)](https://coes.cl/elsoc/): a representative panel survey of the urban adult population in Chile, based on a probabilistic, stratified, clustered, and multistage sampling design across large and small cities
+
+- Period: six waves (2016, 2017, 2018, 2019, 2022, and 2023)
+
+- Attrition 2016→2023: ~ 40%
+
+- Analytical sample (**balanced 6-wave panel**): 
+
+    * **N = 7,522 observations** (level 1) nested within 
+    * **N = 1,317 individuals** (level 2)
+
+:::
+
+
+## Dependent variable
+
+::: {.incremental style="font-size: 100%;"}
+
+- Item: **¿"It is fair that people with higher incomes have better pensions than people with lower incomes?"**
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| label: fig-desc
+#| fig-cap-location: bottom
+#| fig-cap: "Distribution of responses for preferences for market justice in pensions in Chile (2016–2023)"
+#| fig-align: center
+#| out-width: '85%'
+#| fig-asp: 0.6
+
+
+### Alluvial
+#datos.pension <- df_study1 %>% 
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(idencuesta, ola) %>% 
+#  count(just_pension) %>% 
+#  group_by(ola) %>% 
+#  mutate(porcentaje=n/sum(n)) %>% 
+#  ungroup() %>% 
+#  na.omit() %>% 
+#  mutate(wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#
+#etiquetas.pension <- df_study1 %>%
+#  mutate(just_pension = factor(just_pension, 
+#                               levels = c("Strongly agree",
+#                                          "Agree",
+#                                          "Neither agree nor disagree",
+#                                          "Disagree",
+#                                          "Strongly disagree"))) %>% 
+#  group_by(ola, just_pension) %>%
+#  summarise(count = n(), .groups = "drop") %>%
+#  group_by(ola) %>%
+#  mutate(porcentaje = count / sum(count)) %>% 
+#  na.omit() %>% 
+#  mutate(idencuesta = 1,
+#         wave = case_when(ola == 1 ~ "2016",
+#                          ola == 2 ~ "2017",
+#                          ola == 3 ~ "2018",
+#                          ola == 4 ~ "2019",
+#                          ola == 5 ~ "2022",
+#                          ola == 6 ~ "2023"),
+#         wave = factor(wave, levels = c("2016",
+#                                        "2017",
+#                                        "2018",
+#                                        "2019",
+#                                        "2022",
+#                                        "2023")))
+#
+#
+#datos.pension %>% 
+#  ggplot(aes(x = wave, fill = just_pension, stratum = just_pension,
+#             alluvium = idencuesta, y = porcentaje)) +
+#  ggalluvial::geom_flow(alpha = .4) + 
+#  ggalluvial::geom_stratum(linetype = 0) +
+#  scale_y_continuous(labels = scales::percent) + 
+#  scale_fill_manual(values =  #c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+#  geom_text(data = etiquetas.pension,
+#            aes(label = ifelse(porcentaje > 0 , #scales::percent(porcentaje, accuracy = .1),"")),
+#            position = position_stack(vjust = .5),
+#            show.legend = FALSE, fontface = "bold",
+#            size = 4,
+#            color = 'white') +
+#  labs(y = NULL,
+#       x = NULL,
+#       fill = NULL,
+##       title = "It is fair that people with higher #incomes have better #pensions than people\nwith lower #incomes?",
+#       caption = "Source: own elaboration with data from ELSOC 2016-2023 #(N obs = 7,522; N individuals = 1,317)") +
+#  theme_ggdist() +
+#  theme(legend.position = "top",
+#        plot.title = element_text(face = "bold"),
+#        text = element_text(size = 16)) 
+#
+
+knitr::include_graphics(path = ("images/dv_alluvial.png"))
+```
+
+::: 
+
+
+## Independent variables: Level 1
+
+```{r}
+#| label: fig-merit
+#| fig-cap-location: bottom
+#| fig-cap: "Distribution of responses for meritocracy items"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.6
+#| echo: false
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+
+df_plot <- df_study1 %>%
+  select(merit_effort, merit_talent) %>%
+  pivot_longer(everything(), names_to = "item", values_to = "value") %>%
+  mutate(
+    item = factor(
+      item,
+      levels = c("merit_effort", "merit_talent"),
+      labels = c(
+        "People are rewarded for their efforts",
+        "People are rewarded for their \nintelligence and ability"
+      )
+    ),
+    value = factor(
+      as.character(value),
+      levels = c(
+        "Strongly disagree",
+        "Disagree",
+        "Neither agree nor disagree",
+        "Agree",
+        "Strongly agree"
+      )
+    )
+  ) %>%
+  drop_na(value) %>%
+  count(item, value) %>%
+  group_by(item) %>%
+  mutate(
+    p = n / sum(n),
+    label = percent(p, accuracy = 0.1)
+  ) %>%
+  ungroup()
+
+ggplot(df_plot, aes(x = item, y = p, fill = value)) +
+  geom_col(
+    width = 0.7,
+    linewidth = 0.4,
+    position = position_stack(reverse = TRUE)
+  ) +
+  geom_text(
+    aes(label = label),
+    position = position_stack(vjust = 0.5, reverse = TRUE),
+    color = "white",
+    fontface = "bold",
+    size = 4
+  ) +
+  coord_flip() +
+  scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(
+    values = c(
+      "Strongly disagree" = "#CA0020",
+      "Disagree" = "#F4A582",
+      "Neither agree nor disagree" = "gray65",
+      "Agree" = "#92C5DE",
+      "Strongly agree" = "#0571B0"
+    ),
+    breaks = c(
+      "Strongly disagree",
+      "Disagree",
+      "Neither agree nor disagree",
+      "Agree",
+      "Strongly agree"
+    )
+  ) +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16) +
+  theme(
+    legend.position = "top",
+    axis.text.y = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+
+```
+
+
+
+
+## Independent variables: Level 2
+
+
+```{r}
+#| label: fig-class
+#| fig-cap-location: bottom
+#| fig-cap: "Frecuency of class position"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.6
+#| echo: false
+
+df_study1 %>%
+  count(egp) %>%
+  mutate(prop = (n / sum(n))*100) %>%
+  ungroup() %>% 
+  mutate(egp = fct_rev(egp)) %>% 
+  ggplot(
+    aes(x = egp, y = prop, group = egp, fill = egp)
+  ) +
+  geom_col(position = "stack", width = .9, alpha = 1, show.legend = F) +
+  scale_y_continuous(limits = c(0, 40), 
+                       breaks = seq(0, 40, 10),
+                       labels = function(prop){paste0(prop, "%")},
+                       expand = c(0,1)) +
+  MetBrewer::scale_fill_met_d("VanGogh2") +
+  coord_flip()+
+  geom_text(mapping = aes(label = scales::percent(prop, accuracy = 0.1, scale = 1, decimal.mark = ",")),
+              hjust = -0.2,
+              fontface = "bold",
+              size = 4,
+              position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Class position based on EGP scheme",
+    x = NULL,
+    y = NULL,
+    fill = NULL,
+    caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317)"
+  ) +
+  theme_ggdist(base_size = 16)+
+  theme(
+    legend.position = "top",
+    plot.title = element_text(face = "bold"))
+
+```
+
+
+    
+- Fixed at the first wave (i.e., time-invariant) → captures average between-person differences (BE = $\bar X_{i}$)
+
+
+
+## Estimation strategy
+
+:::: {.incremental style="font-size: 110%;"}
+
+**Cumulative link mixed models (CLMM)**:
+
+- Panel structure: repeated observations (level 1) nested within individuals (level 2)
+
+- Models both _within-person_ (WE) and _between-person_ (BE) effects; includes random effects (intercept and time slope) 
+
+- WE/BE decomposition (person-mean centering) [@bell_fixed_2019]: 
+
+     * Within: $X^{WE}_{it}= X_{it}-\bar{X}_i$
+     * Between: $X^{BE}_{i}=\bar{X}_i$
+
+- Formally:  
+
+::: {.fragment}
+$$\begin{aligned}
+\eta_{it} = \beta_{0}+ \beta_{1}\,\text{Time}_{it} +\beta_2\,\text{Meritocracy}^{WE}_{it} +\beta_3\,\text{Meritocracy}^{BE}_{i} +\beta_4\,\mathrm{Class}^{BE}_i +
+    \end{aligned}$$
+    
+$$\beta_5\,(\mathrm{Class}^{BE}_i\!\times\! \text{Meritocracy}^{WE}_{it}) +\beta_6\,(\mathrm{Class}^{BE}_i\!\times\! \text{Meritocracy}^{BE}_{i}) +u_{0i}+u_{1i}\,\text{Time}_{it}\\$$
+:::
+
+::::
+
+
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, 
+                      include = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE)
+
+table_format <- if(is_html_output()) {
+  "html"
+} else if(is_latex_output()) {
+  "latex"
+}
+table_format2 <- if(is_html_output()) {
+  T
+} else if(is_latex_output()) {
+  F
+}
+
+options(kableExtra.html.bsTable = T)
+options(knitr.kable.NA = "")
+```
+
+
+```{r}
+#| include: false
+#| echo: false
+#| message: false
+
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(tidyverse, 
+               sjmisc, 
+               here, 
+               performance,
+               ordinal,
+               texreg, 
+               ggdist,
+               sjlabelled,
+               cowplot)
+
+
+options(scipen=999)
+rm(list = ls())
+```
+
+
+```{r}
+#| echo: false
+#| include: false
+
+load(file = here("input/data/proc/df_balanced.RData"))
+
+# Generate analytical sample
+
+df_study1 <- df_balanced %>%
+  select(-muestra) %>% 
+  na.omit() %>% 
+  mutate(ola = case_when(ola == 1 ~ 1,
+                         ola == 2 ~ 2, 
+                         ola == 3 ~ 3,
+                         ola == 4 ~ 4,
+                         ola == 6 ~ 5,
+                         ola == 7 ~ 6)) %>% 
+  mutate(ola = as.factor(ola),
+         ola_num = as.numeric(ola),
+         ola_2=as.numeric(ola)^2)
+
+df_study1 <- df_study1 %>%
+  group_by(idencuesta) %>%             # Agrupar por el identificador del participante
+  mutate(n_participaciones = n()) %>%  # Contar el número de filas (participaciones) por participante
+  ungroup()
+
+df_study1 <- df_study1 %>% filter(n_participaciones>1)
+
+# Corregir etiquetas
+
+df_study1$just_pension <- sjlabelled::set_label(df_study1$just_pension, 
+                        label = "Pension distributive justice")
+
+df_study1$egp <- sjlabelled::set_label(df_study1$egp, 
+                        label = "Social class")
+
+df_study1$merit_effort <- sjlabelled::set_label(df_study1$merit_effort, 
+                        label = "People are rewarded for their efforts")
+
+df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent, 
+                        label = "People are rewarded for their intelligence")
+
+load(file = here("output/time_effects.RData"))
+load(file = here("output/main_effects.RData"))
+load(file = here("output/interactions_total.RData"))
+load(file = here("output/interactions_direct.RData"))
+
+
+```
+
+# Results {background-color="#491106ff"}
+
+## Models
+
+```{r}
+#| label: fig-model_time
+#| fig-cap-location: bottom
+#| fig-cap: "Changes across waves in market justice preferences in pensions"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.5
+#| echo: false
+
+sjPlot::plot_model(
+  m1.1,
+  type = "est",
+  terms = c("ola2017","ola2018","ola2019","ola2022","ola2023"),
+  axis.labels = c("Wave 2023","Wave 2022","Wave 2019","Wave 2018","Wave 2017"),
+  transform = NULL,
+  show.ci = TRUE,     # <— muestra intervalos
+  ci.lvl  = 0.95,     # <— nivel de confianza
+  show.values = TRUE,
+  p.style = "stars",
+  vline.color = "grey40",
+  value.size = 4.5
+) +
+  scale_y_continuous(limits = c(-1,1.5))+
+  labs(title = NULL,
+       caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
+
+
+```
+
+::: {style="font-size: 60%;"}
+- ICC = 0.23 between, 0.77 within
+::::
+
+
+
+## Models
+
+```{r}
+#| label: fig-model_be_we_controls
+#| fig-cap-location: bottom
+#| fig-cap: "Main within- and between-person effects on market justice preferences in pensions"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-asp: 0.55
+#| echo: false
+
+sjPlot::plot_model(
+  m6,
+  type = "est",
+  terms = c("ola_num","ola_2","egpIntermediate class (III+IV)","egpService class (I+II)","egpRetired or pensioner","egpUnemployed","egpPerforms unpaid tasks","merit_effort_cwc","merit_talent_cwc", "merit_effort_mean", "merit_talent_mean"),
+  
+   axis.labels = c("Merit: Talent (BE)",
+                   "Merit: Effort (BE)",
+                   "Merit: Talent (WE)",
+                   "Merit: Effort (WE)",
+                   "Performs unpaid tasks",
+                   "Unemployed",
+                   "Retired or pensioner",
+                   "Service class (I+II)",
+                   "Intermediate class (III+IV)",
+                   "Wave^2",
+                   "Wave"),
+  transform = NULL,
+  show.ci = TRUE,     # <— muestra intervalos
+  ci.lvl  = 0.95,     # <— nivel de confianza
+  show.values = TRUE,
+  p.style = "stars",
+  vline.color = "grey40",
+  value.size = 4.5
+) +
+  scale_y_continuous(limits = c(-1,1.5))+
+  labs(title = NULL, caption = "*** p < 0.001; ** p < 0.01; * p < 0.05") +
+  theme_ggdist() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold"),
+        text = element_text(size = 16),
+        plot.caption = element_text(size = 10, face = "italic")) 
+```
+::: {style="font-size: 60%;"}
+- All models control for: gender, age, educational level, and political identification
+
+::::
+
+
+## Discussion
+
+:::: {.incremental style="font-size: 120%;"}
+
+1. **Time**: Preferences for market justice in pensions have increased in recent years in Chile
+
+2. **Social class**: Higher social classes don't exhibit greater support for market justice in pensions than lower classes (H1) [@kerner_pension_2020; @busemeyer_welfare_2020; @lindh_public_2015]
+
+3. **Meritocracy**: The belief that effort is rewarded is associated with higher support for market justice in pensions (H2a and H2b) [@castillo_perceptions_2025]
+
+4. **Class × Meritocracy**: There is no evidence of an amplification effect (H3a/H3b)
+
+::::
+
+## Caveats
+
+:::: {.incremental style="font-size: 120%;"}
+
+- No evidence of class differences in support for pension market justice, but what about a more direct measure of stratification differences? 
+
+::::
+
+
+## The role of income and education
+
+```{r}
+#| label: fig-income
+#| fig-cap: "Main within- and between-person effects on market justice preferences in pension"
+#| fig-align: center
+#| out-width: '90%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics("images/income_regression.png")
+
+```
+
+
+## Caveats
+
+:::: {.incremental style="font-size: 120%;"}
+
+- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
+
+- Next step: model meritocracy as a multidimensional construct  
+  → [@castillo_multidimensional_2023]
+::::
+
+
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Additional analyses (SEM) {background-color="#491106ff"}
+
+```{r}
+#| echo: false
+#| include: false
+library(here)
+source("prod_analysis_sem.R")
+```
+
+
+## Data
+
+:::: {.incremental style="font-size: 120%;"}
+
+- EDUMERCO: Online survey (CAWI), fielded in 2025, with adult respondents from the Metropolitan Region of Chile  
+
+- Non-probability sample with quota-based design  
+    → approximating population parameters by age, gender, education, and socioeconomic status  
+
+- Total sample: N = 3,470  
+
+- Analytical sample: N = 2,557 
+
+:::: 
+
+
+## Measures
+
+::: {.fragment}
+
+```{r}
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics("images/diagramas.png")
+
+```
+
+:::
+
+
+## Measures
+
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics("images/diagramas(1).png")
+
+```
+
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics("images/diagramas(2).png")
+```
+
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics("images/diagramas(3).png")
+```
+
+
+## Measures
+
+
+```{r}
+#| fig-cap-location: bottom
+#| fig-cap: "Castillo et al. (2023) measurement model"
+#| fig-align: center
+#| out-width: '100%'
+
+
+knitr::include_graphics("images/diagramas(4).png")
+```
+
+
+## Analytical strategy
+
+:::: {.incremental style="font-size: 120%;"}
+
+- First, we estimate a Confirmatory Factor Analysis of the multidimensional meritocracy scale  
+  → good model fit (CFI = 0.995, TLI = 0.991, RMSEA = 0.048)
+
+- Second, we estimate a Structural Equation Model  
+  → pension market justice regressed on latent meritocracy factors
+
+::: {.fragment}
+$$
+\text{MJP}_{i} = \alpha + \beta_1 \eta^{PM}_{i} + \beta_2 \eta^{PNM}_{i} + \beta_3 \eta^{PrM}_{i} + \beta_4 \eta^{PrNM}_{i} + \gamma'X_i + \varepsilon_i
+$$
+:::
+
+- Estimation: WLSMV  
+  → appropriate for ordinal (Likert-type) data [@kline_principles_2023]
+
+:::: 
+
+# Results {background-color="#491106ff"}
+
+## Descriptive
+
+```{r}
+#| label: fig-likermerit
+#| fig-cap-location: bottom
+#| fig-cap: "Distribution of responses on the scale of perceptions and preferences regarding meritocracy"
+#| out-width: '90%'
+#| echo: false
+#| fig-asp: 0.6
+
+likerplot 
+```
+
+
+
+## Model
+
+
+```{r}
+#| label: fig-sem
+#| fig-align: center
+#| out-width: '100%'
+#| echo: false
+#| fig-asp: 0.6
+#| fig-cap-location: bottom
+#| fig-cap: "Structural equation model"
+
+
+knitr::include_graphics("images/sem.png")
+
+```
+
+
+
+
+
+# Conclusions {background-color="#491106ff"}
+
+## Conclusions
+:::: {.incremental style="font-size: 110%;"}
+
+1. **Research agenda**: The expansion of market-based welfare is reflected in public attitudes [@lindh_public_2015; @busemeyer_welfare_2020], helping explain support for neoliberal arrangements [@mau_inequality_2015]
+
+2. **Chile**: Support remains minority but is rising over time, consistent with longitudinal evidence from a highly commodified welfare context marked by mixed policy feedback [@castillo_perceptions_2025]
+
+3. **Main result**: Effort-based meritocratic perceptions are positively associated with pension market justice, both between and within individuals
+
+4. **Extension**: With a multidimensional measure of meritocracy [@castillo_multidimensional_2023], support is highest among those who normatively accept non-meritocratic advantage, while perceiving society as non-meritocratic lowers it 
+
+::::
+
+## Next steps
+:::: {.incremental style="font-size: 110%;"}
+
+- **Market justice measurement**: We are refining the measure and extending it to additional welfare domains
+
+- **Class measurement**: Despite the null findings, we do not abandon the argument that objective stratification shapes these preferences; we will test alternative measures of class and inequality
+
+- **Next analyses**: We will further examine how meritocratic deservingness relates to market justice in pensions, health, and education using latent class analysis and comparative ISSP data, with attention to institutional and economic cross-national differences
+
+
+::::
+
+# Thank you for your attention {background-color="#491106ff"}
+
+-   **Website:** <https://jus-mer.com/>
+
+:::{=html}
+<div style="text-align: center; margin-top: 30px;">
+  <img src="images/octowars.jpg" style="width: 300px; height: auto;" />
+</div>
+:::
+
+
+## References
+
+::: {#refs}
+:::
+
+
+# Supplementary Material {background-color="#491106ff"}
+
+```{r}
+#| echo: false
+#| include: false
+library(here)
+source("prod_analysis_sem.R")
+```
+
+
+## Bivariate
+```{r}
+#| label: fig-cor
+#| fig-cap-location: bottom
+#| fig-cap: "Correlation matrix between market justice and meritocracy scale"
+#| out-width: '90%'
+#| echo: false
+#| fig-asp: 0.6
+
+M <- db %>%
+dplyr::select(just_pension, all_of(vars_m)) %>%
+mutate_all(~as.numeric(.)) %>%
+psych::polychoric()
+
+diag(M$rho) <- NA
+
+rownames(M$rho) <- c("A. Market Justice",
+                     "B. Perception Effort",
+                     "C. Perception Talent",
+                     "D. Perception Rich parents",
+                     "E. Perception Contacts",
+                     "F. Preference Effort",
+                     "H. Preference Talent",
+                     "H. Preference Rich parents",
+                     "I. Preference Contacts")
+
+#set Column names of the matrix
+colnames(M$rho) <-c("(A)", "(B)","(C)","(D)","(E)","(F)","(G)", "(H)", "(I)")
+
+testp <- cor.mtest(M$rho, conf.level = 0.95)
+
+#Plot the matrix using corrplot
+corrplot::corrplot(M$rho,
+method = "color",
+addCoef.col = "black",
+type = "upper",
+tl.col = "black",
+col = colorRampPalette(c("#E16462", "white", "#0D0887"))(12),
+bg = "white",
+na.label = "-")
+```
+
+
+## MIMIC Model: Education
+
+
+
+```{r}
+#| label: fig-educ
+#| fig-cap: "MIMIC Model for market justice preferences in education"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+
+
+knitr::include_graphics("images/sem2.png")
+
+```
+
+
+
+## MIMIC Model: Healthcare
+
+
+
+```{r}
+#| label: fig-health
+#| fig-cap: "MIMIC Model for market justice preferences in healthcare"
+#| fig-align: center
+#| out-width: '100%'
+#| fig-cap-location: bottom
+library(knitr)
+library(here)
+
+knitr::include_graphics("images/sem3.png")
+
+```
+
+
+
