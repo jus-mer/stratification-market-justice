@@ -164,16 +164,3 @@ knitr::include_graphics("images/sem.png")
 ```
 
 
-
-## Preliminary conclusions
-
-:::: {.incremental style="font-size: 120%;"}
-
-
-1. **Meritocracy in Chile**: Privilege is perceived to outweigh merit, even though merit—especially effort—remains the dominant normative ideal
-
-2. **Measuring meritocracy**: Respondents distinguish between perceptions and preferences, as well as between meritocratic and non-meritocratic principles
-
-3. **Meritocracy and pension market justice**: Support is strongest among those willing to normalize privilege within a fair distributive order
-
-::::

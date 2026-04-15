@@ -1,7 +1,7 @@
 ---
 bibliography: "bib/jusmer.bib"
 csl: "bib/apa6.csl"
-lang: in
+lang: en
 knitr:
   opts_chunk:
     collapse: true
@@ -50,17 +50,17 @@ rm(list = ls())
 ```
 
 
-
 ::: columns
 
 
 ::: {.column width="20%"}
 
 
-![](images/conference.png)
-  </br></br>
-![](images/jusmer-logo-vert.png)
+![](images/conference.png){width='80%'}
 
+![](images/jusmer-logo-vert.png){width='75%'}
+
+![](images/qr.png){width='80%'}
 
 :::
 

@@ -123,11 +123,14 @@ Market justice preferences [@busemeyer_skills_2015; @castillo_perceptions_2025; 
 
 ::: {.incremental .highlight-last style="font-size: 110%;"}
 
-- Economic growth alongside high inequality [@llorca-jana_historia_2021; @flores_top_2020]
-- Rigid relative mobility and strong closure at the top [@lopez-roldan_comparative_2021; @torche_intergenerational_2014]
-- Deep privatization and commodification of social reproduction domains, combined with strong state dependence [@madariaga_three_2020; @boccardo_30_2020]
-- Pensions: an **individual capitalization** system administered by **private pension funds (AFPs)**; covers ~11 million contributors, but **27% of the labor force** remains excluded due to **informality** [@superintendencia_cuadros_2025]
-- Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025; @canalesceron_sujeto_2021]
+
+- Chile combines high inequality with limited upward mobility and strong elite closure [@flores_top_2020; @lopez-roldan_comparative_2021; @torche_intergenerational_2014]
+
+- Since the dictatorship (1973-1989), neoliberal reforms have deeply privatized and commodified key social services, while preserving strong state dependence [@madariaga_three_2020]
+
+- Pensions: a **mandatory individual capitalization** system administered by **private pension funds** (AFP's) [@superintendencia_cuadros_2025]
+
+- Pension-related social conflict [@somma_no_2021] and contested system legitimacy ("not with my money") [@castillo_perceptions_2025]
 
 :::
 
