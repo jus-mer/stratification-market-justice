@@ -1,7 +1,7 @@
 
-# Conclusions {background-color="#491106ff"}
+# Conclusions and implications {background-color="#491106ff"}
 
-## Conclusions
+## 
 :::: {.incremental style="font-size: 110%;"}
 
 1. Reflection of market-based welfare on public attitudes [@lindh_public_2015; @busemeyer_welfare_2020] -> increasing support for neoliberal arrangements
@@ -24,6 +24,8 @@
 - **Meritocracy**: use of latent clases/profiles in order to capture different combinations of meritocratic beliefs, and their relationship with market justice preferences
 
 - **Comparative analysis**: we are extending the analysis to ISSP data in order to compare the Chilean case with other welfare contexts 
+
+- **Experimental analysis**: design of survey experiments to test the causal effect of meritocratic beliefs on market justice preferences
 
 ::::
 
@@ -52,3 +54,7 @@
 ::::
 
 
+#
+
+
+![](images/qr-code-jusmer.png){width="50%" fig-align="center"}

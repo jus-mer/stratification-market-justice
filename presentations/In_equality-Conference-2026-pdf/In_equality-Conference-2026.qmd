@@ -1,7 +1,7 @@
 ---
 bibliography: "bib/jusmer.bib"
 csl: "bib/apa6.csl"
-lang: in
+lang: en
 knitr:
   opts_chunk:
     collapse: true
@@ -21,8 +21,7 @@ format:
     transition-speed: slow
 # data-background-image: images/cover.jpg
 # data-background-size: cover
-    auto-play-media: false
-    pdf-separate-fragments: false
+    auto-play-media: true
     mathjax: "default"
 editor_options: 
   chunk_output_type: console
@@ -54,24 +53,25 @@ rm(list = ls())
 ```
 
 
-
 ::: columns
 
 
 ::: {.column width="20%"}
 
 
-![](images/conference.png)
-  </br></br>
-![](images/jusmer-logo-vert.png)
+![](images/conference.png){width='80%'}
 
+![](images/jusmer-logo-vert.png){width='75%'}
+
+![](images/qr.png){width='80%'}
 
 :::
 
 ::: {.column .column-right width="80%"}
 
-# 
-### Justification trajectories for pension inequality in Chile (2016–2023) {style="font-size:50px; text-align:right; line-height:1.1;"}
+
+
+# Justification trajectories for pension inequality in Chile (2016–2023) {style="font-size:21px; text-align:right; line-height:1.1;"}
 
 ### **The role of social class and beliefs in meritocracy**{style="font-size:35px; text-align:right; line-height:1.1; margin-top:12px;"}
 
@@ -103,7 +103,7 @@ rm(list = ls())
 
 {{< include 04-conclusion.qmd >}}
 
-## References
+# References
 
 ::: {#refs}
 :::

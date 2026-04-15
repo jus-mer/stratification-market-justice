@@ -87,7 +87,7 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ## Data
 
-::: {.incremental   style="font-size: 120%;"}
+::: {style="font-size: 120%;"}
 
 - [ELSOC (COES)](https://coes.cl/elsoc/): a representative panel survey of the urban adult population in Chile, based on a probabilistic, stratified, clustered, and multistage sampling design across large and small cities
 
@@ -105,13 +105,11 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 
 ## Dependent variable
 
-::: {.incremental style="font-size: 100%;"}
+::: {style="font-size: 100%;"}
 
 - Item: **¿"It is fair that people with higher incomes have better pensions than people with lower incomes?"**
 
 :::
-
-::: {.fragment}
 
 ```{r}
 #| label: fig-desc
@@ -122,7 +120,7 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #| fig-asp: 0.6
 
 
-### Alluvial
+#### Alluvial
 #datos.pension <- df_study1 %>% 
 #  mutate(just_pension = factor(just_pension, 
 #                               levels = c("Strongly agree",
@@ -184,9 +182,9 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #  ggalluvial::geom_flow(alpha = .4) + 
 #  ggalluvial::geom_stratum(linetype = 0) +
 #  scale_y_continuous(labels = scales::percent) + 
-#  scale_fill_manual(values =  #c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020")) +
+#  scale_fill_manual(values =  c("#0571B0","#92C5DE","#b3b3b3ff","#F4A582","#CA0020#")) #+
 #  geom_text(data = etiquetas.pension,
-#            aes(label = ifelse(porcentaje > 0 , #scales::percent(porcentaje, accuracy = .1),"")),
+#            aes(label = ifelse(porcentaje > 0 , scales::percent(porcentaje, accuracy = #.1),"")),
 #            position = position_stack(vjust = .5),
 #            show.legend = FALSE, fontface = "bold",
 #            size = 4,
@@ -194,18 +192,36 @@ df_study1$merit_talent <- sjlabelled::set_label(df_study1$merit_talent,
 #  labs(y = NULL,
 #       x = NULL,
 #       fill = NULL,
-##       title = "It is fair that people with higher #incomes have better #pensions than people\nwith lower #incomes?",
-#       caption = "Source: own elaboration with data from ELSOC 2016-2023 #(N obs = 7,522; N individuals = 1,317)") +
+##       title = "It is fair that people with higher #incomes have better #pensions han #people\nwith lower #incomes?",
+#       caption = "Source: own elaboration with data from ELSOC 2016-2023 (N obs #= ,522; N individuals = 1,317)") +
 #  theme_ggdist() +
 #  theme(legend.position = "top",
 #        plot.title = element_text(face = "bold"),
-#        text = element_text(size = 16)) 
-#
+#        text = element_text(size = 16))# 
+
+#ggsave(
+#  plot = last_plot(),
+#  filename = "dv_alluvial.png",
+#  device = "png",
+#  dpi = "retina",
+#  units = "cm",
+#  width = 33,
+#  height = 20
+#)
 
 knitr::include_graphics(path = ("images/dv_alluvial.png"))
 ```
 
 ::: 
+
+::: {.notes}
+
+- the dependent variable is preferences for market justice in pensions, measured with the item "It is fair that people with higher incomes have better pensions than people with lower incomes?" (5-point Likert scale)
+
+- as we observe in the alluvial diagram, there is a clear trend towards more agreement with market justice in pensions, changing from 17% in 2016 to 29.4% in 2023, representing an increase of about 60%.
+
+:::
+
 
 
 ## Independent variables: Level 1
@@ -225,15 +241,15 @@ library(ggplot2)
 library(scales)
 
 df_plot <- df_study1 %>%
-  select(merit_effort, merit_talent) %>%
-  pivot_longer(everything(), names_to = "item", values_to = "value") %>%
+  dplyr::select(merit_effort, merit_talent) %>%
+  tidyr::pivot_longer(everything(), names_to = "item", values_to = "value") %>%
   mutate(
     item = factor(
       item,
-      levels = c("merit_effort", "merit_talent"),
+      levels = c("merit_talent","merit_effort"),
       labels = c(
-        "People are rewarded for their efforts",
-        "People are rewarded for their \nintelligence and ability"
+         "People are rewarded for their \nintelligence and ability",
+        "People are rewarded for their efforts"
       )
     ),
     value = factor(
@@ -361,7 +377,7 @@ df_study1 %>%
 
 ## Estimation strategy
 
-:::: {.incremental style="font-size: 110%;"}
+:::: {style="font-size: 110%;"}
 
 **Cumulative link mixed models (CLMM)**:
 
@@ -376,7 +392,6 @@ df_study1 %>%
 
 - Formally:  
 
-::: {.fragment}
 $$\begin{aligned}
 \eta_{it} = \beta_{0}+ \beta_{1}\,\text{Time}_{it} +\beta_2\,\text{Meritocracy}^{WE}_{it} +\beta_3\,\text{Meritocracy}^{BE}_{i} +\beta_4\,\mathrm{Class}^{BE}_i +
     \end{aligned}$$

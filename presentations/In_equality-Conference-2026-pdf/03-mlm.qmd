@@ -195,61 +195,8 @@ sjPlot::plot_model(
 
 ::::
 
-## Models
 
-```{r echo=FALSE, results='asis'}
-#| label: fig-interaction1
-#| fig-cap-location: bottom
-#| fig-cap: "Predicted probabilities of pension market justice preferences by talent-based meritocratic perceptions and social class"
-#| out-width: '100%'
-#| fig-asp: 0.55
-
-load(here("output/predicted_probabilities.RData"))
-
-p1_agree <- p1 %>% filter(response.level == 4) 
-
-p1 <- ggplot(p1_agree, aes(x = x, y = predicted, color = group, fill = group)) +
-  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
-  geom_line(linewidth = 1) +
-  scale_color_manual(values = c("#08306B", "#D7301F")) +
-  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
-  labs(
-    x = "Merit: Talent (within-person)",
-    y = "Pr(Agree)",
-    color = NULL, 
-    fill = NULL,
-    caption = "Estimates (95% CIs) using ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317).\nSource: authors’ calculations."
-  ) +
-  theme_ggdist() +
-    theme(text = element_text(size = 12),
-        legend.position = "top"
-        )
-
-
-p2_agree <- p2 %>% filter(response.level == 4) 
-
-p2 <- ggplot(p2_agree, aes(x = x, y = predicted, color = group, fill = group)) +
-  #geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.15, colour = NA) +
-  geom_line(linewidth = 1) +
-  scale_color_manual(values = c("#08306B", "#D7301F")) +
-  scale_fill_manual(values  = c("#08306B", "#D7301F")) +
-  labs(
-    x = "Merit: Talent (between-person)",
-    y = "Pr(Agree)",
-    color = NULL, 
-    fill = NULL,
-   caption = "Estimates (95% CIs) using ELSOC 2016-2023 (N obs = 7,522; N individuals = 1,317).\nSource: authors’ calculations."
-  ) +
-  theme_ggdist()+
-  theme(text = element_text(size = 12),
-        legend.position = "top"
-        )
-
-p1
-```
-
-
-## Preliminary conclusions
+## Discussion
 
 :::: {.incremental style="font-size: 120%;"}
 
@@ -268,6 +215,8 @@ p1
 :::: {.incremental style="font-size: 120%;"}
 
 - No evidence of class differences in support for pension market justice, but what about a more direct measure of stratification differences? 
+
+- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
 
 ::::
 
@@ -288,12 +237,3 @@ knitr::include_graphics("images/income_regression.png")
 ```
 
 
-## Caveats
-
-:::: {.incremental style="font-size: 120%;"}
-
-- Meritocratic beliefs show a strong and consistent effect.  Yet, are measured in a highly reduced way, through effort and talent only  
-
-- Next step: model meritocracy as a multidimensional construct  
-  → [@castillo_multidimensional_2023]
-::::

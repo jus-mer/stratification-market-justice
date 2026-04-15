@@ -1,4 +1,4 @@
-// quarto-scss-analysis-annotation { "quarto-version": "1.8.27" }
+// quarto-scss-analysis-annotation { "quarto-version": "1.7.33" }
 
 // quarto-scss-analysis-annotation { "origin": "'use' section from format" }
 
@@ -135,6 +135,13 @@ $linkColorHover: $headingColor;
 // Text selection
 $selectionBackgroundColor: #F27983;
 $selectionColor: #fff;
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
 
 // start using css here
 #title-slide > h1 {
@@ -666,7 +673,7 @@ $overlayElementFgColor: 0, 0, 0 !default;
 
 // -- END setting.scss --
 
-$code-copy-selector: "div.code-copy-outer-scaffold:hover > " !default;
+$code-copy-selector: "pre.sourceCode:hover > " !default;
 $code-white-space: pre !default;
 $tbl-cap-location: top !default;
 // main colors
@@ -1410,7 +1417,8 @@ details > summary > p:only-child {
 }
 
 // codeCopy
-div.code-copy-outer-scaffold {
+pre.sourceCode,
+code.sourceCode {
   position: relative;
 }
 

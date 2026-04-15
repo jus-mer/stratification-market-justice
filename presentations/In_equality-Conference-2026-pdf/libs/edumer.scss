@@ -59,13 +59,6 @@ $linkColorHover: $headingColor;
 $selectionBackgroundColor: #F27983;
 $selectionColor: #fff;
 
-@media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-}
-
 // start using css here
 #title-slide > h1 {
   color: #ffffff;
