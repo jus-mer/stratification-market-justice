@@ -34,7 +34,7 @@
 :::: {.columns}
 
 ::: {.column width="50%"}
-![](images/english-logo-jusmer.png){align='center'}
+![](images/qr-jusmer-logo.png){align='center' width="70%"}
 :::
 
 ::: {.column .column-right width="50%"}
@@ -53,8 +53,3 @@
 
 ::::
 
-
-#
-
-
-![](images/qr-code-jusmer.png){width="50%" fig-align="center"}

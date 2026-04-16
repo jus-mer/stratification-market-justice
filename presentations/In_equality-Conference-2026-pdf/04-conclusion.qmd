@@ -2,7 +2,7 @@
 # Conclusions and implications {background-color="#491106ff"}
 
 ## 
-:::: {.incremental style="font-size: 110%;"}
+:::: {style="font-size: 110%;"}
 
 1. Reflection of market-based welfare on public attitudes [@lindh_public_2015; @busemeyer_welfare_2020] -> increasing support for neoliberal arrangements
 
@@ -15,7 +15,7 @@
 ::::
 
 ## Next steps
-:::: {.incremental style="font-size: 110%;"}
+:::: {style="font-size: 110%;"}
 
 - **Market justice measurement**: We are refining the measure and extending it to additional welfare domains (as health and education)
 

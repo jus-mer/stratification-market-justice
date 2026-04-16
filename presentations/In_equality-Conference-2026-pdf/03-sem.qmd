@@ -25,8 +25,6 @@ This is still a work in progress, and we would be very glad to hear your feedbac
 
 ## Multidimensional framework of meritocracy
 
-::: {.fragment}
-
 ```{r}
 #| fig-cap: "Castillo et al. (2023) measurement model"
 #| fig-align: center
@@ -38,8 +36,6 @@ library(here)
 knitr::include_graphics("images/diagramas.png")
 
 ```
-
-:::
 
 ::: {.notes}
 
@@ -125,7 +121,7 @@ Also, you can see the two items for each factor, all measured on a four-point Li
 
 ## Data
 
-:::: {.incremental style="font-size: 120%;"}
+:::: {style="font-size: 120%;"}
 
 - EDUMERCO: Online survey (CAWI), fielded in 2025, with adult respondents from the Metropolitan Region of Chile  
 
@@ -147,7 +143,7 @@ For this analysis, we use data from an online CAWI survey conducted in two thous
 
 ## Analytical strategy
 
-:::: {.incremental style="font-size: 120%;"}
+:::: {style="font-size: 120%;"}
 
 - First, we estimate a Confirmatory Factor Analysis of the multidimensional meritocracy scale  
   → good model fit (CFI = 0.995, TLI = 0.991, RMSEA = 0.048)
@@ -155,11 +151,9 @@ For this analysis, we use data from an online CAWI survey conducted in two thous
 - Second, we estimate a Structural Equation Model  
   → pension market justice regressed on latent meritocracy factors
 
-::: {.fragment}
 $$
 \text{MJP}_{i} = \alpha + \beta_1 \eta^{PM}_{i} + \beta_2 \eta^{PNM}_{i} + \beta_3 \eta^{PrM}_{i} + \beta_4 \eta^{PrNM}_{i} + \gamma'X_i + \varepsilon_i
 $$
-:::
 
 - Estimation: WLSMV  
   → appropriate for ordinal (Likert-type) data [@kline_principles_2023]

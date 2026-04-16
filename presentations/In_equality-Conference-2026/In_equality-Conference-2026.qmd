@@ -93,6 +93,10 @@ rm(list = ls())
 :::
 :::
 
+::: {.notes}
+Good morning everyone, I am Juan Carlos Castillo, and I am here to present our research on justification trajectories for pension inequality in Chile from 2016 to 2023. This study focuses on the role of social class and beliefs in meritocracy. The research was conducted in collaboration with my colleagues Andreas Laffert, René Canales, and Tomás Urzúa, all from the Department of Sociology at the University of Chile.  
+:::
+
 {{< include 01-introduction.qmd >}}
 
 {{< include 02-methods.qmd >}}

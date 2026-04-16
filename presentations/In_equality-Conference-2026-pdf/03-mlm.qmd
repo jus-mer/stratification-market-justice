@@ -198,7 +198,7 @@ sjPlot::plot_model(
 
 ## Discussion
 
-:::: {.incremental style="font-size: 120%;"}
+:::: {style="font-size: 120%;"}
 
 1. **Time**: Preferences for market justice in pensions have increased in recent years in Chile
 
@@ -212,7 +212,7 @@ sjPlot::plot_model(
 
 ## Caveats
 
-:::: {.incremental style="font-size: 120%;"}
+:::: {style="font-size: 120%;"}
 
 - No evidence of class differences in support for pension market justice, but what about a more direct measure of stratification differences? 
 
